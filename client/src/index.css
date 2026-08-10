@@ -133,3 +133,14 @@ em { color:var(--orange); font-style:normal; }
   .work-card:hover { transform:none; }
   .back-to-top { animation:none; }
 }
+
+/* Responsive repair: keep editorial compositions inside the viewport at every breakpoint. */
+html, body, #root { width:100%; max-width:100%; overflow-x:hidden; }
+.app-shell, .route-page, main, section, header, footer { max-width:100%; min-width:0; }
+img, svg, video, canvas { max-width:100%; }
+@media (max-width:850px) {
+  .hero, .work-grid, .work-page-grid, .case-hero, .case-gallery, .case-meta, .case-body, .metric-placeholders, .service-architecture, .about-story, .studio-rhythm, .newsletter, .faq, .demo-section { min-width:0; width:100%; }
+  .work-card, .work-card-meta, .case-gallery-main, .case-thumbs, .case-meta > div, .form-grid > label { min-width:0; max-width:100%; }
+  .work-card h3, .case-hero h1, .case-body h2, .inner-hero h1, .not-found-copy h1 { overflow-wrap:anywhere; }
+  .case-thumbs { overflow-x:auto; }
+}

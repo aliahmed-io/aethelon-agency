@@ -13,3 +13,10 @@
 - [x] Add a sticky Back to Top control for long case-study pages.
 - [x] Verify responsive behavior, reduced-motion behavior, and production build.
 - [x] Save and deliver the updated checkpoint.
+
+## Responsive overflow fix
+
+- [x] Identify the element causing horizontal overflow at narrow widths.
+- [x] Apply a responsive layout fix without weakening the editorial design.
+- [x] Verify the affected routes at narrow and desktop viewports.
+- [x] Run the final build and save the fix checkpoint.
