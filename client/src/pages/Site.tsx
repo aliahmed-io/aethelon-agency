@@ -18,12 +18,18 @@ const gallerySets: Record<string, string[]> = {
   "form-and-function": [IMG.work1, IMG.hero, IMG.work2],
   "signal-search": [IMG.work2, IMG.hero, IMG.work1],
   "in-your-space": [IMG.work3, IMG.hero, IMG.work2],
+  "quiet-kitchen": [IMG.hero, IMG.work3, IMG.work1],
+  "field-notes": [IMG.work2, IMG.work3, IMG.hero],
+  "afterlight": [IMG.work1, IMG.work2, IMG.work3],
 };
 
 const projects = [
   { slug: "form-and-function", number: "01", title: "Form & Function", category: "Furniture", industry: "Furniture", service: "Custom E-commerce", description: "A modular furniture storefront concept built around browsing by room, material, and intent.", stack: "Next.js · Shopify · TypeScript", scope: "Selected experiment", image: IMG.work1, tags: ["E-commerce", "Experiments"] },
   { slug: "signal-search", number: "02", title: "Signal Search", category: "Beauty", industry: "Beauty", service: "AI Commerce", description: "A product discovery system that turns natural language into a shorter path to the right routine.", stack: "Next.js · AI · Semantic search", scope: "Selected experiment", image: IMG.work2, tags: ["AI", "E-commerce"] },
   { slug: "in-your-space", number: "03", title: "In Your Space", category: "Product", industry: "Product", service: "3D & AR Experiences", description: "An immersive product page concept where configuration and context do the selling.", stack: "React · Three.js · WebGL", scope: "Selected experiment", image: IMG.work3, tags: ["3D / AR", "Experiments"] },
+  { slug: "quiet-kitchen", number: "04", title: "Quiet Kitchen", category: "Food & Beverage", industry: "Food & Beverage", service: "Performance & SEO", description: "A calmer direct-to-consumer experience for pantry staples, built around repeat purchase and useful discovery.", stack: "Next.js · Shopify · Technical SEO", scope: "Selected experiment", image: IMG.hero, tags: ["E-commerce", "Performance"] },
+  { slug: "field-notes", number: "05", title: "Field Notes", category: "Outdoor", industry: "Outdoor", service: "Conversion & Recovery", description: "A commerce recovery concept that turns product education into a more confident return visit.", stack: "React · Shopify · Analytics", scope: "Selected experiment", image: IMG.work2, tags: ["E-commerce", "Recovery"] },
+  { slug: "afterlight", number: "06", title: "Afterlight", category: "Home & Living", industry: "Home & Living", service: "Ongoing Development", description: "A modular release system for a growing home brand that needs every launch to feel considered.", stack: "Next.js · CMS · Design systems", scope: "Selected experiment", image: IMG.work1, tags: ["Systems", "Experiments"] },
 ];
 
 const services = [
