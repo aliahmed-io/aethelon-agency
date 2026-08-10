@@ -28,3 +28,12 @@
 - [x] Migrate the site component, styles, forms, theme, galleries, and 404 behavior.
 - [x] Verify all routes, responsive behavior, type checking, and Next.js production build.
 - [x] Save and deliver the Next.js migration checkpoint.
+
+## Final idiomatic Next.js migration
+
+- [x] Audit hybrid routes, image usage, legacy files, and dependencies.
+- [x] Replace wouter navigation with native App Router route segments and client navigation.
+- [x] Convert all site image tags to optimized next/image usage with remote image configuration.
+- [x] Remove legacy Vite entry points, configs, server scaffolding, and unused dependencies.
+- [x] Apply final metadata, accessibility, performance, and error-boundary improvements.
+- [x] Run full checks, production build, route smoke tests, and save the final checkpoint.

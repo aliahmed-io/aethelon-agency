@@ -1,5 +1,10 @@
-import SiteClient from "./SiteClient";
+import SiteChrome from "./SiteChrome";
+import { Home } from "../client/src/pages/Site";
 
 export default function HomePage() {
-  return <SiteClient />;
+  return (
+    <SiteChrome>
+      <Home />
+    </SiteChrome>
+  );
 }
