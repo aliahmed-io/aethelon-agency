@@ -5,3 +5,11 @@
 - [x] Verify filter combinations, case-study routes, galleries, forms, dark mode, and responsive layouts.
 - [x] Run final type checking and production build.
 - [x] Save the final stable checkpoint and deliver it.
+
+## Interaction update
+
+- [x] Add a subtle editorial hover treatment to Work-page case-study cards.
+- [x] Implement a custom editorial 404 page with a homepage escape route.
+- [x] Add a sticky Back to Top control for long case-study pages.
+- [x] Verify responsive behavior, reduced-motion behavior, and production build.
+- [x] Save and deliver the updated checkpoint.

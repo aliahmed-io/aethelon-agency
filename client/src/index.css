@@ -107,3 +107,29 @@ em { color:var(--orange); font-style:normal; }
   .route-page { animation:none; }
   *, *::before, *::after { transition-duration:0.01ms !important; animation-duration:0.01ms !important; }
 }
+
+/* Interaction update: quiet lift on project cards, editorial 404 composition, and an unobtrusive return control. */
+.work-card { transition:transform .32s var(--ease); }
+.work-card:hover { transform:translateY(-6px); }
+.work-card:hover .work-card-meta { border-color:var(--orange); }
+.work-card:hover .work-arrow { box-shadow:0 8px 18px rgba(23,23,23,.12); }
+.not-found-page { min-height:calc(100vh - 82px); padding:clamp(90px,13vw,180px) 8.5vw; display:grid; grid-template-columns:.8fr 1.2fr; gap:8vw; align-items:center; background:var(--paper-2); }
+.not-found-mark { width:min(30vw,300px); aspect-ratio:1; border:1px solid var(--ink); border-radius:50%; display:grid; place-items:center; position:relative; transform:rotate(-12deg); }
+.not-found-mark span { font:600 clamp(4.5rem,10vw,9rem)/.8 var(--font-display); letter-spacing:-.12em; margin-right:.12em; }
+.not-found-mark i { position:absolute; width:12px; height:12px; border-radius:50%; background:var(--orange); top:11%; right:16%; }
+.not-found-copy { max-width:720px; }
+.not-found-copy h1 { font:600 clamp(3.5rem,7vw,7.5rem)/.86 var(--font-display); letter-spacing:-.09em; margin:40px 0 28px; }
+.not-found-copy p { color:var(--muted); max-width:430px; line-height:1.55; margin:0 0 32px; }
+.back-to-top { position:fixed; z-index:30; right:26px; bottom:24px; width:56px; height:56px; border-radius:50%; background:var(--orange); color:var(--ink); display:grid; place-items:center; box-shadow:0 10px 30px rgba(23,23,23,.15); animation:topIn .28s var(--ease) both; }
+.back-to-top span { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+@keyframes topIn { from { opacity:0; transform:translateY(10px) scale(.94); } to { opacity:1; transform:none; } }
+@media (max-width:760px) {
+  .work-card:hover { transform:none; }
+  .not-found-page { min-height:calc(100vh - 82px); grid-template-columns:1fr; gap:50px; padding-top:90px; padding-bottom:110px; }
+  .not-found-mark { width:170px; }
+  .back-to-top { right:16px; bottom:16px; width:48px; height:48px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-card:hover { transform:none; }
+  .back-to-top { animation:none; }
+}

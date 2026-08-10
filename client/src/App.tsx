@@ -4,7 +4,6 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Site from "./pages/Site";
-import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -20,7 +19,7 @@ function App() {
             <Route path="/about" component={Site} />
             <Route path="/insights" component={Site} />
             <Route path="/contact" component={Site} />
-            <Route component={NotFound} />
+            <Route component={Site} />
           </Switch>
         </TooltipProvider>
       </ThemeProvider>
