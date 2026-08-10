@@ -1,3 +1,5 @@
+"use client";
+
 // Paper Signal style: editorial scale, warm paper, charcoal ink, signal orange, asymmetrical proof-led layouts.
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useRoute } from "wouter";
@@ -7,11 +9,11 @@ import { useTheme } from "../contexts/ThemeContext";
 import { submitContact, subscribeNewsletter } from "../lib/mockBackend";
 
 const IMG = {
-  hero: "/manus-storage/paper-signal-hero_ff979c14.png",
-  work1: "/manus-storage/selected-work-01_898ca8d2.png",
-  work2: "/manus-storage/selected-work-02_0d61cfec.png",
-  work3: "/manus-storage/selected-work-03_ba04d09f.png",
-  mark: "/manus-storage/cs-monogram_f5dfdf45.png",
+  hero: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663885080823/lpmVmLZuRGBdKrcb.png",
+  work1: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663885080823/FMADykJIIylGGJfx.png",
+  work2: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663885080823/qRgYvwavUxfacwIR.png",
+  work3: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663885080823/gQoPppfJtIjnmYIC.png",
+  mark: "https://files.manuscdn.com/user_upload_by_module/session_file/310519663885080823/LvrDgmJgwNhBNnxK.png",
 };
 
 const gallerySets: Record<string, string[]> = {

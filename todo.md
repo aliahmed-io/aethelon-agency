@@ -20,3 +20,11 @@
 - [x] Apply a responsive layout fix without weakening the editorial design.
 - [x] Verify the affected routes at narrow and desktop viewports.
 - [x] Run the final build and save the fix checkpoint.
+
+## Next.js migration
+
+- [x] Audit the current Vite/React entry points and map them to App Router files.
+- [x] Add the Next.js package, scripts, config, and App Router shell.
+- [x] Migrate the site component, styles, forms, theme, galleries, and 404 behavior.
+- [x] Verify all routes, responsive behavior, type checking, and Next.js production build.
+- [x] Save and deliver the Next.js migration checkpoint.

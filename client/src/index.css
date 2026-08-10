@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
-@import "tw-animate-css";
 
 /* Paper Signal: warm paper, charcoal ink, signal orange; editorial scale over card grids. */
 :root { --paper:#f3f0e8; --paper-2:#e9e5dc; --ink:#171717; --muted:#68675f; --line:#c9c5bb; --orange:#ff5a1f; --sage:#b5c1b1; --ease:cubic-bezier(.23,1,.32,1); --font-display:'Space Grotesk',sans-serif; --font-body:'DM Sans',sans-serif; }
