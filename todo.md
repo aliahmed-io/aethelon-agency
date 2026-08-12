@@ -133,4 +133,4 @@
 - [ ] Re-run Lighthouse against the published Aethelon URL after the project is published.
 - [x] Run type checking, production build, and route/form smoke tests for the completed upgrade.
 - [x] Save a new checkpoint for the completed Aethelon upgrade.
-- [ ] Commit and push the completed Aethelon upgrade to the private GitHub repository.
+- [x] Commit and push the completed Aethelon upgrade to the private GitHub repository.
