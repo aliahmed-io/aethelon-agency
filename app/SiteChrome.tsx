@@ -2,15 +2,16 @@
 
 import type { ReactNode } from "react";
 import { ThemeProvider } from "../client/src/contexts/ThemeContext";
-import { Footer, Header } from "../client/src/pages/Site";
+import SiteFooter from "../client/src/components/SiteFooter";
+import SiteHeader from "../client/src/components/SiteHeader";
 
 export default function SiteChrome({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider defaultTheme="light" switchable>
       <div className="app-shell">
-        <Header />
+        <SiteHeader />
         <div className="route-page">{children}</div>
-        <Footer />
+        <SiteFooter />
       </div>
     </ThemeProvider>
   );

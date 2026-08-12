@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import SiteChrome from "../../SiteChrome";
-import { InsightArticlePage } from "../../../client/src/pages/Site";
+import InsightArticlePage from "../../../client/src/pages/InsightArticlePage";
 import { getInsight, insightArticles } from "../../../client/src/lib/insights";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://commerce-studio.manus.space";
@@ -54,5 +54,5 @@ export default async function InsightArticleRoute({ params }: { params: Promise<
       { "@type": "ListItem", position: 3, name: article.title, item: `${siteUrl}/insights/${article.slug}` },
     ],
   };
-  return <SiteChrome><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} /><InsightArticlePage slug={article.slug} /></SiteChrome>;
+  return <SiteChrome><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} /><InsightArticlePage article={article} /></SiteChrome>;
 }

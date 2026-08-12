@@ -61,3 +61,55 @@
 - [x] Create or reuse the private `aethelon-agency` repository.
 - [x] Commit the completed Commerce Studio project and push the final checkpoint.
 - [x] Verify the remote repository URL and pushed default branch.
+
+## International pricing correction
+
+- [x] Reframe pricing around international remote delivery rather than Egypt-local purchasing power.
+- [x] Recalculate founding-client and standard prices in USD without an Egypt-local discount.
+- [x] Add communication, accent, timezone, and trust-building recommendations for online delivery.
+- [x] Update the Ask Phill comparison and pricing report with the corrected assumptions.
+
+## Location-flexible positioning correction
+
+- [x] Replace Egypt-based wording with location-independent, remote-first positioning.
+- [x] Note current Saudi Arabia context and future Southern Europe move without making either location the brand identity.
+- [x] Update pricing-report language for timezone, invoicing, and client-facing location disclosure.
+
+## Solo-freelancer pricing recalibration
+
+- [x] Set prices around one-person capacity and three-to-four-week delivery windows.
+- [x] Replace agency-scale project prices with accessible founding and standard freelancer prices.
+- [x] Define strict scope, revision, integration, and post-launch boundaries for the shorter delivery model.
+- [x] Update and deliver the pricing report with the revised ladder.
+
+## User pricing package revision
+
+- [x] Replace the current service ladder with the user’s two-price package structure.
+- [x] Set AI, AR, and feature additions to $300 founding / $500 standard.
+- [x] Set standard custom ecommerce to $1,500 founding / $2,000 standard.
+- [x] Set complete growth ultra all-included ecommerce to $2,500 founding / $4,000 standard.
+- [x] Set 10-hour retainers to $200 founding / $300 standard with maintenance and hot-fix support included.
+- [x] Set 20-hour retainers to $300 founding / $500 standard with maintenance and hot-fix support included.
+- [x] Mark strategy sprints, store audits, improvement plans, and supporting documents as included free when needed.
+
+## Client-pitch pricing deck
+
+- [x] Prepare concise slide content for the final service packages and pricing.
+- [x] Generate the deck in a premium Paper Signal editorial style.
+- [x] Deliver the finished presentation file to the user.
+
+## Performance improvement pass
+
+- [x] Profile the current Lighthouse bottlenecks and establish a baseline for startup, LCP, payload, and interaction latency.
+- [x] Optimize the critical rendering path, images, fonts, CSS, and JavaScript without changing the visual system.
+- [x] Make Work and Insights filtering/sorting instantaneous and stable.
+- [x] Re-run production build, Lighthouse, responsive checks, and visual parity verification.
+- [x] Document the final performance changes, remaining constraints, and next steps.
+
+## Performance implementation
+
+- [x] Remove root-level dynamic rendering and narrow the shared client boundary.
+- [x] Split Insights summaries from full article bodies and reduce archive payload.
+- [x] Replace blocking font CSS, optimize the hero LCP image, and add responsive image sizes.
+- [x] Remove first-paint animation cost and tune archive prefetch/filter behavior.
+- [x] Validate build, bundle/payload changes, Lighthouse metrics, and visual parity.

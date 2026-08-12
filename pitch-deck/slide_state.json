@@ -1,0 +1,115 @@
+{
+  "project_info": {
+    "title": "Commerce Studio",
+    "created": 1786500675.682,
+    "last_updated": 1786501221.139,
+    "total_slides": 10
+  },
+  "slides": [
+    {
+      "id": "cover",
+      "state": "edited",
+      "pageNum": 1
+    },
+    {
+      "id": "direct_owner",
+      "state": "edited",
+      "pageNum": 2
+    },
+    {
+      "id": "choose_package",
+      "state": "edited",
+      "pageNum": 3
+    },
+    {
+      "id": "feature_addition",
+      "state": "edited",
+      "pageNum": 4
+    },
+    {
+      "id": "standard_ecommerce",
+      "state": "edited",
+      "pageNum": 5
+    },
+    {
+      "id": "growth_ultra",
+      "state": "edited",
+      "pageNum": 6
+    },
+    {
+      "id": "retainers",
+      "state": "edited",
+      "pageNum": 7
+    },
+    {
+      "id": "included",
+      "state": "edited",
+      "pageNum": 8
+    },
+    {
+      "id": "process",
+      "state": "edited",
+      "pageNum": 9
+    },
+    {
+      "id": "closing",
+      "state": "edited",
+      "pageNum": 10
+    }
+  ],
+  "outline": [
+    {
+      "id": "cover",
+      "title": "Commerce Studio",
+      "summary": "Cover slide with the positioning line “Commerce that earns its complexity.” and the service-packages context.",
+      "image_plan": "/home/ubuntu/screenshots/3000-iorhlexdkvq1co7_2026-08-12_01-09-59_8053.webp - Cover slide matches the brand aesthetic and studio intro from the screenshot."
+    },
+    {
+      "id": "direct_owner",
+      "title": "One direct technical owner",
+      "summary": "Position Commerce Studio as a remote-first independent practice with direct delivery, fast decisions, and a three-to-four-week delivery model."
+    },
+    {
+      "id": "choose_package",
+      "title": "Choose the smallest package that moves the business forward",
+      "summary": "Frame the three service packages as a simple decision model: feature addition, standard ecommerce, or Growth Ultra."
+    },
+    {
+      "id": "feature_addition",
+      "title": "Add a capability without rebuilding everything",
+      "summary": "Present the AI, AR, or other scoped feature-addition package with founding and standard pricing, scope, and exclusions.",
+      "image_plan": "/home/ubuntu/commerce-studio/research/hero-cdn-current.jpg - Product photography / feature addition context showing custom items."
+    },
+    {
+      "id": "standard_ecommerce",
+      "title": "Build a sharper storefront in three to four weeks",
+      "summary": "Present the Standard Custom Ecommerce package with founding and standard pricing and its defined scope.",
+      "image_plan": "/home/ubuntu/commerce-studio/research/hero-browser-paint.png - Immersive product experience / 3D commerce showcase."
+    },
+    {
+      "id": "growth_ultra",
+      "title": "One complete package for a stronger launch",
+      "summary": "Present the Complete Growth Ultra Ecommerce package, pricing, deliverables, and a clear definition of all included."
+    },
+    {
+      "id": "retainers",
+      "title": "Keep the store healthy after launch",
+      "summary": "Present the 10-hour and 20-hour monthly retainers, including maintenance and hot-fix support."
+    },
+    {
+      "id": "included",
+      "title": "The thinking and documentation come with the work",
+      "summary": "Explain the free-included strategy, audits, roadmaps, technical notes, and handoff documentation, plus transparent exclusions."
+    },
+    {
+      "id": "process",
+      "title": "Clear process. Short feedback loops.",
+      "summary": "Show the four-step engagement process: align, build, refine, and handoff."
+    },
+    {
+      "id": "closing",
+      "title": "Start with the problem, not the biggest package",
+      "summary": "Closing slide with Commerce Studio, the invitation to share the problem, and founding-rate availability for the first five paid clients."
+    }
+  ]
+}

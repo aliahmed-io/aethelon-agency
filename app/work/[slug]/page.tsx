@@ -1,6 +1,21 @@
 import SiteChrome from "../../SiteChrome";
 import { CaseStudy } from "../../../client/src/pages/Site";
 
+const caseStudySlugs = [
+  "form-and-function",
+  "signal-search",
+  "in-your-space",
+  "quiet-kitchen",
+  "field-notes",
+  "afterlight",
+] as const;
+
+export function generateStaticParams() {
+  return caseStudySlugs.map((slug) => ({ slug }));
+}
+
+export const dynamicParams = false;
+
 type CaseStudyRouteProps = {
   params: Promise<{ slug: string }>;
 };

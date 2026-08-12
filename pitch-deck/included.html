@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<style>
+body{margin:0}
+.slide-container{width:1280px;min-height:720px;box-sizing:border-box;padding-top:120px;padding-left:120px;padding-right:120px;background:#E8F0F4;color:#0A192F;font-family:Arial,Helvetica,sans-serif;position:relative;overflow:hidden}
+.slide-container *{box-sizing:border-box}
+.grid{position:absolute;inset:0;background-image:linear-gradient(to right,rgba(10,25,47,.08) 1px,transparent 1px),linear-gradient(to bottom,rgba(10,25,47,.07) 1px,transparent 1px);background-size:86.66px 100%,100% 72px;pointer-events:none}
+.top{position:relative;display:flex;justify-content:space-between;border-bottom:1px solid #0A192F;padding-bottom:16px;font:12px 'Courier New',monospace;letter-spacing:.08em;text-transform:uppercase}.signal{color:#0047FF}
+.layout{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:72px;margin-top:16px;min-height:380px;align-items:start}.kicker{margin:0 0 16px;font:13px 'Courier New',monospace;color:#0047FF;letter-spacing:.1em;text-transform:uppercase}.layout h1{max-width:500px;margin:0;font-size:58px;line-height:1.01;letter-spacing:-.06em;font-weight:500}.lede{max-width:420px;margin:20px 0 0;color:#4A5D7E;font-size:19px;line-height:1.35}.list{border-top:3px solid #0047FF}.item{display:grid;grid-template-columns:62px 1fr;gap:18px;padding-top:12px;padding-bottom:12px;border-bottom:1px solid rgba(10,25,47,.35)}.item-num{font:12px 'Courier New',monospace;color:#0047FF}.item h2{margin:0 0 7px;font-size:23px;line-height:1.05;letter-spacing:-.035em;font-weight:500}.item p{margin:0;max-width:370px;color:#4A5D7E;font-size:15px;line-height:1.32}.boundary{position:relative;margin-top:10px;border-top:1px solid #0A192F;padding-top:12px;display:grid;grid-template-columns:180px 1fr;gap:30px;font:12px 'Courier New',monospace;line-height:1.4;color:#4A5D7E}.boundary strong{font-weight:400;color:#0A192F}.footer{position:relative;margin-top:12px;border-top:1px solid #0A192F;padding-top:12px;display:flex;justify-content:space-between;font:12px 'Courier New',monospace;color:#4A5D7E}
+</style>
+</head>
+<body>
+<div class="slide-container">
+  <div class="grid"></div>
+  <div class="top"><span><span class="signal">■</span> Commerce Studio / 08</span><span>Included with the work</span></div>
+  <div class="layout">
+    <div>
+      <p class="kicker">No extra paperwork tax</p>
+      <h1>The thinking and documentation come with the work.</h1>
+      <p class="lede">The materials needed to make a package useful, understandable, and handoff-ready are included when they are part of delivery.</p>
+    </div>
+    <div class="list">
+      <div class="item"><div class="item-num">01</div><div><h2>Strategy sprint</h2><p>Clarify the outcome, priorities, audience, and the smallest useful scope before the build begins.</p></div></div>
+      <div class="item"><div class="item-num">02</div><div><h2>Store audit / improvement plan</h2><p>Identify practical UX, performance, commerce, and conversion opportunities that affect the agreed work.</p></div></div>
+      <div class="item"><div class="item-num">03</div><div><h2>Roadmap and technical notes</h2><p>Make the implementation legible: decisions, dependencies, next steps, and what should happen later.</p></div></div>
+      <div class="item"><div class="item-num">04</div><div><h2>Handoff documentation</h2><p>Leave the client with the information needed to operate, review, and continue the work confidently.</p></div></div>
+    </div>
+  </div>
+  <div class="boundary"><span>SEPARATE WHEN APPLICABLE</span><strong>Hosting, Shopify fees, paid APIs, third-party software, copywriting, translation, photography, 3D modeling, and major scope changes are not silently absorbed into the package.</strong></div>
+  <div class="footer"><span>Included free when needed for a paid package</span><span>08 / 10</span></div>
+</div>
+</body>
+</html>
