@@ -3,8 +3,7 @@ import { notFound } from "next/navigation";
 import SiteChrome from "../../SiteChrome";
 import InsightArticlePage from "../../../client/src/pages/InsightArticlePage";
 import { getInsight, insightArticles } from "../../../client/src/lib/insights";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aethelon.manus.space";
+import { siteUrl } from "../../../shared/site-config";
 
 export function generateStaticParams() {
   return insightArticles.map((article) => ({ slug: article.slug }));

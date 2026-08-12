@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../client/src/index.css";
 import localFont from "next/font/local";
+import { siteUrl } from "../shared/site-config";
 
 const bodyFont = localFont({
   src: [
@@ -27,7 +28,7 @@ const displayFont = localFont({
 export const metadata: Metadata = {
   title: "Aethelon — Next-generation commerce systems",
   description: "Custom storefronts, useful AI, and immersive product experiences.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://aethelon.manus.space"),
+  metadataBase: new URL(siteUrl),
   applicationName: "Aethelon",
   authors: [{ name: "Aethelon" }],
   alternates: { canonical: "/" },
