@@ -1,6 +1,5 @@
 "use client";
 
-// Paper Signal style: feedback is immediate, route-aware, and never delays Next.js navigation.
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
@@ -27,14 +26,16 @@ function getTransitionProfile(pathname: string): TransitionProfile {
 function isInternalNavigation(anchor: HTMLAnchorElement) {
   if (anchor.target === "_blank" || anchor.hasAttribute("download")) return false;
   if (anchor.getAttribute("rel") === "external") return false;
+
   const href = anchor.getAttribute("href");
   if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) return false;
+
   const url = new URL(href, window.location.href);
   return url.origin === window.location.origin && url.pathname !== window.location.pathname;
 }
 
 export default function RouteTransition() {
-  const pathname = usePathname();
+  const pathname = usePathname() || "/";
   const [transition, setTransition] = useState(() => ({
     phase: "idle" as TransitionPhase,
     profile: getTransitionProfile(pathname),
@@ -50,9 +51,16 @@ export default function RouteTransition() {
     settleTimer.current = null;
   };
 
+  const resetTransition = () => {
+    clearTimers();
+    document.documentElement.dataset.routeLoading = "false";
+    setTransition((current) => ({ ...current, phase: "idle" }));
+  };
+
   useEffect(() => {
     const profile = getTransitionProfile(pathname);
     document.documentElement.dataset.routeLoading = "false";
+
     if (initialPathname.current) {
       initialPathname.current = false;
       setTransition({ phase: "idle", profile });
@@ -68,7 +76,7 @@ export default function RouteTransition() {
     settleTimer.current = window.setTimeout(() => {
       setTransition({ phase: "idle", profile });
       settleTimer.current = null;
-    }, 210);
+    }, 180);
 
     return () => {
       if (settleTimer.current !== null) window.clearTimeout(settleTimer.current);
@@ -76,26 +84,37 @@ export default function RouteTransition() {
   }, [pathname]);
 
   useEffect(() => {
-    const onPointerDown = (event: PointerEvent) => {
-      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    // Click is deliberately used instead of pointerdown. On touch screens a
+    // pointerdown often starts a scroll gesture, which must never launch a
+    // full-viewport navigation overlay.
+    const onClick = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
       const target = event.target instanceof Element ? event.target.closest("a") : null;
-      if (target instanceof HTMLAnchorElement && isInternalNavigation(target)) {
-        const destination = new URL(target.href, window.location.href);
-        const profile = getTransitionProfile(destination.pathname);
-        clearTimers();
-        setTransition({ phase: "prepare", profile });
-        window.requestAnimationFrame(() => setTransition({ phase: "covering", profile }));
-        document.documentElement.dataset.routeLoading = "true";
-        fallbackTimer.current = window.setTimeout(() => {
-          document.documentElement.dataset.routeLoading = "false";
-          setTransition((current) => ({ ...current, phase: "idle" }));
-          fallbackTimer.current = null;
-        }, 900);
-      }
+      if (!(target instanceof HTMLAnchorElement) || !isInternalNavigation(target)) return;
+
+      const destination = new URL(target.href, window.location.href);
+      const profile = getTransitionProfile(destination.pathname);
+      clearTimers();
+      setTransition({ phase: "prepare", profile });
+      window.requestAnimationFrame(() => setTransition({ phase: "covering", profile }));
+      document.documentElement.dataset.routeLoading = "true";
+      fallbackTimer.current = window.setTimeout(resetTransition, 650);
     };
-    document.addEventListener("pointerdown", onPointerDown, true);
+
+    const onPageHide = () => resetTransition();
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "hidden") resetTransition();
+    };
+
+    document.addEventListener("click", onClick, true);
+    window.addEventListener("pagehide", onPageHide);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
     return () => {
-      document.removeEventListener("pointerdown", onPointerDown, true);
+      document.removeEventListener("click", onClick, true);
+      window.removeEventListener("pagehide", onPageHide);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       clearTimers();
     };
   }, []);
@@ -117,7 +136,7 @@ export default function RouteTransition() {
         className="route-progress"
         role="status"
         aria-live="polite"
-        aria-label={isMoving ? `Opening ${transition.profile.label}` : ""}
+        aria-label={isMoving ? `Opening ${transition.profile.label}` : undefined}
       />
     </>
   );

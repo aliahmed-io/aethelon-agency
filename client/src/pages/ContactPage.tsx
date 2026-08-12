@@ -1,10 +1,10 @@
-// Paper Signal style: editorial project intake, warm paper, charcoal ink, signal orange, direct and proof-led.
 "use client";
 
 import { useState } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { budgetOptions, projectFocusOptions, timelineOptions } from "../../../shared/form-options";
 import { submitContact } from "../lib/submissionApi";
 
 function SectionLabel({ children, index }: { children: ReactNode; index?: string }) {
@@ -20,6 +20,7 @@ function SectionLabel({ children, index }: { children: ReactNode; index?: string
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+  const [reference, setReference] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   if (sent) {
@@ -29,6 +30,7 @@ export default function ContactPage() {
           <span className="signal-dot" />
           <h1>Good.<br /><em>Let’s make it useful.</em></h1>
           <p>Your project note is safely recorded. I’ll review the brief and reply with a clear next step.</p>
+          {reference && <p className="submission-reference">Reference: <strong>{reference}</strong></p>}
           <Link href="/" className="button button-dark">Back home <ArrowUpRight size={16} /></Link>
         </div>
       </main>
@@ -45,7 +47,7 @@ export default function ContactPage() {
     const data = new FormData(form);
 
     try {
-      await submitContact({
+      const response = await submitContact({
         name: data.get("name")?.toString() || "",
         email: data.get("email")?.toString() || "",
         company: data.get("company")?.toString(),
@@ -56,6 +58,7 @@ export default function ContactPage() {
         description: data.get("description")?.toString() || "",
         middleName: data.get("middleName")?.toString() || "",
       });
+      setReference(response.reference);
       setSent(true);
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Could not send your note.");
@@ -80,45 +83,32 @@ export default function ContactPage() {
       <form className="project-form" onSubmit={handleSubmit}>
         <input className="form-honeypot" name="middleName" tabIndex={-1} autoComplete="off" aria-hidden="true" />
         <div className="form-grid">
-          <label>Name<input name="name" required placeholder="Your name" /></label>
-          <label>Email<input name="email" required type="email" placeholder="you@brand.com" /></label>
-          <label>Company / brand<input name="company" placeholder="Brand name" /></label>
-          <label>Website<input name="website" placeholder="https://" /></label>
+          <label>Name<input name="name" required autoComplete="name" placeholder="Your name" /></label>
+          <label>Email<input name="email" required type="email" autoComplete="email" placeholder="you@brand.com" /></label>
+          <label>Company / brand<input name="company" autoComplete="organization" placeholder="Brand name" /></label>
+          <label>Website<input name="website" type="url" inputMode="url" autoComplete="url" placeholder="https://" /></label>
         </div>
         <label>What do you need?
           <select name="focus" defaultValue="" required>
             <option value="" disabled>Select a focus</option>
-            <option>New e-commerce store</option>
-            <option>Existing store improvement</option>
-            <option>AI integration</option>
-            <option>3D / AR</option>
-            <option>Cart recovery</option>
-            <option>Performance / SEO</option>
-            <option>Custom web application</option>
+            {projectFocusOptions.map((option) => <option key={option} value={option}>{option}</option>)}
           </select>
         </label>
         <div className="form-grid">
           <label>Budget range
             <select name="budget" defaultValue="">
               <option value="" disabled>Choose a range</option>
-              <option>Under $5k</option>
-              <option>$5k—$10k</option>
-              <option>$10k—$20k</option>
-              <option>$20k+</option>
-              <option>Not sure yet</option>
+              {budgetOptions.map((option) => <option key={option} value={option}>{option}</option>)}
             </select>
           </label>
           <label>Timeline
             <select name="timeline" defaultValue="">
               <option value="" disabled>Choose a timeline</option>
-              <option>ASAP</option>
-              <option>1—2 months</option>
-              <option>3—6 months</option>
-              <option>Flexible</option>
+              {timelineOptions.map((option) => <option key={option} value={option}>{option}</option>)}
             </select>
           </label>
         </div>
-        <label>Project description<textarea name="description" required placeholder="What are you trying to make happen?" rows={6} /></label>
+        <label>Project description<textarea name="description" required minLength={20} placeholder="What are you trying to make happen?" rows={6} /></label>
         <button className="button button-dark" type="submit" disabled={sending}>
           {sending ? "Sending project note…" : "Send project note"} {!sending && <ArrowUpRight size={16} />}
         </button>

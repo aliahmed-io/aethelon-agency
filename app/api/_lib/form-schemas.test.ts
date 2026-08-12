@@ -16,7 +16,7 @@ describe("contactInputSchema", () => {
     expect(() => contactInputSchema.parse({ ...parsed, email: "not-an-email" })).toThrow("Enter a valid email address.");
   });
 
-  it("rejects short descriptions and filled honeypot fields", () => {
+  it("rejects short descriptions, filled honeypots, invalid options, and malformed websites", () => {
     const baseline = {
       name: "Samira Youssef",
       email: "samira@example.com",
@@ -26,6 +26,24 @@ describe("contactInputSchema", () => {
 
     expect(() => contactInputSchema.parse({ ...baseline, description: "Too short" })).toThrow("Share a little more about the project.");
     expect(() => contactInputSchema.parse({ ...baseline, middleName: "Automated sender" })).toThrow();
+    expect(() => contactInputSchema.parse({ ...baseline, focus: "Unknown work" })).toThrow();
+    expect(() => contactInputSchema.parse({ ...baseline, website: "not a URL" })).toThrow("Enter a valid website URL.");
+  });
+
+  it("normalizes optional blank values and accepts secure website URLs", () => {
+    const parsed = contactInputSchema.parse({
+      name: "Samira Youssef",
+      email: "samira@example.com",
+      company: "   ",
+      website: "https://example.com/work",
+      focus: "Performance / SEO",
+      budget: "$10k—$20k",
+      timeline: "1—2 months",
+      description: "A real project brief with enough initial context.",
+    });
+
+    expect(parsed.company).toBeUndefined();
+    expect(parsed.website).toBe("https://example.com/work");
   });
 });
 

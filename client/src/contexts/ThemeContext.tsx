@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+"use client";
+
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 type Theme = "light" | "dark";
 
@@ -16,43 +18,55 @@ interface ThemeProviderProps {
   switchable?: boolean;
 }
 
+function getStoredTheme(defaultTheme: Theme): Theme {
+  try {
+    const storedTheme = window.localStorage.getItem("theme");
+    return storedTheme === "dark" || storedTheme === "light" ? storedTheme : defaultTheme;
+  } catch {
+    return defaultTheme;
+  }
+}
+
 export function ThemeProvider({
   children,
   defaultTheme = "light",
   switchable = false,
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (switchable && typeof window !== "undefined") {
-      const stored = window.localStorage.getItem("theme");
-      return (stored as Theme) || defaultTheme;
+  // Keep the server and first client render identical. Reading localStorage in
+  // the useState initializer causes hydration mismatches on returning visitors.
+  const [theme, setTheme] = useState<Theme>(defaultTheme);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    if (switchable) {
+      setTheme(getStoredTheme(defaultTheme));
     }
-    return defaultTheme;
-  });
+    setIsMounted(true);
+  }, [defaultTheme, switchable]);
 
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
+    root.classList.toggle("dark", theme === "dark");
+    root.style.colorScheme = theme;
 
-    if (switchable) {
-      window.localStorage.setItem("theme", theme);
-    }
-  }, [theme, switchable]);
-
-  const toggleTheme = switchable
-    ? () => {
-        setTheme(prev => (prev === "light" ? "dark" : "light"));
+    if (switchable && isMounted) {
+      try {
+        window.localStorage.setItem("theme", theme);
+      } catch {
+        // A blocked storage area should never prevent the site from rendering.
       }
-    : undefined;
+    }
+  }, [isMounted, switchable, theme]);
 
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, switchable }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  const value = useMemo<ThemeContextType>(() => ({
+    theme,
+    switchable,
+    toggleTheme: switchable
+      ? () => setTheme((currentTheme) => (currentTheme === "light" ? "dark" : "light"))
+      : undefined,
+  }), [switchable, theme]);
+
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 
 export function useTheme() {

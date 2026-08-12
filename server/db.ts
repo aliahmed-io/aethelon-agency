@@ -4,6 +4,20 @@ import { contactSubmissions, type InsertContactSubmission, newsletterSubscriptio
 
 let database: ReturnType<typeof drizzle> | null = null;
 
+export class SubmissionUnavailableError extends Error {
+  constructor() {
+    super("Submission storage is temporarily unavailable.");
+    this.name = "SubmissionUnavailableError";
+  }
+}
+
+export class SubmissionRateLimitError extends Error {
+  constructor() {
+    super("Please wait before sending another project note.");
+    this.name = "SubmissionRateLimitError";
+  }
+}
+
 export async function getDb() {
   if (!database && process.env.DATABASE_URL) {
     database = drizzle(process.env.DATABASE_URL);
@@ -13,8 +27,10 @@ export async function getDb() {
 
 export async function createContactSubmission(submission: InsertContactSubmission) {
   const db = await getDb();
-  if (!db) throw new Error("Submission storage is temporarily unavailable.");
+  if (!db) throw new SubmissionUnavailableError();
 
+  // This is a secondary guard. The primary public boundary is the IP-based
+  // limiter in the route; keeping an email-based check limits repeat abuse.
   const cutoff = new Date(Date.now() - 60 * 60 * 1000);
   const [recent] = await db
     .select({ count: sql<number>`count(*)` })
@@ -22,7 +38,7 @@ export async function createContactSubmission(submission: InsertContactSubmissio
     .where(and(eq(contactSubmissions.email, submission.email), gte(contactSubmissions.submittedAt, cutoff)));
 
   if (Number(recent?.count ?? 0) >= 4) {
-    throw new Error("Please wait before sending another project note.");
+    throw new SubmissionRateLimitError();
   }
 
   const result = await db.insert(contactSubmissions).values(submission);
@@ -31,16 +47,16 @@ export async function createContactSubmission(submission: InsertContactSubmissio
 
 export async function subscribeEmail(email: string, source = "website-newsletter") {
   const db = await getDb();
-  if (!db) throw new Error("Subscription storage is temporarily unavailable.");
+  if (!db) throw new SubmissionUnavailableError();
 
-  const existing = await db
-    .select({ id: newsletterSubscriptions.id })
-    .from(newsletterSubscriptions)
-    .where(eq(newsletterSubscriptions.email, email))
-    .limit(1);
+  const result = await db
+    .insert(newsletterSubscriptions)
+    .values({ email, source })
+    .onDuplicateKeyUpdate({
+      // Preserve the first subscription timestamp and source while treating
+      // duplicate requests as an idempotent success.
+      set: { email: sql`${newsletterSubscriptions.email}` },
+    });
 
-  if (existing.length > 0) return { created: false as const };
-
-  await db.insert(newsletterSubscriptions).values({ email, source });
-  return { created: true as const };
+  return { created: Number(result[0].affectedRows ?? 0) === 1 } as const;
 }

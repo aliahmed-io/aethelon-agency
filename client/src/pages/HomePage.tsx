@@ -6,12 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowDownRight, ArrowUpRight, ChevronDown } from "lucide-react";
 import { IMG } from "../lib/site-assets";
-
-const projects = [
-  { slug: "form-and-function", number: "01", title: "Form & Function", category: "Furniture", stack: "Next.js · Shopify · TypeScript", scope: "Selected experiment", image: IMG.work1 },
-  { slug: "signal-search", number: "02", title: "Signal Search", category: "Beauty", stack: "Next.js · AI · Semantic search", scope: "Selected experiment", image: IMG.work2 },
-  { slug: "in-your-space", number: "03", title: "In Your Space", category: "Product", stack: "React · Three.js · WebGL", scope: "Selected experiment", image: IMG.work3 },
-] as const;
+import { projects } from "../../../shared/projects";
 
 const services = [
   ["01", "Custom E-commerce", "Storefronts that make product, story, and checkout feel like one system.", ["Next.js storefronts", "Shopify & headless integrations", "Product, collection & account flows"]],
