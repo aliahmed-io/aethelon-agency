@@ -54,3 +54,10 @@
 - [ ] Identify and fix the specific homepage break without regressing the editorial layout.
 - [ ] Verify the landing page at desktop and mobile widths.
 - [ ] Run the production build and save the repair checkpoint.
+
+## GitHub export
+
+- [ ] Verify the authenticated GitHub owner and whether `aethelon-agency` already exists.
+- [ ] Create or reuse the private `aethelon-agency` repository.
+- [ ] Commit the completed Commerce Studio project and push the final checkpoint.
+- [ ] Verify the remote repository URL and pushed default branch.
