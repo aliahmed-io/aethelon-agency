@@ -37,3 +37,13 @@
 - [x] Remove legacy Vite entry points, configs, server scaffolding, and unused dependencies.
 - [x] Apply final metadata, accessibility, performance, and error-boundary improvements.
 - [x] Run full checks, production build, route smoke tests, and save the final checkpoint.
+
+## Knowledge hub and SEO expansion
+
+- [x] Gather authoritative evidence and source URLs for the requested ecommerce subjects.
+- [x] Write one substantial article for each requested feature and include citations plus honest implementation caveats.
+- [x] Build a Paper Signal topic taxonomy and filterable blog index inspired by the supplied reference, without copying it.
+- [x] Add native App Router blog index and article routes with metadata and structured content.
+- [x] Implement technical SEO foundations: metadata, canonical URLs, robots, sitemap, JSON-LD, internal links, and share previews.
+- [x] Verify blog filtering, article routes, mobile layout, dark mode, accessibility, type checking, and production build.
+- [x] Save and deliver the knowledge hub checkpoint plus the SEO plan.
