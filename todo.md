@@ -47,3 +47,10 @@
 - [x] Implement technical SEO foundations: metadata, canonical URLs, robots, sitemap, JSON-LD, internal links, and share previews.
 - [x] Verify blog filtering, article routes, mobile layout, dark mode, accessibility, type checking, and production build.
 - [x] Save and deliver the knowledge hub checkpoint plus the SEO plan.
+
+## Landing page repair
+
+- [ ] Inspect the landing route and current runtime/build errors.
+- [ ] Identify and fix the specific homepage break without regressing the editorial layout.
+- [ ] Verify the landing page at desktop and mobile widths.
+- [ ] Run the production build and save the repair checkpoint.

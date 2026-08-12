@@ -1,0 +1,1 @@
+{'format': 'JPEG', 'size': (1800, 1013), 'mode': 'RGB'}

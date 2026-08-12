@@ -1,0 +1,11 @@
+# Landing-page repair notes
+
+- The reported failure is isolated to the right-hand Home hero visual; the copy and header render correctly.
+- The original hero PNG is valid, 2560 × 1440, and visibly contains the warm-paper still life with the orange cube and black sphere.
+- A locally optimized JPEG export is also valid, 1800 × 1013, approximately 159 KB, and visually contains the same composition.
+- The optimized CDN URL returns HTTP 200 with `content-type: image/jpeg`.
+- The current Home markup contains a native `next/image` fill image with the optimized CDN source, but the preview still shows a solid near-black panel. This points to a rendering/stacking or image-visibility issue rather than a missing source file.
+- In the live browser, `.hero-visual img` is `complete: true` with `naturalWidth: 1800`, `naturalHeight: 1013`, `opacity: 1`, `visibility: visible`, and a full 632.5 × 1017 px rectangle matching its parent. The CDN source is the expected JPEG and the parent background is the light paper token. The remaining issue is therefore the browser paint/compositing path, not loading or dimensions.
+- Saving the rendered element from the browser reveals a valid dark shoe composition, while the exact CDN URL downloads the intended warm-paper still life. The hero is not invisible: the live browser is painting a different image than the visual expectation. The repair should point `IMG.hero` at the intended uploaded warm-paper asset and keep the explicit fill geometry as a defensive fallback.
+- The browser paint stack at the black-panel coordinate contains two `.cover-image` elements: the hero image and a later split-section image. The split-section wrapper lacked `position: relative`, so its absolute fill image escaped its intended frame and painted over the Home hero. Adding containment to `.split-image` is the primary fix; adding containment to `.case-thumbs button` closes the same class of bug for gallery thumbnails.
+- A second cascade issue affected the decorative overlays: `.hero-visual > :not(img)` had higher specificity than `.hero-stamp` and `.hero-caption`, changing both from absolute to relative positioning. The browser measured the stamp at the hero’s left edge and the caption in normal flow. The final override restores absolute positioning while retaining the overlay z-index.

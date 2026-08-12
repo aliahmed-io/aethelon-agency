@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 /* Paper Signal: warm paper, charcoal ink, signal orange; editorial scale over card grids. */
-:root { --paper:#f3f0e8; --paper-2:#e9e5dc; --ink:#171717; --muted:#68675f; --line:#c9c5bb; --orange:#ff5a1f; --sage:#b5c1b1; --ease:cubic-bezier(.23,1,.32,1); --font-display:'Space Grotesk',sans-serif; --font-body:'DM Sans',sans-serif; }
+:root { --paper:#f3f0e8; --paper-2:#e9e5dc; --ink:#171717; --muted:#68675f; --line:#c9c5bb; --orange:#ff5a1f; --sage:#b5c1b1; --ease:cubic-bezier(.23,1,.32,1); --font-display:'Space Grotesk',sans-serif; --font-body:'DM Sans',sans-serif; --display:var(--font-display); --signal:var(--orange); --paper-deep:var(--paper-2); }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); }
@@ -41,7 +41,7 @@ em { color:var(--orange); font-style:normal; }
 .button-paper { background:var(--paper); color:var(--ink); }
 .text-link { display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; border-bottom:1px solid var(--ink); padding-bottom:6px; width:max-content; transition:color .2s,border .2s; }
 .text-link:hover { color:var(--orange); border-color:var(--orange); }
-.hero-visual { position:relative; min-height:620px; background:var(--paper-2); overflow:hidden; }
+.hero-visual { position:relative; height:100%; min-height:620px; background:var(--paper-2); overflow:hidden; }
 .hero-visual img { width:100%; height:100%; object-fit:cover; transition:transform 1.2s var(--ease); }
 .hero-visual:hover img { transform:scale(1.035); }
 .hero-stamp { position:absolute; top:30px; right:34px; width:73px; height:73px; border:1px solid var(--ink); border-radius:50%; display:grid; place-content:center; text-align:center; font:700 17px/1 var(--font-display); transform:rotate(12deg); }
@@ -157,6 +157,7 @@ img, svg, video, canvas { max-width:100%; }
 .hero-copy { background: var(--paper); }
 .hero-visual { background: var(--paper-2); isolation: isolate; overflow: hidden; }
 .hero-visual img { z-index: 0; }
+.cover-image { position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:cover; }
 .hero-visual > :not(img) { position: relative; z-index: 1; }
 
 /* Paper Signal knowledge hub: archive-like topic controls, evidence-led cards, and readable long-form article rhythm. */
@@ -244,3 +245,8 @@ img, svg, video, canvas { max-width:100%; }
 @media (prefers-reduced-motion: reduce) {
   .topic-pills button, .article-card { transition: none; }
 }
+
+/* Fill-image containment: every absolute next/image lives inside its visual frame. */
+.split-image { position:relative; min-height:100%; overflow:hidden; }
+.case-thumbs button { position:relative; }
+.hero-visual > .hero-stamp, .hero-visual > .hero-caption { position:absolute; }
