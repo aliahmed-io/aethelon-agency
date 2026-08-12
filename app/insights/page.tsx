@@ -3,11 +3,11 @@ import InsightsPage from "../../client/src/pages/InsightsPage";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Knowledge — Commerce Studio",
+  title: "Knowledge — Aethelon",
   description: "Evidence-backed notes on ecommerce systems, AI commerce, product experience, growth, and technical SEO.",
   alternates: { canonical: "/insights" },
   openGraph: {
-    title: "Knowledge — Commerce Studio",
+    title: "Knowledge — Aethelon",
     description: "Evidence-backed notes on ecommerce systems, AI commerce, product experience, growth, and technical SEO.",
     type: "website",
   },

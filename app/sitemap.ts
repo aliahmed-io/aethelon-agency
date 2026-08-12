@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { insightArticles } from "../client/src/lib/insights";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://commerce-studio.manus.space";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aethelon.manus.space";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const coreRoutes = ["", "/work", "/services", "/about", "/insights", "/contact"];

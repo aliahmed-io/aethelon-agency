@@ -4,7 +4,7 @@ import SiteChrome from "../../SiteChrome";
 import InsightArticlePage from "../../../client/src/pages/InsightArticlePage";
 import { getInsight, insightArticles } from "../../../client/src/lib/insights";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://commerce-studio.manus.space";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aethelon.manus.space";
 
 export function generateStaticParams() {
   return insightArticles.map((article) => ({ slug: article.slug }));
@@ -13,9 +13,9 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const article = getInsight(slug);
-  if (!article) return { title: "Knowledge note not found — Commerce Studio" };
+  if (!article) return { title: "Knowledge note not found — Aethelon" };
   return {
-    title: `${article.title} — Commerce Studio`,
+    title: `${article.title} — Aethelon`,
     description: article.excerpt,
     alternates: { canonical: `/insights/${article.slug}` },
     openGraph: {
@@ -40,8 +40,8 @@ export default async function InsightArticleRoute({ params }: { params: Promise<
     description: article.excerpt,
     datePublished: `2026-${article.index.padStart(2, "0")}-01`,
     dateModified: `2026-${article.index.padStart(2, "0")}-01`,
-    author: { "@type": "Organization", name: "Commerce Studio", url: siteUrl },
-    publisher: { "@type": "Organization", name: "Commerce Studio", url: siteUrl },
+    author: { "@type": "Organization", name: "Aethelon", url: siteUrl },
+    publisher: { "@type": "Organization", name: "Aethelon", url: siteUrl },
     mainEntityOfPage: `${siteUrl}/insights/${article.slug}`,
     keywords: article.tags.join(", "),
   };

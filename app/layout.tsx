@@ -25,21 +25,21 @@ const displayFont = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Commerce Studio — Next-generation commerce systems",
+  title: "Aethelon — Next-generation commerce systems",
   description: "Custom storefronts, useful AI, and immersive product experiences.",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://commerce-studio.manus.space"),
-  applicationName: "Commerce Studio",
-  authors: [{ name: "Commerce Studio" }],
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://aethelon.manus.space"),
+  applicationName: "Aethelon",
+  authors: [{ name: "Aethelon" }],
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Commerce Studio — Next-generation commerce systems",
+    title: "Aethelon — Next-generation commerce systems",
     description: "Custom storefronts, useful AI, and immersive product experiences.",
     type: "website",
-    siteName: "Commerce Studio",
+    siteName: "Aethelon",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Commerce Studio — Next-generation commerce systems",
+    title: "Aethelon — Next-generation commerce systems",
     description: "Custom storefronts, useful AI, and immersive product experiences.",
   },
 };

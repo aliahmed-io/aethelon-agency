@@ -21,6 +21,7 @@ html[data-route-loading="false"] .route-progress{transform:scaleX(1);opacity:0}
 .mark-lockup { display:flex; align-items:center; gap:3px; font:700 10px var(--font-display); letter-spacing:-.08em; }
 .mark-lockup img { width:33px; height:33px; object-fit:contain; }
 .mark-lockup b { color:var(--orange); }
+.form-feedback { margin:12px 0 0; color:var(--muted); font-size:12px; line-height:1.45; }.form-feedback.is-error { color:#ad381a; }
 .desktop-nav { display:flex; align-items:center; gap:26px; font-size:13px; }
 .desktop-nav a:not(.nav-cta) { position:relative; padding:8px 0; }
 .desktop-nav a:not(.nav-cta)::after { content:''; position:absolute; left:0; right:100%; bottom:2px; height:1px; background:var(--orange); transition:right .25s var(--ease); }
@@ -97,6 +98,7 @@ em { color:var(--orange); font-style:normal; }
 .empty-filter h2 { font:500 clamp(2rem,4vw,4rem) var(--font-display); letter-spacing:-.07em; margin:0; }
 .empty-filter p { color:var(--muted); margin:0; }
 .project-form button:disabled { opacity:.6; cursor:wait; }
+.form-honeypot { position:absolute !important; left:-10000px !important; width:1px !important; height:1px !important; opacity:0 !important; pointer-events:none !important; }
 @media (max-width: 760px) {
   .desktop-nav { display:none; }
   .mobile-toggle { display:grid; place-items:center; width:36px; height:36px; }

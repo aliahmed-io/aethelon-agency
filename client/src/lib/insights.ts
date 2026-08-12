@@ -296,7 +296,7 @@ export const insightArticles: InsightArticle[] = [
         heading: "Build a measurement loop",
         paragraphs: [
           "Track indexed pages, impressions, qualified clicks, query groups, non-brand traffic, product-rich-result coverage, Core Web Vitals, crawl errors, and assisted conversions. Review templates, not just individual URLs. A recurring pattern of empty category pages, duplicate filters, or thin product content is a product backlog, not an SEO mystery.",
-          "The SEO plan for Commerce Studio is therefore technical and editorial: native routes, canonical metadata, sitemap and robots files, Product and Article schema where truthful, fast imagery, meaningful internal links, and a knowledge hub that answers questions before the shopper asks them."
+          "The SEO plan for Aethelon is therefore technical and editorial: native routes, canonical metadata, sitemap and robots files, Product and Article schema where truthful, fast imagery, meaningful internal links, and a knowledge hub that answers questions before the shopper asks them."
         ]
       }
     ],
@@ -400,7 +400,7 @@ export const insightArticles: InsightArticle[] = [
     date: "2026 / 10",
     stat: "Input → context",
     statLabel: "A room photo can turn a generic catalog question into a context-aware shortlist",
-    statSource: "Product capability pattern from the supplied Commerce Studio brief; validate accuracy with human review and testing.",
+    statSource: "Product capability pattern from the supplied Aethelon brief; validate accuracy with human review and testing.",
     deck: "The best personalization starts with the shopper’s context, but it never pretends the model can see more than the image and catalog allow.",
     sections: [
       {
@@ -432,7 +432,7 @@ export const insightArticles: InsightArticle[] = [
     date: "2026 / 11",
     stat: "One ledger",
     statLabel: "Every RESTOCK, SALE, and RETURN should be explainable in the inventory history",
-    statSource: "Operational design principle from the supplied Commerce Studio brief; measure accuracy and reconciliation in production.",
+    statSource: "Operational design principle from the supplied Aethelon brief; measure accuracy and reconciliation in production.",
     deck: "A storefront cannot stay elegant if the systems behind it make every update feel like a fire drill.",
     sections: [
       {

@@ -116,8 +116,21 @@
 
 ## Aggressive performance pass
 
-- [ ] Profile actual route-change latency, image request failures, and the latest Lighthouse gaps.
-- [ ] Create and run a reproducible Python image-conversion pipeline with runtime-safe output URLs.
-- [ ] Reduce unused route JavaScript and add an instant-feeling App Router transition without hiding loading work.
-- [ ] Tune Next.js image delivery, preloading, responsive sizes, and cache behavior.
-- [ ] Validate navigation, image loading, Lighthouse-style metrics, visual quality, type checking, and production build.
+- [x] Profile actual route-change latency, image request failures, and the latest Lighthouse gaps.
+- [x] Create and run a reproducible Python image-conversion pipeline with runtime-safe output URLs.
+- [x] Reduce unused route JavaScript and add an instant-feeling App Router transition without hiding loading work.
+- [x] Tune Next.js image delivery, preloading, responsive sizes, and cache behavior.
+- [x] Validate navigation, image loading, Lighthouse-style metrics, visual quality, type checking, and production build.
+
+## Aethelon brand, backend, and measurement upgrade
+
+- [x] Rename the public brand from Commerce Studio to Aethelon across UI, metadata, structured data, sitemap, robots, and contact copy.
+- [x] Upgrade the project with a real server-backed submission path for contact and newsletter forms.
+- [x] Add validation, persistence, abuse-resistant handling, and clear success/error states for both forms.
+- [x] Add repeatable production bundle analysis and identify the heaviest remaining client dependencies.
+- [x] Reduce avoidable shared JavaScript without changing the Paper Signal visual system or interactions.
+- [x] Run and document a Lighthouse audit against the local production build because no active public deployment is currently available.
+- [ ] Re-run Lighthouse against the published Aethelon URL after the project is published.
+- [x] Run type checking, production build, and route/form smoke tests for the completed upgrade.
+- [ ] Save a new checkpoint for the completed Aethelon upgrade.
+- [ ] Commit and push the completed Aethelon upgrade to the private GitHub repository.

@@ -5,7 +5,6 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowDownRight, ArrowUpRight, ChevronDown } from "lucide-react";
-import { toast } from "sonner";
 import { IMG } from "../lib/site-assets";
 
 const projects = [
@@ -31,7 +30,7 @@ function WorkCard({ project, featured = false }: { project: typeof projects[numb
 }
 
 function Hero() {
-  return <section className="hero"><div className="hero-copy"><div className="eyebrow"><span className="signal-dot" /> Next-generation commerce systems</div><h1>Build a store<br />people <em>remember.</em></h1><p>Custom Next.js storefronts, useful AI, and immersive product experiences—built with the care of a studio and the overhead of one person.</p><div className="hero-actions"><Link className="button button-dark" href="/contact">Start a project <ArrowUpRight size={16} /></Link><a className="text-link" href="#work">See the work <ArrowDownRight size={16} /></a></div></div><div className="hero-visual"><Image src={IMG.hero} alt="Abstract product composition in warm paper and orange" fill preload quality={70} sizes="(max-width: 760px) 100vw, 50vw" className="cover-image" /><div className="hero-stamp">CS<br /><span>01—26</span></div><div className="hero-caption">Directly designed<br />and developed.</div></div></section>;
+  return <section className="hero"><div className="hero-copy"><div className="eyebrow"><span className="signal-dot" /> Next-generation commerce systems</div><h1>Build a store<br />people <em>remember.</em></h1><p>Custom Next.js storefronts, useful AI, and immersive product experiences—built with the care of a studio and the overhead of one person.</p><div className="hero-actions"><Link className="button button-dark" href="/contact">Start a project <ArrowUpRight size={16} /></Link><a className="text-link" href="#work">See the work <ArrowDownRight size={16} /></a></div></div><div className="hero-visual"><Image src={IMG.hero} alt="Abstract product composition in warm paper and orange" fill preload quality={70} sizes="(max-width: 760px) 100vw, 50vw" className="cover-image" /><div className="hero-stamp">AE<br /><span>01—26</span></div><div className="hero-caption">Directly designed<br />and developed.</div></div></section>;
 }
 
 function TrustStrip() {
@@ -46,8 +45,9 @@ function ServicesPreview() {
 function Demo() {
   const [color, setColor] = useState("orange");
   const [size, setSize] = useState("M");
+  const [cartNotice, setCartNotice] = useState("");
   const colors: Record<string, string> = { orange: "#ff5a1f", stone: "#d8d1c4", ink: "#252525" };
-  return <section className="demo-section"><div className="demo-copy"><SectionLabel index="03">A small proof of concept</SectionLabel><h2>The site should<br /><em>do the talking.</em></h2><p>Here’s a tiny commerce interaction: choose a finish, select a size, and add the object to your cart. No theatre. Just a useful product moment.</p><span className="demo-note"><span className="signal-dot" /> Selected experiment · interactive product card</span></div><div className="product-card"><div className="product-art" style={{ "--product": colors[color] } as React.CSSProperties}><div className="product-shape" /><span className="product-code">OBJ—001</span></div><div className="product-info"><div><span className="eyebrow">The everyday object</span><h3>Signal form / 01</h3></div><strong>$148</strong></div><div className="swatches"><span>Finish</span>{Object.keys(colors).map((value) => <button key={value} aria-label={value} className={color === value ? "selected" : ""} style={{ background: colors[value] }} onClick={() => setColor(value)} />)}</div><div className="sizes"><span>Size</span>{["S", "M", "L"].map((value) => <button key={value} className={size === value ? "selected" : ""} onClick={() => setSize(value)}>{value}</button>)}</div><button className="button button-orange" onClick={() => toast.success(`Signal form / 01 — ${size} added to cart`)}>Add to cart <ArrowUpRight size={16} /></button></div></section>;
+  return <section className="demo-section"><div className="demo-copy"><SectionLabel index="03">A small proof of concept</SectionLabel><h2>The site should<br /><em>do the talking.</em></h2><p>Here’s a tiny commerce interaction: choose a finish, select a size, and add the object to your cart. No theatre. Just a useful product moment.</p><span className="demo-note"><span className="signal-dot" /> Selected experiment · interactive product card</span></div><div className="product-card"><div className="product-art" style={{ "--product": colors[color] } as React.CSSProperties}><div className="product-shape" /><span className="product-code">OBJ—001</span></div><div className="product-info"><div><span className="eyebrow">The everyday object</span><h3>Signal form / 01</h3></div><strong>$148</strong></div><div className="swatches"><span>Finish</span>{Object.keys(colors).map((value) => <button key={value} aria-label={value} className={color === value ? "selected" : ""} style={{ background: colors[value] }} onClick={() => setColor(value)} />)}</div><div className="sizes"><span>Size</span>{["S", "M", "L"].map((value) => <button key={value} className={size === value ? "selected" : ""} onClick={() => setSize(value)}>{value}</button>)}</div><button className="button button-orange" onClick={() => setCartNotice(`Signal form / 01 — ${size} added to cart`)}>Add to cart <ArrowUpRight size={16} /></button>{cartNotice && <p className="form-feedback" role="status">{cartNotice}</p>}</div></section>;
 }
 
 function FAQ() {
