@@ -134,3 +134,14 @@
 - [x] Run type checking, production build, and route/form smoke tests for the completed upgrade.
 - [x] Save a new checkpoint for the completed Aethelon upgrade.
 - [x] Commit and push the completed Aethelon upgrade to the private GitHub repository.
+
+## Aethelon editorial transition system
+
+- [x] Define a shared, transform-and-opacity-only transition foundation that never delays route rendering.
+- [x] Implement distinct Signal Arrival, Archive Slide, Blueprint Fold, Editorial Turn, Index Scan, Stamp Close, Gallery Shutter, and Misprint route variants.
+- [x] Verify the dedicated Archive Slide motion on the Work archive at desktop and mobile widths.
+- [x] Preserve reduced-motion support and accessibility without blocking focus, navigation, or page content.
+- [x] Verify transitions across desktop and mobile routes, then run tests and production build.
+- [x] Complete and verify the transition-system implementation.
+- [ ] Save a new checkpoint that includes the Aethelon editorial transition system and runtime verifier.
+- [ ] Commit and push the transition-system changes to the private GitHub repository.
