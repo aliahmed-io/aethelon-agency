@@ -50,10 +50,10 @@
 
 ## Landing page repair
 
-- [ ] Inspect the landing route and current runtime/build errors.
-- [ ] Identify and fix the specific homepage break without regressing the editorial layout.
-- [ ] Verify the landing page at desktop and mobile widths.
-- [ ] Run the production build and save the repair checkpoint.
+- [x] Inspect the landing route and current runtime/build errors.
+- [x] Identify and fix the specific homepage break without regressing the editorial layout.
+- [x] Verify the landing page at desktop and mobile widths.
+- [x] Run the production build and save the repair checkpoint.
 
 ## GitHub export
 
@@ -132,5 +132,5 @@
 - [x] Run and document a Lighthouse audit against the local production build because no active public deployment is currently available.
 - [ ] Re-run Lighthouse against the published Aethelon URL after the project is published.
 - [x] Run type checking, production build, and route/form smoke tests for the completed upgrade.
-- [ ] Save a new checkpoint for the completed Aethelon upgrade.
+- [x] Save a new checkpoint for the completed Aethelon upgrade.
 - [ ] Commit and push the completed Aethelon upgrade to the private GitHub repository.
