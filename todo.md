@@ -57,7 +57,7 @@
 
 ## GitHub export
 
-- [ ] Verify the authenticated GitHub owner and whether `aethelon-agency` already exists.
-- [ ] Create or reuse the private `aethelon-agency` repository.
-- [ ] Commit the completed Commerce Studio project and push the final checkpoint.
-- [ ] Verify the remote repository URL and pushed default branch.
+- [x] Verify the authenticated GitHub owner and whether `aethelon-agency` already exists.
+- [x] Create or reuse the private `aethelon-agency` repository.
+- [x] Commit the completed Commerce Studio project and push the final checkpoint.
+- [x] Verify the remote repository URL and pushed default branch.
