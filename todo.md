@@ -143,5 +143,5 @@
 - [x] Preserve reduced-motion support and accessibility without blocking focus, navigation, or page content.
 - [x] Verify transitions across desktop and mobile routes, then run tests and production build.
 - [x] Complete and verify the transition-system implementation.
-- [ ] Save a new checkpoint that includes the Aethelon editorial transition system and runtime verifier.
+- [x] Save a new checkpoint that includes the Aethelon editorial transition system and runtime verifier.
 - [ ] Commit and push the transition-system changes to the private GitHub repository.
