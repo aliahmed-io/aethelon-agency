@@ -1,6 +1,6 @@
 import SiteChrome from "./SiteChrome";
-import { EditorialNotFound } from "../client/src/pages/Site";
+import NotFoundPage from "../client/src/pages/NotFoundPage";
 
 export default function NotFound() {
-  return <SiteChrome><EditorialNotFound /></SiteChrome>;
+  return <SiteChrome><NotFoundPage /></SiteChrome>;
 }

@@ -1,5 +1,5 @@
 import SiteChrome from "../../SiteChrome";
-import { CaseStudy } from "../../../client/src/pages/Site";
+import CaseStudyPage from "../../../client/src/pages/CaseStudyPage";
 
 const caseStudySlugs = [
   "form-and-function",
@@ -22,5 +22,5 @@ type CaseStudyRouteProps = {
 
 export default async function CaseStudyRoute({ params }: CaseStudyRouteProps) {
   const { slug } = await params;
-  return <SiteChrome><CaseStudy slug={slug} /></SiteChrome>;
+  return <SiteChrome><CaseStudyPage slug={slug} /></SiteChrome>;
 }

@@ -113,3 +113,11 @@
 - [x] Replace blocking font CSS, optimize the hero LCP image, and add responsive image sizes.
 - [x] Remove first-paint animation cost and tune archive prefetch/filter behavior.
 - [x] Validate build, bundle/payload changes, Lighthouse metrics, and visual parity.
+
+## Aggressive performance pass
+
+- [ ] Profile actual route-change latency, image request failures, and the latest Lighthouse gaps.
+- [ ] Create and run a reproducible Python image-conversion pipeline with runtime-safe output URLs.
+- [ ] Reduce unused route JavaScript and add an instant-feeling App Router transition without hiding loading work.
+- [ ] Tune Next.js image delivery, preloading, responsive sizes, and cache behavior.
+- [ ] Validate navigation, image loading, Lighthouse-style metrics, visual quality, type checking, and production build.

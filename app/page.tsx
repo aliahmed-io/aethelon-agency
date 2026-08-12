@@ -1,10 +1,10 @@
 import SiteChrome from "./SiteChrome";
-import { Home } from "../client/src/pages/Site";
+import HomePageComponent from "../client/src/pages/HomePage";
 
 export default function HomePage() {
   return (
     <SiteChrome>
-      <Home />
+      <HomePageComponent />
     </SiteChrome>
   );
 }

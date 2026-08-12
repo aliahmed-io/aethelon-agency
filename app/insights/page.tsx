@@ -1,5 +1,5 @@
 import SiteChrome from "../SiteChrome";
-import { InsightsPage } from "../../client/src/pages/Site";
+import InsightsPage from "../../client/src/pages/InsightsPage";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
