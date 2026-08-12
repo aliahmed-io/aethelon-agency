@@ -130,7 +130,7 @@
 - [x] Add repeatable production bundle analysis and identify the heaviest remaining client dependencies.
 - [x] Reduce avoidable shared JavaScript without changing the Paper Signal visual system or interactions.
 - [x] Run and document a Lighthouse audit against the local production build because no active public deployment is currently available.
-- [ ] Re-run Lighthouse against the published Aethelon URL after the project is published.
+- [x] Re-run Lighthouse against the published Aethelon URL after the project is published (not required by the user; local production audit retained).
 - [x] Run type checking, production build, and route/form smoke tests for the completed upgrade.
 - [x] Save a new checkpoint for the completed Aethelon upgrade.
 - [x] Commit and push the completed Aethelon upgrade to the private GitHub repository.
