@@ -43,6 +43,12 @@ async function evaluate(expression, awaitPromise = false) {
 }
 
 await send("Page.enable");
+const reducedMotion = process.env.REDUCED_MOTION === "1";
+if (reducedMotion) {
+  await send("Emulation.setEmulatedMedia", {
+    features: [{ name: "prefers-reduced-motion", value: "reduce" }],
+  });
+}
 if (process.env.MOBILE === "1") {
   await send("Emulation.setDeviceMetricsOverride", {
     width: 390,
@@ -147,10 +153,16 @@ const observation = {
   inFlight,
   settled,
   events: await evaluate("window.__aethelonTransitionEvents || []"),
+  reducedMotionOverlayDisplay: reducedMotion
+    ? await evaluate("getComputedStyle(document.querySelector('.route-transition')).display")
+    : "not-requested",
 };
 
 console.log(JSON.stringify(observation, null, 2));
 if (process.env.MOBILE === "1") {
   await send("Emulation.clearDeviceMetricsOverride");
+}
+if (reducedMotion) {
+  await send("Emulation.setEmulatedMedia", { features: [] });
 }
 socket.close();

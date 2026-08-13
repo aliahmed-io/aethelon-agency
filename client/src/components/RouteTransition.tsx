@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 type TransitionPhase = "idle" | "prepare" | "covering" | "revealing";
 type TransitionVariant = "arrival" | "archive" | "blueprint" | "editorial" | "index" | "stamp" | "gallery" | "misprint";
@@ -42,7 +42,6 @@ function isInternalNavigation(anchor: HTMLAnchorElement) {
 
 export default function RouteTransition() {
   const pathname = usePathname() || "/";
-  const router = useRouter();
   const [transition, setTransition] = useState(() => ({
     phase: "idle" as TransitionPhase,
     profile: getTransitionProfile(pathname),
@@ -110,16 +109,13 @@ export default function RouteTransition() {
 
       const destination = new URL(target.href, window.location.href);
       const profile = getTransitionProfile(destination.pathname);
-      const href = `${destination.pathname}${destination.search}${destination.hash}`;
 
-      event.preventDefault();
       clearTimers();
       isNavigating.current = true;
       document.documentElement.dataset.routeLoading = "true";
       setTransition({ phase: "prepare", profile });
 
       window.requestAnimationFrame(() => setTransition({ phase: "covering", profile }));
-      navigationTimer.current = window.setTimeout(() => router.push(href), COVER_DURATION);
       fallbackTimer.current = window.setTimeout(resetTransition, FALLBACK_DURATION);
     };
 
@@ -138,7 +134,7 @@ export default function RouteTransition() {
       document.removeEventListener("visibilitychange", onVisibilityChange);
       clearTimers();
     };
-  }, [router]);
+  }, []);
 
   const isMoving = transition.phase !== "idle";
 

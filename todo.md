@@ -145,3 +145,11 @@
 - [x] Complete and verify the transition-system implementation.
 - [x] Save a new checkpoint that includes the Aethelon editorial transition system and runtime verifier.
 - [x] Commit and push the transition-system changes to the private GitHub repository.
+
+## Transition timing refinement
+
+- [x] Increase the shared Aethelon route-transition duration by 200 ms without delaying route rendering.
+- [x] Verify the longer motion remains smooth, reduced-motion-safe, and production-build compatible.
+- [x] Exercise the extended transition through real desktop and mobile navigation without delaying route rendering.
+- [x] Re-verify the reduced-motion behavior after the timing refinement.
+- [ ] Save and push the timing-refinement checkpoint.
