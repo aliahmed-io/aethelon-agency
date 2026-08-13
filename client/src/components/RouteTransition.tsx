@@ -12,11 +12,12 @@ type TransitionProfile = {
   number: string;
 };
 
-// The cover and reveal phases were deliberately extended by 200 ms, while
-// navigation itself remains immediate: the click is never prevented or delayed.
-const COVER_DURATION = 360;
-const REVEAL_DURATION = 460;
-const FALLBACK_DURATION = 2200;
+// The page begins loading immediately, while the visual cover and reveal keep
+// a deliberate 700 ms editorial cadence.
+const TRANSITION_DURATION = 700;
+const COVER_DURATION = TRANSITION_DURATION;
+const REVEAL_DURATION = TRANSITION_DURATION;
+const FALLBACK_DURATION = 3200;
 
 function getTransitionProfile(pathname: string): TransitionProfile {
   if (pathname === "/") return { label: "Aethelon / home", variant: "arrival", number: "00" };

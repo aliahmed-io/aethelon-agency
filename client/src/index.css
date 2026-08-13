@@ -283,7 +283,7 @@ img, svg, video, canvas { max-width:100%; }
   inset: 0;
   background: color-mix(in srgb, var(--ink) 38%, transparent);
   opacity: 0;
-  transition: opacity 260ms ease;
+  transition: opacity 700ms ease;
 }
 .route-transition__paper {
   position: absolute;
@@ -291,7 +291,7 @@ img, svg, video, canvas { max-width:100%; }
   background: var(--paper);
   box-shadow: 0 -1.2rem 3.5rem color-mix(in srgb, var(--ink) 20%, transparent);
   transform: var(--route-enter);
-  transition: transform 360ms cubic-bezier(.76, 0, .24, 1);
+  transition: transform 700ms cubic-bezier(.76, 0, .24, 1);
   will-change: transform;
 }
 .route-transition__grid {
@@ -301,7 +301,7 @@ img, svg, video, canvas { max-width:100%; }
   background-size: clamp(4rem, 9vw, 8rem) clamp(4rem, 9vw, 8rem);
   opacity: 0;
   transform: translate3d(0, 1.4rem, 0);
-  transition: opacity 180ms ease 120ms, transform 360ms cubic-bezier(.23, 1, .32, 1) 90ms;
+  transition: opacity 360ms ease 160ms, transform 700ms cubic-bezier(.23, 1, .32, 1) 40ms;
 }
 .route-transition__signal {
   position: absolute;
@@ -314,7 +314,7 @@ img, svg, video, canvas { max-width:100%; }
   opacity: 0;
   transform: scaleX(0) translateY(-50%);
   transform-origin: left center;
-  transition: opacity 100ms linear, transform 360ms cubic-bezier(.23, 1, .32, 1) 100ms;
+  transition: opacity 220ms linear, transform 700ms cubic-bezier(.23, 1, .32, 1) 40ms;
 }
 .route-transition__label {
   position: absolute;
@@ -325,7 +325,7 @@ img, svg, video, canvas { max-width:100%; }
   color: var(--ink);
   opacity: 0;
   transform: translate3d(0, calc(-50% + 1.35rem), 0);
-  transition: opacity 140ms linear, transform 380ms cubic-bezier(.23, 1, .32, 1) 120ms;
+  transition: opacity 260ms linear, transform 700ms cubic-bezier(.23, 1, .32, 1) 80ms;
 }
 .route-transition__label span {
   color: var(--signal);
@@ -353,7 +353,7 @@ img, svg, video, canvas { max-width:100%; }
   line-height: 0.7;
   opacity: 0;
   transform: translate3d(0, 1.5rem, 0);
-  transition: opacity 160ms linear 140ms, transform 440ms cubic-bezier(.23, 1, .32, 1) 110ms;
+  transition: opacity 260ms linear 120ms, transform 700ms cubic-bezier(.23, 1, .32, 1) 60ms;
 }
 .route-transition--covering .route-transition__shadow { opacity: 1; }
 .route-transition--covering .route-transition__paper { transform: var(--route-cover); }
@@ -362,7 +362,7 @@ img, svg, video, canvas { max-width:100%; }
 .route-transition--covering .route-transition__label { opacity: 1; transform: translate3d(0, -50%, 0); }
 .route-transition--covering .route-transition__count { opacity: 1; transform: translate3d(0, 0, 0); }
 .route-transition--revealing .route-transition__shadow { opacity: 0; transition-delay: 150ms; }
-.route-transition--revealing .route-transition__paper { transform: var(--route-exit); transition-duration: 460ms; }
+.route-transition--revealing .route-transition__paper { transform: var(--route-exit); transition-duration: 700ms; }
 .route-transition--revealing .route-transition__grid { opacity: 0; transform: translate3d(0, -1.4rem, 0); transition-delay: 0ms; }
 .route-transition--revealing .route-transition__signal { opacity: 0; transform: scaleX(.82) translateY(-50%); transform-origin: right center; transition-delay: 0ms; }
 .route-transition--revealing .route-transition__label { opacity: 0; transform: translate3d(0, calc(-50% - 1.35rem), 0); transition-delay: 0ms; }
@@ -393,10 +393,10 @@ img, svg, video, canvas { max-width:100%; }
   opacity: 0;
   transform: scaleX(0);
   transform-origin: left;
-  transition: opacity 180ms ease, transform 560ms cubic-bezier(.23, 1, .32, 1);
+  transition: opacity 240ms ease, transform 700ms cubic-bezier(.23, 1, .32, 1);
 }
 html[data-route-loading="true"] .route-progress { opacity: 1; transform: scaleX(.94); }
-html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX(1); transition-duration: 380ms; }
+html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX(1); transition-duration: 700ms; }
 @media (max-width: 760px) {
   .route-transition__label { left: 7vw; }
   .route-transition__label strong { max-width: 82vw; font-size: clamp(2.5rem, 11vw, 4.5rem); }
