@@ -153,5 +153,5 @@
 - [x] Exercise the extended transition through real desktop and mobile navigation without delaying route rendering.
 - [x] Re-verify the reduced-motion behavior after the timing refinement.
 - [x] Save the timing-refinement checkpoint.
-- [ ] Push the final rebased timing-refinement commit to the private GitHub repository.
-- [ ] Verify the private GitHub main branch contains the final timing-refinement commit after the rebase.
+- [x] Push the final rebased timing-refinement commit to the private GitHub repository.
+- [x] Verify the private GitHub main branch contains the final timing-refinement commit after the rebase.
