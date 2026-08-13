@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 type TransitionPhase = "idle" | "prepare" | "covering" | "revealing";
 type TransitionVariant = "arrival" | "archive" | "blueprint" | "editorial" | "index" | "stamp" | "gallery" | "misprint";
@@ -9,18 +9,23 @@ type TransitionVariant = "arrival" | "archive" | "blueprint" | "editorial" | "in
 type TransitionProfile = {
   label: string;
   variant: TransitionVariant;
+  number: string;
 };
 
+const COVER_DURATION = 360;
+const REVEAL_DURATION = 460;
+const FALLBACK_DURATION = 2200;
+
 function getTransitionProfile(pathname: string): TransitionProfile {
-  if (pathname === "/") return { label: "Aethelon / home", variant: "arrival" };
-  if (pathname === "/work") return { label: "Selected work / archive", variant: "archive" };
-  if (pathname.startsWith("/work/")) return { label: "Selected work / case study", variant: "gallery" };
-  if (pathname === "/services") return { label: "Services / architecture", variant: "blueprint" };
-  if (pathname === "/about") return { label: "About / editorial", variant: "editorial" };
-  if (pathname === "/insights") return { label: "Insights / index", variant: "index" };
-  if (pathname.startsWith("/insights/")) return { label: "Insights / note", variant: "index" };
-  if (pathname === "/contact") return { label: "Start a project / contact", variant: "stamp" };
-  return { label: "Aethelon / signal", variant: "misprint" };
+  if (pathname === "/") return { label: "Aethelon / home", variant: "arrival", number: "00" };
+  if (pathname === "/work") return { label: "Selected work / archive", variant: "archive", number: "01" };
+  if (pathname.startsWith("/work/")) return { label: "Selected work / case study", variant: "gallery", number: "02" };
+  if (pathname === "/services") return { label: "Services / architecture", variant: "blueprint", number: "03" };
+  if (pathname === "/about") return { label: "About / editorial", variant: "editorial", number: "04" };
+  if (pathname === "/insights") return { label: "Insights / index", variant: "index", number: "05" };
+  if (pathname.startsWith("/insights/")) return { label: "Insights / note", variant: "index", number: "06" };
+  if (pathname === "/contact") return { label: "Start a project / contact", variant: "stamp", number: "07" };
+  return { label: "Aethelon / signal", variant: "misprint", number: "08" };
 }
 
 function isInternalNavigation(anchor: HTMLAnchorElement) {
@@ -31,28 +36,35 @@ function isInternalNavigation(anchor: HTMLAnchorElement) {
   if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) return false;
 
   const url = new URL(href, window.location.href);
-  return url.origin === window.location.origin && url.pathname !== window.location.pathname;
+  const current = new URL(window.location.href);
+  return url.origin === current.origin && (url.pathname !== current.pathname || url.search !== current.search);
 }
 
 export default function RouteTransition() {
   const pathname = usePathname() || "/";
+  const router = useRouter();
   const [transition, setTransition] = useState(() => ({
     phase: "idle" as TransitionPhase,
     profile: getTransitionProfile(pathname),
   }));
   const initialPathname = useRef(true);
+  const navigationTimer = useRef<number | null>(null);
   const fallbackTimer = useRef<number | null>(null);
   const settleTimer = useRef<number | null>(null);
+  const isNavigating = useRef(false);
 
   const clearTimers = () => {
+    if (navigationTimer.current !== null) window.clearTimeout(navigationTimer.current);
     if (fallbackTimer.current !== null) window.clearTimeout(fallbackTimer.current);
     if (settleTimer.current !== null) window.clearTimeout(settleTimer.current);
+    navigationTimer.current = null;
     fallbackTimer.current = null;
     settleTimer.current = null;
   };
 
   const resetTransition = () => {
     clearTimers();
+    isNavigating.current = false;
     document.documentElement.dataset.routeLoading = "false";
     setTransition((current) => ({ ...current, phase: "idle" }));
   };
@@ -67,16 +79,20 @@ export default function RouteTransition() {
       return;
     }
 
+    if (!isNavigating.current) {
+      setTransition({ phase: "idle", profile });
+      return;
+    }
+
     if (fallbackTimer.current !== null) window.clearTimeout(fallbackTimer.current);
     fallbackTimer.current = null;
-    setTransition((current) => ({
-      phase: "revealing",
-      profile: current.phase === "idle" ? profile : current.profile,
-    }));
+    navigationTimer.current = null;
+    setTransition((current) => ({ phase: "revealing", profile: current.profile }));
     settleTimer.current = window.setTimeout(() => {
+      isNavigating.current = false;
       setTransition({ phase: "idle", profile });
       settleTimer.current = null;
-    }, 180);
+    }, REVEAL_DURATION);
 
     return () => {
       if (settleTimer.current !== null) window.clearTimeout(settleTimer.current);
@@ -84,22 +100,27 @@ export default function RouteTransition() {
   }, [pathname]);
 
   useEffect(() => {
-    // Click is deliberately used instead of pointerdown. On touch screens a
-    // pointerdown often starts a scroll gesture, which must never launch a
-    // full-viewport navigation overlay.
+    // Navigation starts on confirmed click, never pointerdown, so touch scrolling
+    // cannot accidentally invoke a viewport-covering transition.
     const onClick = (event: MouseEvent) => {
       if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
       const target = event.target instanceof Element ? event.target.closest("a") : null;
-      if (!(target instanceof HTMLAnchorElement) || !isInternalNavigation(target)) return;
+      if (!(target instanceof HTMLAnchorElement) || !isInternalNavigation(target) || isNavigating.current) return;
 
       const destination = new URL(target.href, window.location.href);
       const profile = getTransitionProfile(destination.pathname);
+      const href = `${destination.pathname}${destination.search}${destination.hash}`;
+
+      event.preventDefault();
       clearTimers();
-      setTransition({ phase: "prepare", profile });
-      window.requestAnimationFrame(() => setTransition({ phase: "covering", profile }));
+      isNavigating.current = true;
       document.documentElement.dataset.routeLoading = "true";
-      fallbackTimer.current = window.setTimeout(resetTransition, 650);
+      setTransition({ phase: "prepare", profile });
+
+      window.requestAnimationFrame(() => setTransition({ phase: "covering", profile }));
+      navigationTimer.current = window.setTimeout(() => router.push(href), COVER_DURATION);
+      fallbackTimer.current = window.setTimeout(resetTransition, FALLBACK_DURATION);
     };
 
     const onPageHide = () => resetTransition();
@@ -117,7 +138,7 @@ export default function RouteTransition() {
       document.removeEventListener("visibilitychange", onVisibilityChange);
       clearTimers();
     };
-  }, []);
+  }, [router]);
 
   const isMoving = transition.phase !== "idle";
 
@@ -128,9 +149,15 @@ export default function RouteTransition() {
         data-variant={transition.profile.variant}
         aria-hidden="true"
       >
+        <span className="route-transition__shadow" />
         <span className="route-transition__paper" />
+        <span className="route-transition__grid" />
         <span className="route-transition__signal" />
-        <span className="route-transition__label">{transition.profile.label}</span>
+        <span className="route-transition__label">
+          <span>AET / {transition.profile.number}</span>
+          <strong>{transition.profile.label}</strong>
+        </span>
+        <span className="route-transition__count">{transition.profile.number}</span>
       </div>
       <div
         className="route-progress"
