@@ -12,6 +12,8 @@ type TransitionProfile = {
   number: string;
 };
 
+// The cover and reveal phases were deliberately extended by 200 ms, while
+// navigation itself remains immediate: the click is never prevented or delayed.
 const COVER_DURATION = 360;
 const REVEAL_DURATION = 460;
 const FALLBACK_DURATION = 2200;
@@ -99,8 +101,8 @@ export default function RouteTransition() {
   }, [pathname]);
 
   useEffect(() => {
-    // Navigation starts on confirmed click, never pointerdown, so touch scrolling
-    // cannot accidentally invoke a viewport-covering transition.
+    // Capture the confirmed click before Next Link handles it, but never prevent
+    // default navigation. This lets the destination begin loading immediately.
     const onClick = (event: MouseEvent) => {
       if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
@@ -109,12 +111,10 @@ export default function RouteTransition() {
 
       const destination = new URL(target.href, window.location.href);
       const profile = getTransitionProfile(destination.pathname);
-
       clearTimers();
       isNavigating.current = true;
       document.documentElement.dataset.routeLoading = "true";
       setTransition({ phase: "prepare", profile });
-
       window.requestAnimationFrame(() => setTransition({ phase: "covering", profile }));
       fallbackTimer.current = window.setTimeout(resetTransition, FALLBACK_DURATION);
     };

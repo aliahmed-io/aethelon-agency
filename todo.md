@@ -152,4 +152,5 @@
 - [x] Verify the longer motion remains smooth, reduced-motion-safe, and production-build compatible.
 - [x] Exercise the extended transition through real desktop and mobile navigation without delaying route rendering.
 - [x] Re-verify the reduced-motion behavior after the timing refinement.
-- [ ] Save and push the timing-refinement checkpoint.
+- [x] Save the timing-refinement checkpoint.
+- [ ] Push the timing-refinement update to the private GitHub repository.
