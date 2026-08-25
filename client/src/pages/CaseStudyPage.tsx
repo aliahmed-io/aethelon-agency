@@ -34,12 +34,17 @@ export default function CaseStudyPage({ slug }: { slug: string }) {
 
   if (!project) return null;
 
+  const projectBuild = "build" in project
+    ? project.build
+    : "This selected experiment explores how a commerce experience can create confidence before checkout. The product story is structured around intent, useful filters, and a clear visual rhythm that keeps the interface feeling premium without getting in the way.";
+  const projectFocus = "focus" in project ? project.focus : "UX · Systems · Motion";
+
   return (
     <main className="case-page">
       <div className="case-hero"><Link href="/work" className="back-link">← Back to work</Link><div><span className="project-number">{project.number}</span><h1>{project.title}<br /><em>{project.category.split(" / ")[0]}</em></h1><p>{project.description}</p></div></div>
       <div className="case-gallery"><div className="case-gallery-main"><Image src={project.gallery[active]} alt={`${project.title} gallery view ${active + 1}`} fill sizes="(max-width: 760px) 100vw, 92vw" className="cover-image" priority={active === 0} /><span>{String(active + 1).padStart(2, "0")} / {String(project.gallery.length).padStart(2, "0")}</span></div><div className="case-thumbs">{project.gallery.map((image, index) => <button className={active === index ? "active" : ""} key={image + index} onClick={() => setActive(index)} aria-label={`View gallery image ${index + 1}`}><Image src={image} alt="" fill sizes="96px" className="cover-image" /></button>)}</div></div>
-      <div className="case-meta"><div><span>Project type</span><strong>{project.scope}</strong></div><div><span>Stack</span><strong>{project.stack}</strong></div><div><span>Focus</span><strong>UX · Systems · Motion</strong></div></div>
-      <div className="case-body"><SectionLabel index="01">The build</SectionLabel><h2>Make the product<br /><em>easier to choose.</em></h2><div><p>This selected experiment explores how a commerce experience can create confidence before checkout. The product story is structured around intent, useful filters, and a clear visual rhythm that keeps the interface feeling premium without getting in the way.</p><p>It is presented as a concept, not a client case study. The outcome is the working interaction, the system thinking, and the performance-minded direction—not an invented business result.</p></div></div>
+      <div className="case-meta"><div><span>Project type</span><strong>{project.scope}</strong></div><div><span>Stack</span><strong>{project.stack}</strong></div><div><span>Focus</span><strong>{projectFocus}</strong></div></div>
+      <div className="case-body"><SectionLabel index="01">The build</SectionLabel><h2>Make the product<br /><em>easier to choose.</em></h2><div><p>{projectBuild}</p><p>It is presented as a concept, not a client case study. The outcome is the working interaction, the system thinking, and the performance-minded direction—not an invented business result.</p></div></div>
       <div className="metric-placeholders"><SectionLabel index="02">Metrics to plug in</SectionLabel><div>{[["—", "Conversion lift", "Placeholder until a live business result is available."], ["—", "Lighthouse performance", "Add a verified score from the shipped build."], ["—", "Workflow change", "Describe the measurable operational improvement."]].map(([value, label, note]) => <article key={label}><strong>{value}</strong><span>{label}</span><p>{note}</p></article>)}</div></div>
       <CTA />
       <BackToTop />

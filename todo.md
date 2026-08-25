@@ -155,3 +155,11 @@
 - [x] Save the timing-refinement checkpoint.
 - [x] Push the final rebased timing-refinement commit to the private GitHub repository.
 - [x] Verify the private GitHub main branch contains the final timing-refinement commit after the rebase.
+
+## Portfolio curation: Aethelon, Novexa, and Velorum
+
+- [x] Inspect the three named repositories and catalog existing screenshots, media, features, and deployment evidence.
+- [x] Select only factual, portfolio-ready narratives and image sources for Aethelon, Novexa, and Velorum.
+- [x] Add the approved projects and optimized existing visuals to the Work archive without inventing clients, metrics, or results.
+- [x] Verify the updated Work archive and project pages on desktop and mobile, then run tests and a production build.
+- [ ] Save and push the curated portfolio update to the private GitHub repository.
