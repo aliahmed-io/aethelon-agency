@@ -162,4 +162,4 @@
 - [x] Select only factual, portfolio-ready narratives and image sources for Aethelon, Novexa, and Velorum.
 - [x] Add the approved projects and optimized existing visuals to the Work archive without inventing clients, metrics, or results.
 - [x] Verify the updated Work archive and project pages on desktop and mobile, then run tests and a production build.
-- [ ] Save and push the curated portfolio update to the private GitHub repository.
+- [x] Save and push the curated portfolio update to the private GitHub repository.
