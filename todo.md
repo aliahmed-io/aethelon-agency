@@ -167,3 +167,11 @@
 ## Final GitHub synchronization
 
 - [x] Synchronize the latest curated portfolio checkpoint to the private GitHub main branch and verify matching refs.
+
+## Repository-hosted portfolio assets
+
+- [x] Audit each curated portfolio image reference and map it to its local approved source file.
+- [x] Add all approved Aethelon, Novexa, and Velorum portfolio image assets to the repository.
+- [x] Document the committed asset inventory and retain verified CDN runtime delivery for deployment compatibility.
+- [x] Run tests, type checking, and a production build after the asset migration.
+- [ ] Push and verify the repository-hosted asset update on the private GitHub main branch.
