@@ -5,14 +5,14 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev --webpack --hostname 0.0.0.0",
-    "build": "NODE_ENV=production next build --webpack",
-    "start": "NODE_ENV=production next start",
-    "preview": "NODE_ENV=production next start",
+    "build": "cross-env NODE_ENV=production next build --webpack",
+    "start": "cross-env NODE_ENV=production next start",
+    "preview": "cross-env NODE_ENV=production next start",
     "check": "tsc --noEmit",
     "format": "prettier --write .",
     "test": "vitest run",
     "db:push": "drizzle-kit generate && drizzle-kit migrate",
-    "analyze": "ANALYZE=true NODE_ENV=production next build --webpack"
+    "analyze": "cross-env ANALYZE=true NODE_ENV=production next build --webpack"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -21,8 +21,8 @@ const FALLBACK_DURATION = 3200;
 
 function getTransitionProfile(pathname: string): TransitionProfile {
   if (pathname === "/") return { label: "Aethelon / home", variant: "arrival", number: "00" };
-  if (pathname === "/work") return { label: "Selected work / archive", variant: "archive", number: "01" };
-  if (pathname.startsWith("/work/")) return { label: "Selected work / case study", variant: "gallery", number: "02" };
+  if (pathname === "/work") return { label: "Portfolio / Archive", variant: "archive", number: "01" };
+  if (pathname.startsWith("/work/")) return { label: "Portfolio / Case Study", variant: "gallery", number: "02" };
   if (pathname === "/services") return { label: "Services / architecture", variant: "blueprint", number: "03" };
   if (pathname === "/about") return { label: "About / editorial", variant: "editorial", number: "04" };
   if (pathname === "/insights") return { label: "Insights / index", variant: "index", number: "05" };

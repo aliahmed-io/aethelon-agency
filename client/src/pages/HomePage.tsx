@@ -1,61 +1,346 @@
-"use client";
-
-// Paper Signal style: warm paper, charcoal ink, signal orange, editorial scale, asymmetric proof-led composition.
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowDownRight, ArrowUpRight, ChevronDown } from "lucide-react";
-import { IMG } from "../lib/site-assets";
-import { projects } from "../../../shared/projects";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { getFlagshipProject, getFullstackProjects, getDesignProjects, projects } from "../../../shared/projects";
+import ServicesAccordion from "../components/islands/ServicesAccordion";
+import ProductDemo from "../components/islands/ProductDemo";
+import FaqAccordion from "../components/islands/FaqAccordion";
+import HeroCommerceEcosystem from "../components/islands/HeroCommerceEcosystem";
+import FlagshipShowcaseIsland from "../components/islands/FlagshipShowcaseIsland";
+import WorkArchiveIsland from "../components/islands/WorkArchiveIsland";
 
-const services = [
-  ["01", "Custom E-commerce", "Storefronts that make product, story, and checkout feel like one system.", ["Next.js storefronts", "Shopify & headless integrations", "Product, collection & account flows"]],
-  ["02", "AI Commerce", "Useful AI in the places it can remove friction—not as a decorative chatbot.", ["Semantic product search", "Shopping assistants", "Recommendations & discovery"]],
-  ["03", "3D & AR Experiences", "Make a product easier to understand by letting people see, shape, and place it.", ["Interactive 3D", "Product configurators", "WebGL product moments"]],
-  ["04", "Conversion & Recovery", "A better storefront is only useful when it helps more people finish the journey.", ["Abandoned cart recovery", "Checkout optimization", "Upsells & cross-sells"]],
-  ["05", "Performance & SEO", "The invisible work that makes a store feel fast, discoverable, and dependable.", ["Core Web Vitals", "Technical SEO", "Image and rendering optimization"]],
+const flagship = getFlagshipProject();
+const fullstackProjects = getFullstackProjects();
+const designProjects = getDesignProjects();
+
+const capabilities = [
+  [
+    "01",
+    "Ecommerce Development",
+    "Custom storefronts, catalog architecture, cart drawers, checkout integration, and inventory flows.",
+    [
+      "Custom Next.js & headless storefronts",
+      "Cart drawers & instant checkout flows",
+      "Product variant matrices & stock sync",
+      "Stripe & merchant payment integrations",
+    ],
+  ],
+  [
+    "02",
+    "Full-Stack Web Applications",
+    "Custom web applications, databases, APIs, authentication, dashboards, and internal business tools.",
+    [
+      "Admin portals & inventory dashboards",
+      "PostgreSQL & Prisma database schemas",
+      "Secure authentication & session flows",
+      "Custom REST & Server Action APIs",
+    ],
+  ],
+  [
+    "03",
+    "AI & Search Integrations",
+    "Natural language product search, intelligent filtering, and automated routine builders.",
+    [
+      "Semantic product discovery",
+      "Guided recommendation step-flows",
+      "Automated catalog categorization",
+      "Customer decision-support flows",
+    ],
+  ],
+  [
+    "04",
+    "Interactive & 3D Experiences",
+    "Product configurators, 3D viewers, and interactive storytelling where it genuinely helps the sale.",
+    [
+      "Interactive 3D product inspection",
+      "Material finish & color customizers",
+      "Lightweight WebGL product moments",
+      "Responsive canvas visualization",
+    ],
+  ],
+] as const;
+
+const faqItems = [
+  {
+    question: "How do you structure projects and pricing?",
+    answer:
+      "Projects are scoped around the exact deliverable—whether a complete full-stack storefront, a targeted customizer, or an admin system. Pricing and milestones are established upfront with transparent fixed-scope agreements.",
+  },
+  {
+    question: "Do you work with headless platforms or custom backends?",
+    answer:
+      "Yes. I build custom Next.js storefronts connected to headless commerce engines (Shopify, Stripe, Medusa) as well as bespoke full-stack applications with PostgreSQL, Prisma, and custom admin portals.",
+  },
+  {
+    question: "Can you improve or rebuild an existing storefront?",
+    answer:
+      "Yes. If an existing store suffers from slow load times, rigid templates, or high cart drop-off, I can redesign and rebuild the frontend while keeping your existing product and order records intact.",
+  },
+  {
+    question: "What does the handoff and post-launch process look like?",
+    answer:
+      "Every build includes clean TypeScript code, administrative training, and structured deployment on modern infrastructure. Post-launch support and ongoing feature development are available as your business scales.",
+  },
 ] as const;
 
 function SectionLabel({ children, index }: { children: React.ReactNode; index?: string }) {
-  return <div className="section-label"><span>{index || ""}</span><span>{children}</span><span className="label-line" /></div>;
-}
-
-function WorkCard({ project, featured = false }: { project: typeof projects[number]; featured?: boolean }) {
-  return <Link prefetch={false} href={`/work/${project.slug}`} className={`work-card ${featured ? "featured" : ""}`}><div className="work-image"><Image src={project.image} alt={`${project.title} visual`} fill sizes="(max-width: 760px) 100vw, (max-width: 1100px) 50vw, 33vw" quality={68} preload={featured} className="cover-image" /><span className="work-arrow"><ArrowUpRight /></span></div><div className="work-card-meta"><div><span className="project-number">{project.number}</span><h3>{project.title}</h3><p>{project.category}</p></div><div className="work-detail"><span>{project.stack}</span><span>{project.scope}</span></div></div></Link>;
+  return (
+    <div className="section-label">
+      <span>{index || ""}</span>
+      <span>{children}</span>
+      <span className="label-line" />
+    </div>
+  );
 }
 
 function Hero() {
-  return <section className="hero"><div className="hero-copy"><div className="eyebrow"><span className="signal-dot" /> Next-generation commerce systems</div><h1>Build a store<br />people <em>remember.</em></h1><p>Custom Next.js storefronts, useful AI, and immersive product experiences—built with the care of a studio and the overhead of one person.</p><div className="hero-actions"><Link className="button button-dark" href="/contact">Start a project <ArrowUpRight size={16} /></Link><a className="text-link" href="#work">See the work <ArrowDownRight size={16} /></a></div></div><div className="hero-visual"><Image src={IMG.hero} alt="Abstract product composition in warm paper and orange" fill preload quality={70} sizes="(max-width: 760px) 100vw, 50vw" className="cover-image" /><div className="hero-stamp">AE<br /><span>01—26</span></div><div className="hero-caption">Directly designed<br />and developed.</div></div></section>;
+  return (
+    <section className="hero">
+      <div className="hero-copy">
+        <div className="eyebrow">
+          <span className="signal-dot" /> Freelance Full-Stack Developer
+        </div>
+        <h1>
+          I build custom ecommerce experiences and full-stack web applications.
+        </h1>
+        <p>
+          From high-speed storefronts and interactive configurators to database schemas, checkout endpoints, and custom admin portals. Direct senior execution.
+        </p>
+        <div className="hero-actions">
+          <Link className="button button-dark" href="/contact">
+            Start a project <ArrowUpRight size={15} aria-hidden="true" />
+          </Link>
+          <a className="text-link" href="#flagship">
+            Explore flagship <ArrowDownRight size={15} aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+      <div className="hero-visual-wrapper">
+        <HeroCommerceEcosystem />
+      </div>
+    </section>
+  );
 }
 
 function TrustStrip() {
-  return <div className="trust-strip">{["Custom-built", "Next.js", "AI-ready", "3D / AR", "Performance-first", "Direct communication"].map((item, index) => <span key={item}><b>{String(index + 1).padStart(2, "0")}</b>{item}</span>)}</div>;
-}
-
-function ServicesPreview() {
-  const [active, setActive] = useState(0);
-  return <section className="services-preview section-pad"><div className="section-intro"><SectionLabel index="02">What I build</SectionLabel><h2>Commerce is<br /><em>more</em> than a cart.</h2><p>The best storefronts do two jobs at once: they make a product desirable, then make buying it feel obvious.</p><Link href="/services" className="text-link">Explore all services <ArrowUpRight size={16} /></Link></div><div className="service-list">{services.map(([number, title, desc, bullets], index) => <div className={`service-row ${active === index ? "open" : ""}`} key={number}><button onClick={() => setActive(active === index ? -1 : index)}><span className="service-num">{number}</span><span className="service-title">{title}</span><span className="service-plus">{active === index ? "—" : "+"}</span></button>{active === index && <div className="service-detail"><p>{desc}</p><ul>{bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul></div>}</div>)}</div></section>;
-}
-
-function Demo() {
-  const [color, setColor] = useState("orange");
-  const [size, setSize] = useState("M");
-  const [cartNotice, setCartNotice] = useState("");
-  const colors: Record<string, string> = { orange: "#ff5a1f", stone: "#d8d1c4", ink: "#252525" };
-  return <section className="demo-section"><div className="demo-copy"><SectionLabel index="03">A small proof of concept</SectionLabel><h2>The site should<br /><em>do the talking.</em></h2><p>Here’s a tiny commerce interaction: choose a finish, select a size, and add the object to your cart. No theatre. Just a useful product moment.</p><span className="demo-note"><span className="signal-dot" /> Selected experiment · interactive product card</span></div><div className="product-card"><div className="product-art" style={{ "--product": colors[color] } as React.CSSProperties}><div className="product-shape" /><span className="product-code">OBJ—001</span></div><div className="product-info"><div><span className="eyebrow">The everyday object</span><h3>Signal form / 01</h3></div><strong>$148</strong></div><div className="swatches"><span>Finish</span>{Object.keys(colors).map((value) => <button key={value} aria-label={value} className={color === value ? "selected" : ""} style={{ background: colors[value] }} onClick={() => setColor(value)} />)}</div><div className="sizes"><span>Size</span>{["S", "M", "L"].map((value) => <button key={value} className={size === value ? "selected" : ""} onClick={() => setSize(value)}>{value}</button>)}</div><button className="button button-orange" onClick={() => setCartNotice(`Signal form / 01 — ${size} added to cart`)}>Add to cart <ArrowUpRight size={16} /></button>{cartNotice && <p className="form-feedback" role="status">{cartNotice}</p>}</div></section>;
-}
-
-function FAQ() {
-  const questions = ["How much does a custom store cost?", "Do you work with Shopify?", "Can you improve an existing store?", "What happens after launch?"];
-  const answers = ["Projects are scoped around the problem, not a fixed template. Starting ranges are shared once the scope is clear, and pricing stays transparent from there.", "Yes. Shopify can be the commerce engine behind a custom Next.js storefront, or the existing theme can be improved in place.", "Yes. Performance, UX, recovery, and technical SEO work can be more valuable than starting over.", "Build → launch → improve. Ongoing development and optimization are available when there is a clear next problem to solve."];
-  const [open, setOpen] = useState<number | null>(null);
-  return <section className="faq section-pad"><div className="faq-heading"><SectionLabel index="05">Useful answers</SectionLabel><h2>Before we<br /><em>start.</em></h2></div><div className="faq-list">{questions.map((question, index) => <div className="faq-item" key={question}><button onClick={() => setOpen(open === index ? null : index)}><span>{question}</span>{open === index ? <ChevronDown className="rotate" /> : <ChevronDown />}</button>{open === index && <p>{answers[index]}</p>}</div>)}</div></section>;
-}
-
-function CTA() {
-  return <section className="closing-cta"><div className="eyebrow"><span className="signal-dot" /> The next useful thing</div><h2>Bring the hard part.<br /><em>I’ll bring the system.</em></h2><Link href="/contact" className="button button-paper">Start a project <ArrowUpRight size={16} /></Link></section>;
+  return (
+    <div className="trust-strip">
+      {[
+        "Custom Storefronts",
+        "Full-Stack Systems",
+        "Admin & CMS",
+        "Checkout & Payments",
+        "Interactive 3D / AI",
+        "Direct Communication",
+      ].map((item, index) => (
+        <span key={item}>
+          <b>{String(index + 1).padStart(2, "0")}</b>
+          {item}
+        </span>
+      ))}
+    </div>
+  );
 }
 
 export default function HomePage() {
-  return <><Hero /><TrustStrip /><main><section className="work-section section-pad" id="work"><div className="section-intro row-intro"><SectionLabel index="01">Selected work</SectionLabel><div><h2>Ideas that<br /><em>ship.</em></h2><p>Self-initiated experiments and builds exploring what commerce can feel like when design and engineering start in the same room.</p></div><Link href="/work" className="text-link">View all work <ArrowUpRight size={16} /></Link></div><div className="work-grid"><WorkCard project={projects[0]} featured /><WorkCard project={projects[1]} /><WorkCard project={projects[2]} /></div></section><ServicesPreview /><section className="split-statement"><div className="split-image"><Image src={IMG.work3} alt="Abstract product form" fill sizes="(max-width: 760px) 100vw, 50vw" className="cover-image" /></div><div className="split-copy"><SectionLabel index="04">Why this studio</SectionLabel><h2>Big-agency<br /><em>thinking.</em><br />Small-studio<br /><em>economics.</em></h2><p>You work directly with the person shaping the strategy, designing the experience, and shipping the system. Fewer layers. Better context. A more sensible budget.</p><Link href="/about" className="text-link">How I work <ArrowUpRight size={16} /></Link></div></section><Demo /><FAQ /><CTA /></main></>;
+  return (
+    <>
+      {/* 01: Arrival & Living Commerce Identity */}
+      <Hero />
+      <TrustStrip />
+
+      <main>
+        {/* 02: Flagship Cinematic Experience */}
+        <section className="flagship-section section-pad" id="flagship">
+          <div className="section-intro row-intro">
+            <SectionLabel index="01">Flagship build</SectionLabel>
+            <div>
+              <h2>
+                Aethelon Modern<br />
+                <em>Furniture Platform.</em>
+              </h2>
+              <p>
+                An end-to-end furniture commerce platform engineered with room staging, persistent cart drawer, optimistic item updates, and dedicated administrative management.
+              </p>
+            </div>
+            <Link href="/work" className="text-link">
+              View full portfolio <ArrowUpRight size={15} aria-hidden="true" />
+            </Link>
+          </div>
+
+          <FlagshipShowcaseIsland project={flagship} />
+        </section>
+
+        {/* 03: Tactile Commerce Interaction Slice */}
+        <section className="demo-section">
+          <div className="demo-copy">
+            <SectionLabel index="02">Tactile commerce standard</SectionLabel>
+            <h2>
+              Interactive commerce<br />
+              <em>architecture.</em>
+            </h2>
+            <p>
+              A live commerce slice demonstrating real-time finish switching, dynamic subtotal calculations, and optimistic cart updates without layout shift.
+            </p>
+            <span className="demo-note">
+              <span className="signal-dot" /> Live interaction slice · Optimistic state handling
+            </span>
+          </div>
+          <ProductDemo />
+        </section>
+
+        {/* 04: Scannable Curated Project Archive */}
+        <section className="homepage-archive-section section-pad" id="archive">
+          <div className="section-intro row-intro">
+            <SectionLabel index="03">Curated project archive</SectionLabel>
+            <div>
+              <h2>
+                Selected platforms &<br />
+                <em>interface studies.</em>
+              </h2>
+              <p>
+                Compact, dense project archive highlighting full-stack systems, 3D customizers, and editorial conversion flows.
+              </p>
+            </div>
+          </div>
+
+          <WorkArchiveIsland projects={projects} />
+        </section>
+
+        {/* 05: Asymmetrical Visual Exhibition (Design Studies) */}
+        <section className="design-exhibition-section section-pad">
+          <div className="section-intro">
+            <SectionLabel index="04">Visual art direction</SectionLabel>
+            <h2>
+              Commerce lookbooks &<br />
+              <em>spatial interfaces.</em>
+            </h2>
+            <p>
+              Focused design studies demonstrating editorial layout hierarchy, ambient day/night modes, and tactile scale visualization.
+            </p>
+          </div>
+
+          <div className="exhibition-asymmetric-grid">
+            <div className="exhibition-item-large">
+              <Link href="/work/monolith-audio" className="exhibition-card">
+                <div className="exhibition-image-wrap">
+                  <Image
+                    src="/images/projects/vantiq.png"
+                    alt="Vantiq Hypercar 3D Visualization and Sonic Gallery"
+                    fill
+                    unoptimized
+                    sizes="(max-width: 900px) 100vw, 60vw"
+                    className="cover-image"
+                  />
+                  <span className="exhibition-badge">3D & Web Audio · Hypercar</span>
+                </div>
+                <div className="exhibition-meta">
+                  <h3>Vantiq</h3>
+                  <p>Hypercar 3D Anatomy Deconstruction & Real-Time Sonic Waveform Visualizer</p>
+                </div>
+              </Link>
+            </div>
+
+            <div className="exhibition-col-pair">
+              <Link href="/work/in-your-space" className="exhibition-card">
+                <div className="exhibition-image-wrap">
+                  <Image
+                    src="/images/projects/vonex.png"
+                    alt="Vonex Brutalist Techwear Luxury"
+                    fill
+                    unoptimized
+                    sizes="(max-width: 900px) 100vw, 35vw"
+                    className="cover-image"
+                  />
+                  <span className="exhibition-badge">Techwear · Minimalist UI</span>
+                </div>
+                <div className="exhibition-meta">
+                  <h3>Vonex</h3>
+                  <p>Brutalist Luxury Streetwear Flagship & Hero Slider</p>
+                </div>
+              </Link>
+
+              <Link href="/work/afterlight" className="exhibition-card">
+                <div className="exhibition-image-wrap">
+                  <Image
+                    src="/images/projects/maison-lumiere.png"
+                    alt="Maison Lumiere High-Jewelry 3D Showroom"
+                    fill
+                    unoptimized
+                    sizes="(max-width: 900px) 100vw, 35vw"
+                    className="cover-image"
+                  />
+                  <span className="exhibition-badge">3D Carousel · Fine Jewelry</span>
+                </div>
+                <div className="exhibition-meta">
+                  <h3>Maison Lumière</h3>
+                  <p>High-Jewelry Digital Showroom & 3D Rotating Carousel</p>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* 06: Capabilities Breakdown */}
+        <section className="services-preview section-pad">
+          <div className="section-intro">
+            <SectionLabel index="05">Capabilities</SectionLabel>
+            <h2>
+              What I build for<br />
+              <em>modern brands.</em>
+            </h2>
+            <p>
+              Direct full-stack engineering across the entire commerce journey—from initial customer impression to administrative fulfillment.
+            </p>
+            <Link href="/services" className="text-link">
+              Explore detailed services <ArrowUpRight size={15} aria-hidden="true" />
+            </Link>
+          </div>
+          <ServicesAccordion services={capabilities} />
+        </section>
+
+        {/* 07: Philosophy & Senior Execution */}
+        <section className="split-statement">
+          <div className="split-image">
+            <Image
+              src="/images/aethelon-portfolio-chair.webp"
+              alt="Design and development studio space"
+              fill
+              unoptimized
+              sizes="(max-width: 760px) 100vw, 50vw"
+              className="cover-image"
+            />
+          </div>
+          <div className="split-copy">
+            <SectionLabel index="06">How I work</SectionLabel>
+            <h2>
+              Direct collaboration.<br />
+              <em>Senior execution.</em>
+            </h2>
+            <p>
+              You work directly with the person designing the interface, writing the full-stack code, and shipping the system. No account managers, no junior handoffs, and zero diluted context.
+            </p>
+            <p>
+              This direct model ensures faster iterations, deeper technical context, and a commercially sensible budget.
+            </p>
+            <Link href="/about" className="text-link">
+              Learn about the practice <ArrowUpRight size={15} aria-hidden="true" />
+            </Link>
+          </div>
+        </section>
+
+        {/* 08: FAQ */}
+        <section className="faq section-pad">
+          <div className="faq-heading">
+            <SectionLabel index="07">Common questions</SectionLabel>
+            <h2>
+              Before we<br />
+              <em>begin.</em>
+            </h2>
+          </div>
+          <FaqAccordion items={faqItems} />
+        </section>
+      </main>
+    </>
+  );
 }

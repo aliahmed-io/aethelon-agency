@@ -1,28 +1,20 @@
 import type { Metadata } from "next";
 import "../client/src/index.css";
-import localFont from "next/font/local";
+import { DM_Sans, Space_Grotesk } from "next/font/google";
 import { siteUrl } from "../shared/site-config";
 
-const bodyFont = localFont({
-  src: [
-    { path: "./fonts/dm-sans-400.ttf", weight: "400", style: "normal" },
-    { path: "./fonts/dm-sans-500.ttf", weight: "500", style: "normal" },
-    { path: "./fonts/dm-sans-600.ttf", weight: "600", style: "normal" },
-    { path: "./fonts/dm-sans-700.ttf", weight: "700", style: "normal" },
-  ],
+const bodyFont = DM_Sans({
+  subsets: ["latin"],
   variable: "--font-body",
-  display: "swap",
+  display: "optional",
+  preload: true,
 });
 
-const displayFont = localFont({
-  src: [
-    { path: "./fonts/space-grotesk-400.ttf", weight: "400", style: "normal" },
-    { path: "./fonts/space-grotesk-500.ttf", weight: "500", style: "normal" },
-    { path: "./fonts/space-grotesk-600.ttf", weight: "600", style: "normal" },
-    { path: "./fonts/space-grotesk-700.ttf", weight: "700", style: "normal" },
-  ],
+const displayFont = Space_Grotesk({
+  subsets: ["latin"],
   variable: "--font-display",
-  display: "swap",
+  display: "optional",
+  preload: true,
 });
 
 export const metadata: Metadata = {

@@ -6,7 +6,7 @@ import { ArrowUpRight, Menu, Moon, Sun, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTheme } from "../contexts/ThemeContext";
 
-const PRIMARY_LINKS = [["Work", "/work"], ["Services", "/services"], ["About", "/about"], ["Insights", "/insights"]] as const;
+const PRIMARY_LINKS = [["Portfolio", "/work"], ["Services", "/services"], ["About", "/about"], ["Insights", "/insights"]] as const;
 
 function ThemeToggle({ mobile = false }: { mobile?: boolean }) {
   const { theme, toggleTheme } = useTheme();
@@ -48,7 +48,7 @@ export default function SiteHeader() {
 
   return (
     <header className="site-header">
-      <Link href="/" className="brand" onClick={closeMenu} aria-label="Aethelon home">
+      <Link href="/" className="brand" onClick={closeMenu}>
         <span className="mark-lockup" aria-hidden="true"><b>AE/</b></span>
         <span>Aethelon</span>
       </Link>
