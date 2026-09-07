@@ -190,9 +190,10 @@ export const projects: readonly Project[] = [
     image: "/images/projects/novexa.png",
     gallery: [
       "/images/projects/novexa.png",
-      "/images/projects/artura.png",
-      "/images/projects/Screenshot 2025-11-06 021219.png",
-      "/images/projects/Screenshot 2025-11-06 092244.png",
+      "/images/projects/novexa-material-study.png",
+      "/images/projects/novexa-silhouettes.png",
+      "/images/projects/novexa-categories.png",
+      "/images/projects/novexa-manifesto.png",
     ],
     metrics: [
       { value: "2.1x", label: "Mobile Checkout Velocity", detail: "1-tap express checkout drawer doubled mobile transaction speed" },
@@ -388,6 +389,7 @@ export const projects: readonly Project[] = [
     image: "/images/projects/oakwell.png",
     gallery: [
       "/images/projects/oakwell.png",
+      "/images/projects/oakwell-zoomed.png",
       "/images/projects/oakwell-catalog.png",
       "/images/projects/oakwell-lookbook.png",
       "/images/projects/oakwell-admin.png",
