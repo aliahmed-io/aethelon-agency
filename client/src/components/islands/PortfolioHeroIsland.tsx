@@ -1,18 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowDownRight, ArrowUpRight, Sparkles, Layers, ShieldCheck, Zap } from "lucide-react";
 
 interface FloatingProject {
-  id: string;
-  title: string;
-  category: string;
-  image: string;
-  slug: string;
-  stack: string;
-  className: string;
+  readonly id: string;
+  readonly title: string;
+  readonly category: string;
+  readonly image: string;
+  readonly slug: string;
+  readonly stack: string;
+  readonly slotClass: string;
+  readonly depth: "foreground" | "midground" | "background";
+  readonly baseScale: number;
+  readonly parallaxFactor: number;
+  readonly defaultZ: number;
 }
 
 const floatingProjects: readonly FloatingProject[] = [
@@ -23,7 +27,11 @@ const floatingProjects: readonly FloatingProject[] = [
     image: "/images/projects/aethelon.png",
     slug: "aethelon-furniture-commerce",
     stack: "Next.js 16 · AR / 3D",
-    className: "orbit-card-top-right",
+    slotClass: "orbit-card-top-right",
+    depth: "foreground",
+    baseScale: 1.03,
+    parallaxFactor: 0.09,
+    defaultZ: 6,
   },
   {
     id: "novexa",
@@ -32,7 +40,11 @@ const floatingProjects: readonly FloatingProject[] = [
     image: "/images/projects/novexa.png",
     slug: "novexa-product-commerce",
     stack: "Three.js · Gemini AI",
-    className: "orbit-card-bottom-left",
+    slotClass: "orbit-card-bottom-left",
+    depth: "midground",
+    baseScale: 1.0,
+    parallaxFactor: 0.06,
+    defaultZ: 5,
   },
   {
     id: "velorum",
@@ -41,48 +53,221 @@ const floatingProjects: readonly FloatingProject[] = [
     image: "/images/projects/velorum.png",
     slug: "velorum-watch-commerce",
     stack: "WebGL · 99 Lighthouse",
-    className: "orbit-card-bottom-right",
+    slotClass: "orbit-card-bottom-right",
+    depth: "background",
+    baseScale: 0.96,
+    parallaxFactor: 0.035,
+    defaultZ: 4,
   },
 ];
 
 export default function PortfolioHeroIsland() {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const [activeDragId, setActiveDragId] = useState<string | null>(null);
+  const [dragOffsets, setDragOffsets] = useState<Record<string, { x: number; y: number }>>({
+    aethelon: { x: 0, y: 0 },
+    novexa: { x: 0, y: 0 },
+    velorum: { x: 0, y: 0 },
+  });
+  const [stageMouse, setStageMouse] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+
+  const dragStartRef = useRef<{ clientX: number; clientY: number; startOffsetX: number; startOffsetY: number }>({
+    clientX: 0,
+    clientY: 0,
+    startOffsetX: 0,
+    startOffsetY: 0,
+  });
+  const totalDragDistanceRef = useRef<number>(0);
+  const tiltAngleRef = useRef<number>(0);
+
+  const handleStagePointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (activeDragId) return;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const relX = (e.clientX - rect.left) / rect.width - 0.5;
+      const relY = (e.clientY - rect.top) / rect.height - 0.5;
+      setStageMouse({ x: relX * 24, y: relY * 24 });
+    },
+    [activeDragId]
+  );
+
+  const handleStagePointerLeave = useCallback(() => {
+    if (!activeDragId) {
+      setHoveredCard(null);
+      setStageMouse({ x: 0, y: 0 });
+    }
+  }, [activeDragId]);
+
+  const handlePointerDown = useCallback(
+    (id: string, e: React.PointerEvent<HTMLDivElement>) => {
+      if (e.button !== 0 && e.pointerType === "mouse") return;
+
+      setActiveDragId(id);
+      const currentOffset = dragOffsets[id] ?? { x: 0, y: 0 };
+      dragStartRef.current = {
+        clientX: e.clientX,
+        clientY: e.clientY,
+        startOffsetX: currentOffset.x,
+        startOffsetY: currentOffset.y,
+      };
+      totalDragDistanceRef.current = 0;
+      tiltAngleRef.current = 0;
+
+      try {
+        (e.currentTarget as HTMLDivElement).setPointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+    },
+    [dragOffsets]
+  );
+
+  const handlePointerMove = useCallback(
+    (id: string, e: React.PointerEvent<HTMLDivElement>) => {
+      if (activeDragId !== id) return;
+
+      const deltaX = e.clientX - dragStartRef.current.clientX;
+      const deltaY = e.clientY - dragStartRef.current.clientY;
+      totalDragDistanceRef.current = Math.hypot(deltaX, deltaY);
+
+      // Subtle dynamic tilt while dragging (capped at +-7deg)
+      const tilt = Math.max(-7, Math.min(7, deltaX * 0.12));
+      tiltAngleRef.current = tilt;
+
+      setDragOffsets((prev) => ({
+        ...prev,
+        [id]: {
+          x: dragStartRef.current.startOffsetX + deltaX,
+          y: dragStartRef.current.startOffsetY + deltaY,
+        },
+      }));
+    },
+    [activeDragId]
+  );
+
+  const handlePointerUp = useCallback(
+    (id: string, e: React.PointerEvent<HTMLDivElement>) => {
+      if (activeDragId === id) {
+        setActiveDragId(null);
+        tiltAngleRef.current = 0;
+        try {
+          (e.currentTarget as HTMLDivElement).releasePointerCapture(e.pointerId);
+        } catch {
+          // ignore
+        }
+      }
+    },
+    [activeDragId]
+  );
+
+  const handleCardClick = useCallback((e: React.MouseEvent) => {
+    if (totalDragDistanceRef.current > 6) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, []);
+
+  const handleDoubleClick = useCallback((id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOffsets((prev) => ({
+      ...prev,
+      [id]: { x: 0, y: 0 },
+    }));
+  }, []);
 
   return (
     <div className="portfolio-interactive-hero">
-      {/* Background Ambient Mesh Subtle Texture */}
-      <div className="hero-orbit-stage">
+      {/* Background Ambient Mesh Subtle Stage */}
+      <div
+        className="hero-orbit-stage"
+        onPointerMove={handleStagePointerMove}
+        onPointerLeave={handleStagePointerLeave}
+      >
         {/* Floating Interactive Project Preview Cards */}
-        {floatingProjects.map((project) => (
-          <Link
-            key={project.id}
-            href={`/work/${project.slug}`}
-            className={`hero-orbit-card ${project.className} ${
-              hoveredCard === project.id ? "hovered" : ""
-            }`}
-            onMouseEnter={() => setHoveredCard(project.id)}
-            onMouseLeave={() => setHoveredCard(null)}
-          >
-            <div className="orbit-card-thumb">
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                unoptimized
-                sizes="240px"
-                className="cover-image orbit-card-img"
-              />
-              <span className="orbit-card-badge">{project.category}</span>
-              <span className="orbit-card-arrow">
-                <ArrowUpRight size={14} aria-hidden="true" />
-              </span>
+        {floatingProjects.map((project) => {
+          const isHovered = hoveredCard === project.id;
+          const isDragging = activeDragId === project.id;
+          const offset = dragOffsets[project.id] ?? { x: 0, y: 0 };
+          const hasBeenMoved = Math.abs(offset.x) > 1 || Math.abs(offset.y) > 1;
+
+          // Multi-plane parallax offset
+          const px = isDragging ? 0 : stageMouse.x * project.parallaxFactor;
+          const py = isDragging ? 0 : stageMouse.y * project.parallaxFactor;
+
+          const currentX = offset.x + px;
+          const currentY = offset.y + py;
+
+          const currentScale = isDragging
+            ? project.baseScale * 1.06
+            : isHovered
+            ? project.baseScale * 1.03
+            : project.baseScale;
+
+          const currentZ = isDragging ? 50 : isHovered ? 25 : project.defaultZ;
+          const tilt = isDragging ? tiltAngleRef.current : 0;
+
+          return (
+            <div
+              key={project.id}
+              className={`hero-orbit-slot ${project.slotClass} ${hasBeenMoved ? "is-moved" : ""}`}
+              style={{ zIndex: currentZ }}
+            >
+              <div
+                className={`hero-orbit-card depth-${project.depth} ${isHovered ? "hovered" : ""} ${
+                  isDragging ? "dragging" : ""
+                }`}
+                style={{
+                  transform: `translate3d(${currentX}px, ${currentY}px, 0px) scale(${currentScale}) rotate(${tilt}deg)`,
+                  transition: isDragging
+                    ? "none"
+                    : "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.2s ease",
+                  cursor: isDragging ? "grabbing" : "grab",
+                }}
+                onPointerDown={(e) => handlePointerDown(project.id, e)}
+                onPointerMove={(e) => handlePointerMove(project.id, e)}
+                onPointerUp={(e) => handlePointerUp(project.id, e)}
+                onPointerCancel={(e) => handlePointerUp(project.id, e)}
+                onMouseEnter={() => {
+                  if (!activeDragId) setHoveredCard(project.id);
+                }}
+                onMouseLeave={() => {
+                  if (!activeDragId) setHoveredCard(null);
+                }}
+                onDoubleClick={(e) => handleDoubleClick(project.id, e)}
+                title="Drag to reposition · Double-click to reset"
+              >
+                <Link
+                  href={`/work/${project.slug}`}
+                  onClick={handleCardClick}
+                  className="orbit-card-link"
+                  aria-label={`View ${project.title} platform build`}
+                  draggable={false}
+                >
+                  <div className="orbit-card-thumb">
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      unoptimized
+                      sizes="240px"
+                      className="cover-image orbit-card-img"
+                      draggable={false}
+                    />
+                    <span className="orbit-card-badge">{project.category}</span>
+                    <span className="orbit-card-arrow">
+                      <ArrowUpRight size={14} aria-hidden="true" />
+                    </span>
+                  </div>
+                  <div className="orbit-card-caption">
+                    <strong>{project.title}</strong>
+                    <span>{project.stack}</span>
+                  </div>
+                </Link>
+              </div>
             </div>
-            <div className="orbit-card-caption">
-              <strong>{project.title}</strong>
-              <span>{project.stack}</span>
-            </div>
-          </Link>
-        ))}
+          );
+        })}
 
         {/* Central Typographic Statement */}
         <div className="portfolio-hero-core">
