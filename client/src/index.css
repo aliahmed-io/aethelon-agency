@@ -420,42 +420,42 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
   .route-transition__count { display: none; }
 }
 
-/* Hero Living Commerce Ecosystem */
-.hero-visual-wrapper { position: relative; height: 100%; min-height: 520px; background: var(--paper-2); overflow: hidden; border-left: 1px solid var(--ink); }
-.hero-ecosystem { width: 100%; height: 100%; position: relative; }
-.hero-ecosystem-canvas { position: relative; width: 100%; height: 100%; min-height: 520px; }
-.hero-ecosystem-image { transition: transform 0.8s var(--ease); }
-.hero-ecosystem-canvas:hover .hero-ecosystem-image { transform: scale(1.025); }
+/* Hero Fanned Card Deck Showcase */
+.hero-visual-wrapper { position: relative; height: 100%; min-height: 520px; background: var(--paper); overflow: hidden; border-left: none; }
 
-.ecosystem-pill { position: absolute; background: var(--paper); border: 1px solid var(--ink); padding: 8px 14px; display: flex; align-items: center; gap: 10px; z-index: 3; box-shadow: 0 8px 24px rgba(23, 23, 23, 0.08); transition: transform 0.2s ease, background 0.2s ease; border-radius: 4px; }
-.ecosystem-pill.flash { background: #171717; color: #fff; transform: scale(1.04); }
-.ecosystem-pill.flash .pill-meta-label { color: #aaa; }
-.ecosystem-pill.flash .pill-meta-value { color: #fff; }
-.ecosystem-pill-top-left { top: 20px; left: 20px; }
-.ecosystem-pill-top-right { top: 20px; right: 20px; }
-.ecosystem-pill-bottom-left { bottom: 20px; left: 20px; }
-.ecosystem-pill-bottom-right { bottom: 20px; right: 20px; }
+.hero-fanned-stage { position: relative; width: 100%; height: 100%; min-height: 520px; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none; background: var(--paper); cursor: grab; }
+.hero-fanned-stage.is-dragging { cursor: grabbing; }
 
-.pill-icon-box { width: 24px; height: 24px; background: var(--paper-deep); display: grid; place-items: center; border-radius: 50%; color: var(--ink); }
-.pill-accent-icon { color: var(--orange-contrast, #bd3b05); }
-.pill-text-group { display: flex; flex-direction: column; }
-.pill-meta-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 700; }
-.pill-meta-value { font-size: 11.5px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
-.pill-live-dot { width: 7px; height: 7px; background: #10b981; border-radius: 50%; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25); animation: pulseDot 2s infinite ease-in-out; }
-.stock-signal-dot { width: 7px; height: 7px; background: var(--orange, #ff5a1f); border-radius: 50%; }
+.fanned-deck-wrapper { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 1; pointer-events: none; }
 
-@keyframes pulseDot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.85); }
+.fanned-card { position: absolute; width: clamp(280px, 30vw, 400px); aspect-ratio: 16 / 10.5; border-radius: 20px; text-decoration: none; color: inherit; transform-origin: center bottom; transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 18px 42px -10px rgba(23, 23, 23, 0.22), 0 3px 10px rgba(23, 23, 23, 0.08), 0 0 0 1px rgba(23, 23, 23, 0.12); cursor: pointer; pointer-events: auto; }
+
+.fanned-card:hover,
+.fanned-card.hovered { box-shadow: 0 30px 65px -12px rgba(23, 23, 23, 0.38), 0 6px 18px rgba(23, 23, 23, 0.15), 0 0 0 1.5px var(--ink); }
+
+.fanned-card-inner { position: relative; width: 100%; height: 100%; border-radius: 20px; overflow: hidden; background: #1a1816; }
+
+.fanned-card-img { object-fit: cover; border-radius: 20px; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); user-select: none; -webkit-user-drag: none; }
+.fanned-card:hover .fanned-card-img,
+.fanned-card.hovered .fanned-card-img { transform: scale(1.04); }
+
+.fanned-card-overlay { position: absolute; inset: 0; border-radius: 20px; background: linear-gradient(180deg, transparent 65%, rgba(14, 13, 12, 0.78) 100%); pointer-events: none; }
+
+.fanned-card-pill { position: absolute; bottom: 12px; left: 14px; right: 14px; display: flex; justify-content: space-between; align-items: center; background: rgba(23, 23, 23, 0.88); border: 1px solid rgba(255, 255, 255, 0.18); backdrop-filter: blur(12px); padding: 6px 12px; border-radius: 100px; color: #f4f0ea; transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease; }
+.fanned-card:hover .fanned-card-pill { background: rgba(23, 23, 23, 0.96); border-color: rgba(255, 90, 31, 0.75); }
+
+.pill-title { font-size: 11.5px; font-weight: 700; letter-spacing: 0.02em; }
+.pill-category { font-size: 9px; color: #a19d96; font-family: monospace; text-transform: uppercase; }
+
+@media (max-width: 768px) {
+  .hero-fanned-stage { min-height: 420px; }
+  .fanned-card { width: clamp(240px, 72vw, 340px); }
 }
 
-.ecosystem-dock { position: absolute; background: var(--paper); border: 1px solid var(--ink); padding: 8px 12px; z-index: 3; box-shadow: 0 8px 24px rgba(23, 23, 23, 0.08); border-radius: 4px; display: flex; flex-direction: column; gap: 6px; }
-.dock-header { display: flex; align-items: center; gap: 6px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--muted); }
-.dock-swatches { display: flex; align-items: center; gap: 7px; }
-.dock-swatch-btn { width: 20px; height: 20px; border-radius: 50%; border: 2px solid transparent; outline: 1px solid var(--line); outline-offset: 2px; cursor: pointer; transition: transform 0.15s ease; }
-.dock-swatch-btn.active { outline-color: var(--ink); transform: scale(1.15); }
-.dock-quick-add { border: 1px solid var(--ink); background: var(--ink); color: var(--paper); font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 100px; cursor: pointer; transition: background 0.2s ease; }
-.dock-quick-add:hover { background: var(--orange, #ff5a1f); border-color: var(--orange, #ff5a1f); color: var(--ink); }
+@media (prefers-reduced-motion: reduce) {
+  .fanned-card { transition: none !important; }
+  .fanned-card-img { transition: none !important; }
+}
 
 /* Flagship Cinematic Showcase */
 .flagship-cinematic-wrapper { width: 100%; display: flex; flex-direction: column; margin-top: 35px; border: 1px solid var(--ink); background: var(--paper); box-shadow: 0 16px 40px rgba(23, 23, 23, 0.07); }
@@ -1764,9 +1764,7 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
 }
 
 @media (max-width: 900px) {
-  .hero-visual-wrapper { min-height: 420px; border-left: none; border-top: 1px solid var(--ink); }
-  .ecosystem-pill { padding: 6px 10px; font-size: 10px; }
-  .ecosystem-pill-top-right, .ecosystem-pill-bottom-right { display: none; }
+  .hero-visual-wrapper { min-height: 420px; border-left: none; border-top: none; }
   .flagship-cinematic-wrapper { margin-top: 25px; }
   .showcase-nav-bar { flex-direction: column; gap: 10px; align-items: flex-start; }
   .showcase-canvas-frame { min-height: 300px; }

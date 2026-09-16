@@ -74,6 +74,7 @@
     "@types/react": "^19.2.1",
     "@types/react-dom": "^19.2.1",
     "autoprefixer": "^10.4.20",
+    "cross-env": "^10.1.0",
     "drizzle-kit": "^0.31.4",
     "lighthouse": "^13.4.1",
     "pnpm": "^10.15.1",

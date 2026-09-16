@@ -5,7 +5,7 @@ import { getFlagshipProject, getFullstackProjects, getDesignProjects, projects }
 import ServicesAccordion from "../components/islands/ServicesAccordion";
 import ProductDemo from "../components/islands/ProductDemo";
 import FaqAccordion from "../components/islands/FaqAccordion";
-import HeroCommerceEcosystem from "../components/islands/HeroCommerceEcosystem";
+import HeroFannedCards from "../components/islands/HeroFannedCards";
 import FlagshipShowcaseIsland from "../components/islands/FlagshipShowcaseIsland";
 import WorkArchiveIsland from "../components/islands/WorkArchiveIsland";
 
@@ -116,7 +116,7 @@ function Hero() {
         </div>
       </div>
       <div className="hero-visual-wrapper">
-        <HeroCommerceEcosystem />
+        <HeroFannedCards />
       </div>
     </section>
   );
