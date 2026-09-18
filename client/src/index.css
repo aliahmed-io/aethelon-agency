@@ -420,46 +420,36 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
   .route-transition__count { display: none; }
 }
 
-/* Hero Fanned Card Deck Showcase (Ask Phill style) */
-.hero-visual-wrapper { position: relative; height: 100%; min-height: 540px; background: var(--paper); overflow: hidden; border-left: none; }
+/* Hero Fanned Card Deck Showcase */
+.hero-visual-wrapper { position: relative; height: 100%; min-height: 520px; background: var(--paper); overflow: hidden; border-left: none; }
 
-.hero-fanned-stage { position: relative; width: 100%; height: 100%; min-height: 540px; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: none; background: var(--paper); cursor: grab; outline: none; }
+.hero-fanned-stage { position: relative; width: 100%; height: 100%; min-height: 520px; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none; background: var(--paper); cursor: grab; }
 .hero-fanned-stage.is-dragging { cursor: grabbing; }
 
-.fanned-deck-wrapper { position: relative; width: 100%; height: calc(100% - 56px); display: flex; justify-content: center; align-items: center; z-index: 1; pointer-events: none; }
+.fanned-deck-wrapper { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 1; pointer-events: none; }
 
-.fanned-card { position: absolute; width: clamp(260px, 24vw, 340px); aspect-ratio: 3.3 / 4; border-radius: 24px; text-decoration: none; color: inherit; transform-origin: 50% 90%; box-shadow: 0 16px 36px -8px rgba(23, 23, 23, 0.2), 0 3px 10px rgba(23, 23, 23, 0.08), 0 0 0 1px rgba(23, 23, 23, 0.1); cursor: pointer; pointer-events: auto; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; touch-action: none; }
-
-.fanned-card.is-center { box-shadow: 0 28px 60px -10px rgba(23, 23, 23, 0.35), 0 8px 24px rgba(23, 23, 23, 0.14), 0 0 0 1.5px rgba(23, 23, 23, 0.22); }
+.fanned-card { position: absolute; width: clamp(280px, 30vw, 400px); aspect-ratio: 16 / 10.5; border-radius: 20px; text-decoration: none; color: inherit; transform-origin: center bottom; transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 18px 42px -10px rgba(23, 23, 23, 0.22), 0 3px 10px rgba(23, 23, 23, 0.08), 0 0 0 1px rgba(23, 23, 23, 0.12); cursor: pointer; pointer-events: auto; }
 
 .fanned-card:hover,
-.fanned-card.hovered { box-shadow: 0 32px 70px -12px rgba(23, 23, 23, 0.42), 0 8px 22px rgba(23, 23, 23, 0.18), 0 0 0 1.5px var(--ink); }
+.fanned-card.hovered { box-shadow: 0 30px 65px -12px rgba(23, 23, 23, 0.38), 0 6px 18px rgba(23, 23, 23, 0.15), 0 0 0 1.5px var(--ink); }
 
-.fanned-card-inner { position: relative; width: 100%; height: 100%; border-radius: 24px; overflow: hidden; background: #1a1816; pointer-events: none; }
+.fanned-card-inner { position: relative; width: 100%; height: 100%; border-radius: 20px; overflow: hidden; background: #1a1816; }
 
-.fanned-card-img { object-fit: cover; border-radius: 24px; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); user-select: none; -webkit-user-drag: none; pointer-events: none; }
+.fanned-card-img { object-fit: cover; border-radius: 20px; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); user-select: none; -webkit-user-drag: none; }
 .fanned-card:hover .fanned-card-img,
 .fanned-card.hovered .fanned-card-img { transform: scale(1.04); }
 
-.fanned-card-overlay { position: absolute; inset: 0; border-radius: 24px; background: linear-gradient(180deg, transparent 60%, rgba(14, 13, 12, 0.76) 100%); pointer-events: none; }
+.fanned-card-overlay { position: absolute; inset: 0; border-radius: 20px; background: linear-gradient(180deg, transparent 65%, rgba(14, 13, 12, 0.78) 100%); pointer-events: none; }
 
-.fanned-card-pill { position: absolute; bottom: 14px; left: 14px; right: 14px; display: flex; justify-content: space-between; align-items: center; background: rgba(23, 23, 23, 0.88); border: 1px solid rgba(255, 255, 255, 0.18); backdrop-filter: blur(12px); padding: 7px 14px; border-radius: 100px; color: #f4f0ea; transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease; pointer-events: none; }
+.fanned-card-pill { position: absolute; bottom: 12px; left: 14px; right: 14px; display: flex; justify-content: space-between; align-items: center; background: rgba(23, 23, 23, 0.88); border: 1px solid rgba(255, 255, 255, 0.18); backdrop-filter: blur(12px); padding: 6px 12px; border-radius: 100px; color: #f4f0ea; transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease; }
 .fanned-card:hover .fanned-card-pill { background: rgba(23, 23, 23, 0.96); border-color: rgba(255, 90, 31, 0.75); }
-.fanned-card.is-center .fanned-card-pill { border-color: rgba(255, 255, 255, 0.32); }
 
 .pill-title { font-size: 11.5px; font-weight: 700; letter-spacing: 0.02em; }
 .pill-category { font-size: 9px; color: #a19d96; font-family: monospace; text-transform: uppercase; }
 
-/* Dot navigation */
-.fanned-dot-nav { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 25; pointer-events: auto; }
-.fanned-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(23, 23, 23, 0.22); border: none; padding: 0; cursor: pointer; transition: background 0.3s ease, transform 0.3s ease; }
-.fanned-dot:hover { background: rgba(23, 23, 23, 0.55); }
-.fanned-dot.active { background: var(--ink); transform: scale(1.4); }
-
 @media (max-width: 768px) {
-  .hero-visual-wrapper { min-height: 440px; }
-  .hero-fanned-stage { min-height: 440px; }
-  .fanned-card { width: clamp(230px, 68vw, 300px); }
+  .hero-fanned-stage { min-height: 420px; }
+  .fanned-card { width: clamp(240px, 72vw, 340px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
