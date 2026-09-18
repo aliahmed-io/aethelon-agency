@@ -1,33 +1,25 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-interface CardItem {
+interface CardDef {
   readonly id: string;
   readonly title: string;
   readonly category: string;
   readonly image: string;
   readonly href: string;
-  readonly rotation: number;
-  readonly translateX: number;
-  readonly translateY: number;
-  readonly zIndex: number;
   readonly objectPosition: string;
 }
 
-const CARDS: readonly CardItem[] = [
+const CARDS: readonly CardDef[] = [
   {
     id: "oakwell",
     title: "Oakwell",
     category: "Handcrafted Luxury",
     image: "/images/projects/oakwell.png",
     href: "/work/oakwell-furniture-commerce",
-    rotation: -14,
-    translateX: -125,
-    translateY: 24,
-    zIndex: 2,
     objectPosition: "35% center",
   },
   {
@@ -36,10 +28,6 @@ const CARDS: readonly CardItem[] = [
     category: "Spatial Commerce",
     image: "/images/projects/aethelon.png",
     href: "/work/aethelon-furniture-commerce",
-    rotation: 0,
-    translateX: -20,
-    translateY: -12,
-    zIndex: 5,
     objectPosition: "center center",
   },
   {
@@ -48,10 +36,6 @@ const CARDS: readonly CardItem[] = [
     category: "Tactile 3D Studio",
     image: "/images/projects/lundev-furniture.png",
     href: "/work/lundev-furniture-experience",
-    rotation: 12,
-    translateX: 80,
-    translateY: 18,
-    zIndex: 3,
     objectPosition: "32% center",
   },
   {
@@ -60,27 +44,64 @@ const CARDS: readonly CardItem[] = [
     category: "Haute Horology",
     image: "/images/projects/velorum.png",
     href: "/work/velorum-watch-commerce",
-    rotation: 24,
-    translateX: 175,
-    translateY: 46,
-    zIndex: 1,
     objectPosition: "center center",
   },
 ];
 
+const N = CARDS.length;
+
+/** Fan layout params per slot offset from center (-2 … +2) */
+function slotLayout(offset: number): {
+  rotation: number;
+  translateX: number;
+  translateY: number;
+  scale: number;
+  zIndex: number;
+  opacity: number;
+} {
+  // offset = position relative to center card (0 = center, -1 = left, 1 = right, ±2 = far)
+  switch (offset) {
+    case 0:
+      return { rotation: 0, translateX: 0, translateY: -18, scale: 1.07, zIndex: 10, opacity: 1 };
+    case -1:
+      return { rotation: -13, translateX: -170, translateY: 12, scale: 0.92, zIndex: 6, opacity: 1 };
+    case 1:
+      return { rotation: 13, translateX: 170, translateY: 12, scale: 0.92, zIndex: 6, opacity: 1 };
+    case -2:
+      return { rotation: -24, translateX: -310, translateY: 40, scale: 0.8, zIndex: 3, opacity: 0.6 };
+    case 2:
+      return { rotation: 24, translateX: 310, translateY: 40, scale: 0.8, zIndex: 3, opacity: 0.6 };
+    default:
+      // hidden off to the side
+      return {
+        rotation: offset < 0 ? -36 : 36,
+        translateX: offset < 0 ? -450 : 450,
+        translateY: 60,
+        scale: 0.68,
+        zIndex: 1,
+        opacity: 0,
+      };
+  }
+}
+
+const DRAG_THRESHOLD = 60; // px to commit a card cycle
+
 export default function HeroFannedCards() {
+  const [centerIndex, setCenterIndex] = useState<number>(1); // aethelon starts center
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [mouseOffset, setMouseOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [dragOffset, setDragOffset] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [dragX, setDragX] = useState<number>(0);
 
   const startXRef = useRef<number>(0);
   const totalMovedRef = useRef<number>(0);
+  const committedRef = useRef<boolean>(false);
 
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     setIsDragging(true);
+    setDragX(0);
     startXRef.current = e.clientX;
     totalMovedRef.current = 0;
+    committedRef.current = false;
     try {
       (e.currentTarget as HTMLDivElement).setPointerCapture(e.pointerId);
     } catch {
@@ -88,23 +109,30 @@ export default function HeroFannedCards() {
     }
   }, []);
 
-  const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const relX = (e.clientX - rect.left) / rect.width - 0.5;
-    const relY = (e.clientY - rect.top) / rect.height - 0.5;
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!isDragging) return;
+      const delta = e.clientX - startXRef.current;
+      totalMovedRef.current = Math.abs(delta);
+      setDragX(delta);
 
-    if (isDragging) {
-      const deltaX = e.clientX - startXRef.current;
-      totalMovedRef.current = Math.abs(deltaX);
-      setDragOffset(deltaX * 0.35);
-    } else {
-      setMouseOffset({ x: relX * 12, y: relY * 12 });
-    }
-  }, [isDragging]);
+      // Commit a cycle once threshold is crossed (one per drag gesture)
+      if (!committedRef.current && Math.abs(delta) >= DRAG_THRESHOLD) {
+        committedRef.current = true;
+        const direction = delta < 0 ? 1 : -1; // drag left → next card; drag right → prev card
+        setCenterIndex((prev) => (prev + direction + N) % N);
+        // Reset so user can chain if they drag far enough
+        startXRef.current = e.clientX;
+        setDragX(0);
+        committedRef.current = false;
+      }
+    },
+    [isDragging],
+  );
 
   const handlePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     setIsDragging(false);
-    setDragOffset(0);
+    setDragX(0);
     try {
       (e.currentTarget as HTMLDivElement).releasePointerCapture(e.pointerId);
     } catch {
@@ -115,7 +143,6 @@ export default function HeroFannedCards() {
   const handlePointerLeave = useCallback(() => {
     if (!isDragging) {
       setHoveredId(null);
-      setMouseOffset({ x: 0, y: 0 });
     }
   }, [isDragging]);
 
@@ -124,6 +151,10 @@ export default function HeroFannedCards() {
       e.preventDefault();
     }
   }, []);
+
+  // Drag hint: subtle parallax tilt of the whole deck while dragging (before threshold)
+  const deckDragTilt = isDragging ? dragX * 0.06 : 0;
+  const deckDragX = isDragging ? dragX * 0.12 : 0;
 
   return (
     <div
@@ -134,34 +165,43 @@ export default function HeroFannedCards() {
       onPointerCancel={handlePointerUp}
       onPointerLeave={handlePointerLeave}
       role="region"
-      aria-label="Featured Portfolio Flagships"
+      aria-label="Featured Portfolio Flagships — drag to browse"
     >
       {/* Cards Deck Container */}
       <div
         className="fanned-deck-wrapper"
         style={{
-          transform: `translate3d(${mouseOffset.x + dragOffset}px, ${mouseOffset.y}px, 0) rotate(${dragOffset * 0.04}deg)`,
-          transition: isDragging ? "none" : "transform 0.4s cubic-bezier(0, 0, 0.2, 1)",
+          transform: `translate3d(${deckDragX}px, 0px, 0) rotate(${deckDragTilt}deg)`,
+          transition: isDragging ? "none" : "transform 0.35s cubic-bezier(0, 0, 0.2, 1)",
         }}
       >
-        {CARDS.map((card) => {
-          const isHovered = hoveredId === card.id;
+        {CARDS.map((card, i) => {
+          // Compute signed offset from centerIndex, wrap to shortest path
+          let offset = i - centerIndex;
+          // Normalize to [-N/2, N/2] for wrapping
+          if (offset > N / 2) offset -= N;
+          if (offset < -N / 2) offset += N;
 
-          // Smooth elevation & straightening on hover
-          const currentRotation = isHovered ? 0 : card.rotation;
-          const currentTranslateX = card.translateX;
-          const currentTranslateY = isHovered ? card.translateY - 26 : card.translateY;
-          const currentScale = isHovered ? 1.05 : 1;
-          const currentZ = isHovered ? 20 : card.zIndex;
+          const layout = slotLayout(offset);
+          const isCenter = offset === 0;
+          const isHovered = !isDragging && hoveredId === card.id;
+
+          const rotation = isHovered && !isCenter ? layout.rotation * 0.6 : layout.rotation;
+          const translateY = isHovered ? layout.translateY - 14 : layout.translateY;
+          const scale = isHovered ? layout.scale + 0.03 : layout.scale;
 
           return (
             <Link
               key={card.id}
               href={card.href}
-              className={`fanned-card ${isHovered ? "hovered" : ""}`}
+              className={`fanned-card ${isCenter ? "is-center" : ""} ${isHovered ? "hovered" : ""}`}
               style={{
-                transform: `translate(${currentTranslateX}px, ${currentTranslateY}px) rotate(${currentRotation}deg) scale(${currentScale})`,
-                zIndex: currentZ,
+                transform: `translate(${layout.translateX}px, ${translateY}px) rotate(${rotation}deg) scale(${scale})`,
+                zIndex: layout.zIndex,
+                opacity: layout.opacity,
+                transition: isDragging
+                  ? "opacity 0.2s ease"
+                  : "transform 0.52s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease",
               }}
               onMouseEnter={() => {
                 if (!isDragging) setHoveredId(card.id);
@@ -192,6 +232,19 @@ export default function HeroFannedCards() {
             </Link>
           );
         })}
+      </div>
+
+      {/* Drag hint dots */}
+      <div className="fanned-dot-nav" aria-hidden="true">
+        {CARDS.map((card, i) => (
+          <button
+            key={card.id}
+            className={`fanned-dot ${i === centerIndex ? "active" : ""}`}
+            onClick={() => setCenterIndex(i)}
+            tabIndex={-1}
+            aria-label={`Show ${card.title}`}
+          />
+        ))}
       </div>
     </div>
   );
