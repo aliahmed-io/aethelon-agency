@@ -2,14 +2,12 @@
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 
 interface CardDef {
   readonly id: string;
   readonly title: string;
   readonly category: string;
   readonly image: string;
-  readonly href: string;
   readonly objectPosition: string;
 }
 
@@ -19,15 +17,13 @@ const CARDS: readonly CardDef[] = [
     title: "Oakwell",
     category: "Handcrafted Luxury",
     image: "/images/projects/oakwell.png",
-    href: "/work/oakwell-furniture-commerce",
-    objectPosition: "35% center",
+    objectPosition: "38% center",
   },
   {
     id: "aethelon",
     title: "Aethelon",
     category: "Spatial Commerce",
     image: "/images/projects/aethelon.png",
-    href: "/work/aethelon-furniture-commerce",
     objectPosition: "center center",
   },
   {
@@ -35,7 +31,6 @@ const CARDS: readonly CardDef[] = [
     title: "Lundev",
     category: "Tactile 3D Studio",
     image: "/images/projects/lundev-furniture.png",
-    href: "/work/lundev-furniture-experience",
     objectPosition: "32% center",
   },
   {
@@ -43,15 +38,15 @@ const CARDS: readonly CardDef[] = [
     title: "Velorum",
     category: "Haute Horology",
     image: "/images/projects/velorum.png",
-    href: "/work/velorum-watch-commerce",
     objectPosition: "center center",
   },
 ];
 
 const N = CARDS.length;
+const DRAG_SENSITIVITY = 150; // px of drag per card transition
 
-/** Fan layout params per slot offset from center (-2 … +2) */
-function slotLayout(offset: number): {
+/** Compute visual transform properties for a given float offset from center */
+function computeCardTransform(offset: number): {
   rotation: number;
   translateX: number;
   translateY: number;
@@ -59,169 +54,192 @@ function slotLayout(offset: number): {
   zIndex: number;
   opacity: number;
 } {
-  // offset = position relative to center card (0 = center, -1 = left, 1 = right, ±2 = far)
-  switch (offset) {
-    case 0:
-      return { rotation: 0, translateX: 0, translateY: -18, scale: 1.07, zIndex: 10, opacity: 1 };
-    case -1:
-      return { rotation: -13, translateX: -170, translateY: 12, scale: 0.92, zIndex: 6, opacity: 1 };
-    case 1:
-      return { rotation: 13, translateX: 170, translateY: 12, scale: 0.92, zIndex: 6, opacity: 1 };
-    case -2:
-      return { rotation: -24, translateX: -310, translateY: 40, scale: 0.8, zIndex: 3, opacity: 0.6 };
-    case 2:
-      return { rotation: 24, translateX: 310, translateY: 40, scale: 0.8, zIndex: 3, opacity: 0.6 };
-    default:
-      // hidden off to the side
-      return {
-        rotation: offset < 0 ? -36 : 36,
-        translateX: offset < 0 ? -450 : 450,
-        translateY: 60,
-        scale: 0.68,
-        zIndex: 1,
-        opacity: 0,
-      };
-  }
+  const absOffset = Math.abs(offset);
+  // Negative offset = card to the left; Positive = card to the right
+  const rotation = offset * 11.5;
+  const translateX = offset * 76;
+  const translateY = absOffset * 11;
+  const scale = Math.max(0.72, 1.02 - absOffset * 0.038);
+  // Highest z-index for the card closest to center
+  const zIndex = Math.round(20 - Math.min(10, absOffset * 3));
+  const opacity = Math.max(0.45, 1 - absOffset * 0.12);
+
+  return { rotation, translateX, translateY, scale, zIndex, opacity };
 }
 
-const DRAG_THRESHOLD = 60; // px to commit a card cycle
-
 export default function HeroFannedCards() {
-  const [centerIndex, setCenterIndex] = useState<number>(1); // aethelon starts center
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [dragDelta, setDragDelta] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [dragX, setDragX] = useState<number>(0);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const startXRef = useRef<number>(0);
-  const totalMovedRef = useRef<number>(0);
-  const committedRef = useRef<boolean>(false);
+  const startTimeRef = useRef<number>(0);
+  const hasMovedRef = useRef<boolean>(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Keyboard navigation for accessibility
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      setActiveIndex((prev) => Math.max(0, prev - 1));
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      setActiveIndex((prev) => Math.min(N - 1, prev + 1));
+    }
+  }, []);
 
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    // Only primary button
+    if (e.button !== 0) return;
+
     setIsDragging(true);
-    setDragX(0);
+    setDragDelta(0);
     startXRef.current = e.clientX;
-    totalMovedRef.current = 0;
-    committedRef.current = false;
+    startTimeRef.current = Date.now();
+    hasMovedRef.current = false;
+
     try {
-      (e.currentTarget as HTMLDivElement).setPointerCapture(e.pointerId);
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     } catch {
-      // ignore
+      // Ignore if pointer capture not supported
     }
   }, []);
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       if (!isDragging) return;
-      const delta = e.clientX - startXRef.current;
-      totalMovedRef.current = Math.abs(delta);
-      setDragX(delta);
 
-      // Commit a cycle once threshold is crossed (one per drag gesture)
-      if (!committedRef.current && Math.abs(delta) >= DRAG_THRESHOLD) {
-        committedRef.current = true;
-        const direction = delta < 0 ? 1 : -1; // drag left → next card; drag right → prev card
-        setCenterIndex((prev) => (prev + direction + N) % N);
-        // Reset so user can chain if they drag far enough
-        startXRef.current = e.clientX;
-        setDragX(0);
-        committedRef.current = false;
+      const rawDelta = e.clientX - startXRef.current;
+      if (Math.abs(rawDelta) > 5) {
+        hasMovedRef.current = true;
       }
+
+      // Elastic resistance when dragging past stack boundaries
+      let effectiveDelta = rawDelta;
+      if (activeIndex === 0 && rawDelta > 0) {
+        effectiveDelta = rawDelta * 0.28;
+      } else if (activeIndex === N - 1 && rawDelta < 0) {
+        effectiveDelta = rawDelta * 0.28;
+      }
+
+      setDragDelta(effectiveDelta);
     },
-    [isDragging],
+    [isDragging, activeIndex],
   );
 
-  const handlePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    setIsDragging(false);
-    setDragX(0);
-    try {
-      (e.currentTarget as HTMLDivElement).releasePointerCapture(e.pointerId);
-    } catch {
-      // ignore
-    }
-  }, []);
+  const handlePointerUp = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!isDragging) return;
 
-  const handlePointerLeave = useCallback(() => {
-    if (!isDragging) {
-      setHoveredId(null);
-    }
-  }, [isDragging]);
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {
+        // Ignore
+      }
 
-  const handleCardClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (totalMovedRef.current > 6) {
-      e.preventDefault();
-    }
-  }, []);
+      setIsDragging(false);
 
-  // Drag hint: subtle parallax tilt of the whole deck while dragging (before threshold)
-  const deckDragTilt = isDragging ? dragX * 0.06 : 0;
-  const deckDragX = isDragging ? dragX * 0.12 : 0;
+      const deltaX = dragDelta;
+      const elapsed = Math.max(1, Date.now() - startTimeRef.current);
+      const velocity = deltaX / elapsed; // px per ms
+
+      if (hasMovedRef.current && Math.abs(deltaX) > 10) {
+        let shift = 0;
+
+        // Swipe flick detection or distance threshold
+        if (velocity < -0.32 || deltaX < -50) {
+          shift = deltaX < -180 ? 2 : 1;
+        } else if (velocity > 0.32 || deltaX > 50) {
+          shift = deltaX > 180 ? -2 : -1;
+        } else {
+          shift = Math.round(-deltaX / DRAG_SENSITIVITY);
+        }
+
+        const nextIndex = Math.max(0, Math.min(N - 1, activeIndex + shift));
+        setActiveIndex(nextIndex);
+      }
+
+      setDragDelta(0);
+    },
+    [isDragging, dragDelta, activeIndex],
+  );
+
+  const handleCardClick = useCallback(
+    (index: number) => {
+      // If user performed a drag gesture, do not treat as click
+      if (hasMovedRef.current) return;
+      setActiveIndex(index);
+    },
+    [],
+  );
+
+  // Virtual float position of the active center
+  // Dragging left (negative delta) moves active position forward
+  const virtualCenter = activeIndex - dragDelta / DRAG_SENSITIVITY;
 
   return (
     <div
+      ref={containerRef}
       className={`hero-fanned-stage ${isDragging ? "is-dragging" : ""}`}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
-      onPointerLeave={handlePointerLeave}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
       role="region"
-      aria-label="Featured Portfolio Flagships — drag to browse"
+      aria-label="Interactive portfolio cards — hold and drag or click to switch center card"
     >
       {/* Cards Deck Container */}
-      <div
-        className="fanned-deck-wrapper"
-        style={{
-          transform: `translate3d(${deckDragX}px, 0px, 0) rotate(${deckDragTilt}deg)`,
-          transition: isDragging ? "none" : "transform 0.35s cubic-bezier(0, 0, 0.2, 1)",
-        }}
-      >
+      <div className="fanned-deck-wrapper">
         {CARDS.map((card, i) => {
-          // Compute signed offset from centerIndex, wrap to shortest path
-          let offset = i - centerIndex;
-          // Normalize to [-N/2, N/2] for wrapping
-          if (offset > N / 2) offset -= N;
-          if (offset < -N / 2) offset += N;
+          const offset = i - virtualCenter;
+          const isCenter = Math.abs(offset) < 0.45;
+          const isHovered = !isDragging && hoveredIndex === i;
+          const transform = computeCardTransform(offset);
 
-          const layout = slotLayout(offset);
-          const isCenter = offset === 0;
-          const isHovered = !isDragging && hoveredId === card.id;
-
-          const rotation = isHovered && !isCenter ? layout.rotation * 0.6 : layout.rotation;
-          const translateY = isHovered ? layout.translateY - 14 : layout.translateY;
-          const scale = isHovered ? layout.scale + 0.03 : layout.scale;
+          // Subtle elevation lift on hover when not dragging
+          const hoverLift = isHovered && !isCenter ? -14 : isHovered && isCenter ? -8 : 0;
+          const currentTranslateY = transform.translateY + hoverLift;
+          const currentScale = isHovered ? transform.scale * 1.025 : transform.scale;
 
           return (
-            <Link
+            <div
               key={card.id}
-              href={card.href}
+              role="button"
+              tabIndex={-1}
               className={`fanned-card ${isCenter ? "is-center" : ""} ${isHovered ? "hovered" : ""}`}
               style={{
-                transform: `translate(${layout.translateX}px, ${translateY}px) rotate(${rotation}deg) scale(${scale})`,
-                zIndex: layout.zIndex,
-                opacity: layout.opacity,
+                transform: `translate3d(${transform.translateX}px, ${currentTranslateY}px, 0) rotate(${transform.rotation}deg) scale(${currentScale})`,
+                zIndex: transform.zIndex,
+                opacity: transform.opacity,
                 transition: isDragging
-                  ? "opacity 0.2s ease"
-                  : "transform 0.52s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease",
+                  ? "none"
+                  : "transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease, opacity 0.4s ease",
               }}
+              onClick={() => handleCardClick(i)}
               onMouseEnter={() => {
-                if (!isDragging) setHoveredId(card.id);
+                if (!isDragging) setHoveredIndex(i);
               }}
               onMouseLeave={() => {
-                if (!isDragging) setHoveredId(null);
+                if (!isDragging) setHoveredIndex(null);
               }}
-              onClick={handleCardClick}
-              aria-label={`View ${card.title} platform build`}
+              onDragStart={(e) => e.preventDefault()}
+              aria-label={`Showcase ${card.title} - ${card.category}`}
             >
               <div className="fanned-card-inner">
                 <Image
                   src={card.image}
                   alt={card.title}
                   fill
-                  sizes="(max-width: 760px) 70vw, 340px"
-                  priority
+                  sizes="(max-width: 768px) 70vw, 360px"
+                  priority={i < 2}
                   unoptimized
+                  draggable={false}
                   className="fanned-card-img"
                   style={{ objectPosition: card.objectPosition }}
+                  onDragStart={(e) => e.preventDefault()}
                 />
                 <div className="fanned-card-overlay" />
                 <div className="fanned-card-pill">
@@ -229,20 +247,24 @@ export default function HeroFannedCards() {
                   <span className="pill-category">{card.category}</span>
                 </div>
               </div>
-            </Link>
+            </div>
           );
         })}
       </div>
 
-      {/* Drag hint dots */}
-      <div className="fanned-dot-nav" aria-hidden="true">
+      {/* Indicator dots for direct switching */}
+      <div className="fanned-dot-nav" aria-label="Card selection indicators">
         {CARDS.map((card, i) => (
           <button
             key={card.id}
-            className={`fanned-dot ${i === centerIndex ? "active" : ""}`}
-            onClick={() => setCenterIndex(i)}
-            tabIndex={-1}
-            aria-label={`Show ${card.title}`}
+            type="button"
+            className={`fanned-dot ${i === activeIndex ? "active" : ""}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              setActiveIndex(i);
+            }}
+            tabIndex={0}
+            aria-label={`Select ${card.title}`}
           />
         ))}
       </div>
