@@ -98,8 +98,10 @@ jspm_packages/
 .storybook-out
 
 # Temporary folders
-tmp/
-temp/
+/tmp/
+/temp/
+!app/temp/
+!client/src/components/temp/
 scratch/
 research/*.png
 research/*.json
