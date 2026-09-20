@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Compass, Sparkles, Layout, ChevronDown } from "lucide-react";
 
-import { HeroVersionA, HeroVersionB, HeroVersionC } from "../components/temp/HeroVariations";
+import { HeroCurrentPhillTweak } from "../components/temp/HeroVariations";
 import { WhoWeAreA, WhoWeAreB, WhoWeAreC, WhoWeAreD } from "../components/temp/WhoWeAreVariations";
 import { SelectedWorkA, SelectedWorkB, SelectedWorkC } from "../components/temp/SelectedWorkVariations";
 import { ServicesA, ServicesB, ServicesC } from "../components/temp/ServicesVariations";
@@ -16,7 +16,7 @@ import { FooterA, FooterB } from "../components/temp/FooterVariations";
 
 export default function TempComparisonPage() {
   const sections = [
-    { id: "sec-hero", label: "1. Hero", count: "3 Versions" },
+    { id: "sec-hero", label: "1. Hero Section", count: "Ask Phill Deck Tweak" },
     { id: "sec-who", label: "2. Who We Are", count: "4 Concepts" },
     { id: "sec-work", label: "3. Selected Work", count: "3 Concepts" },
     { id: "sec-services", label: "4. Services", count: "3 Concepts" },
@@ -77,20 +77,16 @@ export default function TempComparisonPage() {
       </section>
 
       {/* ===================================================================
-          1. HERO SECTION VARIATIONS
+          1. HERO SECTION (ASK PHILL WHOLE-DECK TWEAK)
           =================================================================== */}
       <div id="sec-hero" className="temp-section-separator">
         <div className="separator-inner">
           <span className="separator-num">SECTION 01</span>
-          <h2>Hero Variations (3 Versions)</h2>
-          <p>Evaluating card width, height, crop, visual balance, and subtle interactions.</p>
+          <h2>Hero Section · Ask Phill Whole-Deck Tweak Animation</h2>
+          <p>Current hero layout retained. Hover or select any card to tweak the entire deck: left cards fan left, right cards fan right, and the chosen card stands upright at 0°.</p>
         </div>
       </div>
-      <HeroVersionA />
-      <div className="temp-sub-divider" />
-      <HeroVersionB />
-      <div className="temp-sub-divider" />
-      <HeroVersionC />
+      <HeroCurrentPhillTweak />
 
       {/* ===================================================================
           2. WHO WE ARE / CAPABILITIES
