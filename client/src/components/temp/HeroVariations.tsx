@@ -421,7 +421,10 @@ export function HeroCurrentPhillTweak() {
                       transition: isDragging ? "none" : transitionTiming,
                     }}
                     onMouseEnter={() => {
-                      if (!isDragging) setHoveredIndex(idx);
+                      if (!isDragging) {
+                        setChosenIndex(idx);
+                        setHoveredIndex(idx);
+                      }
                     }}
                     onMouseLeave={() => {
                       if (!isDragging) setHoveredIndex(null);
@@ -463,7 +466,10 @@ export function HeroCurrentPhillTweak() {
                       type="button"
                       className={`deck-dot-btn ${isActive ? "active" : ""}`}
                       onClick={() => setChosenIndex(idx)}
-                      onMouseEnter={() => setHoveredIndex(idx)}
+                      onMouseEnter={() => {
+                        setChosenIndex(idx);
+                        setHoveredIndex(idx);
+                      }}
                       onMouseLeave={() => setHoveredIndex(null)}
                       aria-label={`Select ${card.title} card`}
                     >
