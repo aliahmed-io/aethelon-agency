@@ -145,9 +145,11 @@ function TrustStrip() {
 export default function HomePage() {
   return (
     <>
-      {/* 01: Arrival & Living Commerce Identity */}
-      <Hero />
-      <TrustStrip />
+      {/* 01: Arrival & Living Commerce Identity (Exact Initial Window Viewport) */}
+      <div className="hero-landing-fold">
+        <Hero />
+        <TrustStrip />
+      </div>
 
       <main>
         {/* 02: Flagship Cinematic Experience */}
