@@ -1,19 +1,21 @@
 import type { Metadata } from "next";
 import "../client/src/index.css";
-import { DM_Sans, Space_Grotesk } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { siteUrl } from "../shared/site-config";
 
-const bodyFont = DM_Sans({
+const displayFont = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-body",
-  display: "optional",
+  variable: "--font-display",
+  display: "swap",
+  weight: ["500", "600", "700", "800"],
   preload: true,
 });
 
-const displayFont = Space_Grotesk({
+const bodyFont = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-display",
-  display: "optional",
+  variable: "--font-body",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
   preload: true,
 });
 

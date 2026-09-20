@@ -64,10 +64,10 @@ interface CardPose {
 
 function getBasePose(cardIndex: number, chosen: number) {
   const slot = cardIndex - chosen;
-  // Anchored rightward to prevent cards from ever covering text or CTAs
-  const deckCenters = [35, 10, -10, -30];
+  // Anchored harmoniously to frame the bold typography with balanced breathing room
+  const deckCenters = [20, 6, -6, -20];
   const centerShift = deckCenters[chosen] ?? 0;
-  const translateX = centerShift + slot * 72;
+  const translateX = centerShift + slot * 74;
 
   let rotation = 0;
   if (slot === -1) rotation = -13;
