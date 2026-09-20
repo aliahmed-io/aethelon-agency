@@ -205,6 +205,7 @@ export function HeroCurrentPhillTweak() {
   const [dragOffset, setDragOffset] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
+  const initialXRef = useRef<number>(0);
   const startXRef = useRef<number>(0);
   const totalMovedRef = useRef<number>(0);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -222,7 +223,9 @@ export function HeroCurrentPhillTweak() {
 
   // Drag interaction handlers
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0) return;
     setIsDragging(true);
+    initialXRef.current = e.clientX;
     startXRef.current = e.clientX;
     totalMovedRef.current = 0;
     try {
@@ -240,15 +243,17 @@ export function HeroCurrentPhillTweak() {
 
       if (isDragging) {
         const deltaX = e.clientX - startXRef.current;
-        totalMovedRef.current = Math.abs(deltaX);
-        setDragOffset(deltaX * 0.3);
+        const totalMoved = Math.abs(e.clientX - initialXRef.current);
+        totalMovedRef.current = totalMoved;
+        setDragOffset(deltaX * 0.35);
 
-        // Threshold cycle on drag
-        if (deltaX < -50 && effectiveIndex < DECK_CARDS.length - 1) {
+        // Threshold cycle on drag (45px sweep triggers next/prev card)
+        const threshold = 45;
+        if (deltaX < -threshold) {
           setChosenIndex((prev) => Math.min(DECK_CARDS.length - 1, prev + 1));
           startXRef.current = e.clientX;
           setDragOffset(0);
-        } else if (deltaX > 50 && effectiveIndex > 0) {
+        } else if (deltaX > threshold) {
           setChosenIndex((prev) => Math.max(0, prev - 1));
           startXRef.current = e.clientX;
           setDragOffset(0);
@@ -257,7 +262,7 @@ export function HeroCurrentPhillTweak() {
         setMouseOffset({ x: relX * 10, y: relY * 10 });
       }
     },
-    [isDragging, effectiveIndex]
+    [isDragging]
   );
 
   const handlePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
@@ -280,6 +285,7 @@ export function HeroCurrentPhillTweak() {
   const handleCardClick = useCallback((e: React.MouseEvent, index: number) => {
     if (totalMovedRef.current > 8) {
       e.preventDefault();
+      e.stopPropagation();
       return;
     }
     setChosenIndex(index);
@@ -429,8 +435,10 @@ export function HeroCurrentPhillTweak() {
                     style={{
                       transform: `translate3d(${transform.translateX}px, ${transform.translateY}px, ${transform.translateZ}px) rotate(${transform.rotation}deg) scale(${transform.scale})`,
                       zIndex: transform.zIndex,
-                      transition: isDragging ? "none" : transitionTiming,
+                      transition: transitionTiming,
                     }}
+                    draggable={false}
+                    onDragStart={(e) => e.preventDefault()}
                     onMouseEnter={() => {
                       if (!isDragging) {
                         setChosenIndex(idx);
@@ -451,6 +459,7 @@ export function HeroCurrentPhillTweak() {
                         sizes="(max-width: 760px) 70vw, 340px"
                         priority
                         unoptimized
+                        draggable={false}
                         className="fanned-card-img"
                         style={{ objectPosition: card.objectPosition }}
                       />
@@ -463,33 +472,6 @@ export function HeroCurrentPhillTweak() {
                   </Link>
                 );
               })}
-            </div>
-
-            {/* Quick Card Trigger Selector Indicators */}
-            <div className="temp-hero-deck-indicators">
-              <span className="deck-nav-label">Direct Selection:</span>
-              <div className="deck-dots">
-                {DECK_CARDS.map((card, idx) => {
-                  const isActive = idx === effectiveIndex;
-                  return (
-                    <button
-                      key={card.id}
-                      type="button"
-                      className={`deck-dot-btn ${isActive ? "active" : ""}`}
-                      onClick={() => setChosenIndex(idx)}
-                      onMouseEnter={() => {
-                        setChosenIndex(idx);
-                        setHoveredIndex(idx);
-                      }}
-                      onMouseLeave={() => setHoveredIndex(null)}
-                      aria-label={`Select ${card.title} card`}
-                    >
-                      <span className="dot-index">{idx + 1}</span>
-                      <span className="dot-title">{card.title}</span>
-                    </button>
-                  );
-                })}
-              </div>
             </div>
           </div>
         </div>

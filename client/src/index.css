@@ -3051,71 +3051,6 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
   box-shadow: 0 14px 32px -8px rgba(23, 23, 23, 0.2), 0 0 0 1px rgba(23, 23, 23, 0.08);
 }
 
-.temp-hero-deck-indicators {
-  position: absolute;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(23, 23, 23, 0.92);
-  backdrop-filter: blur(12px);
-  padding: 6px 14px;
-  border-radius: 100px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  z-index: 40;
-}
-
-.deck-nav-label {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.55);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 700;
-}
-
-.deck-dots {
-  display: flex;
-  gap: 6px;
-}
-
-.deck-dot-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.85);
-  padding: 4px 10px;
-  border-radius: 100px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-height: 36px;
-}
-
-.deck-dot-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-.deck-dot-btn:active {
-  transform: scale(0.96);
-}
-
-.deck-dot-btn.active {
-  background: var(--orange, #ff5a1f);
-  border-color: var(--orange, #ff5a1f);
-  color: #fff;
-}
-
-.dot-index {
-  font-family: monospace;
-  font-weight: 700;
-}
-
 .temp-hero-transform-inspector {
   margin: 24px clamp(20px, 4vw, 36px);
   padding: 18px 24px;
@@ -3233,13 +3168,6 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
 @media (max-width: 600px) {
   .inspector-cards-grid {
     grid-template-columns: 1fr;
-  }
-  .temp-hero-deck-indicators {
-    width: 90%;
-    justify-content: center;
-  }
-  .dot-title {
-    display: none;
   }
 }
 
