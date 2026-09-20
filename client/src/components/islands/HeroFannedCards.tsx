@@ -1,33 +1,25 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-interface CardItem {
+interface DeckCard {
   readonly id: string;
   readonly title: string;
   readonly category: string;
   readonly image: string;
   readonly href: string;
-  readonly rotation: number;
-  readonly translateX: number;
-  readonly translateY: number;
-  readonly zIndex: number;
   readonly objectPosition: string;
 }
 
-const CARDS: readonly CardItem[] = [
+const DECK_CARDS: readonly DeckCard[] = [
   {
     id: "oakwell",
     title: "Oakwell",
     category: "Handcrafted Luxury",
     image: "/images/projects/oakwell.png",
     href: "/work/oakwell-furniture-commerce",
-    rotation: -14,
-    translateX: -125,
-    translateY: 24,
-    zIndex: 2,
     objectPosition: "35% center",
   },
   {
@@ -36,10 +28,6 @@ const CARDS: readonly CardItem[] = [
     category: "Spatial Commerce",
     image: "/images/projects/aethelon.png",
     href: "/work/aethelon-furniture-commerce",
-    rotation: 0,
-    translateX: -20,
-    translateY: -12,
-    zIndex: 5,
     objectPosition: "center center",
   },
   {
@@ -48,10 +36,6 @@ const CARDS: readonly CardItem[] = [
     category: "Tactile 3D Studio",
     image: "/images/projects/lundev-furniture.png",
     href: "/work/lundev-furniture-experience",
-    rotation: 12,
-    translateX: 80,
-    translateY: 18,
-    zIndex: 3,
     objectPosition: "32% center",
   },
   {
@@ -60,117 +44,292 @@ const CARDS: readonly CardItem[] = [
     category: "Haute Horology",
     image: "/images/projects/velorum.png",
     href: "/work/velorum-watch-commerce",
-    rotation: 24,
-    translateX: 175,
-    translateY: 46,
-    zIndex: 1,
     objectPosition: "center center",
   },
 ];
 
+const N = DECK_CARDS.length;
+const SWIPE_DRAG_PX = 190; // px of horizontal drag per full card cycle
+
+interface CardPose {
+  rotation: number;
+  rotateY: number;
+  translateX: number;
+  translateY: number;
+  translateZ: number;
+  scale: number;
+  zIndex: number;
+  isChosen: boolean;
+}
+
+function getBasePose(cardIndex: number, chosen: number) {
+  const slot = cardIndex - chosen;
+  // Anchored rightward to prevent cards from ever covering text or CTAs
+  const deckCenters = [35, 10, -10, -30];
+  const centerShift = deckCenters[chosen] ?? 0;
+  const translateX = centerShift + slot * 72;
+
+  let rotation = 0;
+  if (slot === -1) rotation = -13;
+  else if (slot === -2) rotation = -22;
+  else if (slot <= -3) rotation = -30;
+  else if (slot === 1) rotation = 13;
+  else if (slot === 2) rotation = 22;
+  else if (slot >= 3) rotation = 30;
+
+  const absSlot = Math.abs(slot);
+  const translateY = slot === 0 ? -20 : absSlot * 13;
+  const translateZ = slot === 0 ? 46 : 18 - absSlot * 14;
+  const scale = slot === 0 ? 1.04 : Math.max(0.85, 1 - absSlot * 0.05);
+
+  return { rotation, translateX, translateY, translateZ, scale };
+}
+
+function getCardPose(cardIndex: number, virtualIndex: number): CardPose {
+  const clamped = Math.max(0, Math.min(N - 1, virtualIndex));
+  const c0 = Math.floor(clamped);
+  const c1 = Math.min(N - 1, c0 + 1);
+  const fraction = clamped - c0;
+  const t = fraction * fraction * (3 - 2 * fraction);
+  const parabola = 4 * fraction * (1 - fraction); // Peaks at 1.0 mid-transition
+
+  const p0 = getBasePose(cardIndex, c0);
+  const p1 = getBasePose(cardIndex, c1);
+
+  let rot = p0.rotation + (p1.rotation - p0.rotation) * t;
+  let tx = p0.translateX + (p1.translateX - p0.translateX) * t;
+  let ty = p0.translateY + (p1.translateY - p0.translateY) * t;
+  let tz = p0.translateZ + (p1.translateZ - p0.translateZ) * t;
+  let sc = p0.scale + (p1.scale - p0.scale) * t;
+  let rotY = 0;
+
+  // Elastic overscroll damping
+  const overscroll =
+    virtualIndex < 0
+      ? virtualIndex * 40
+      : virtualIndex > N - 1
+      ? (virtualIndex - (N - 1)) * 40
+      : 0;
+  tx += overscroll;
+
+  // 3D Parabolic Arc-Lift: incoming card flies 48px upward and 55px forward
+  if (cardIndex === c1 && fraction > 0) {
+    ty -= parabola * 48; // flies 48px upward
+    tz += parabola * 55; // pushes 55px forward in 3D
+    rotY = -parabola * 12; // subtle 3D card pitch
+  } else if (cardIndex === c0 && fraction > 0) {
+    tz -= parabola * 16; // outgoing card gently sinks behind
+  }
+
+  // Z-Index: incoming card takes top layer cleanly during flight
+  let zIndex = Math.round(18 - Math.abs(cardIndex - virtualIndex) * 4);
+  if (cardIndex === c1 && fraction > 0.06) {
+    zIndex = 26; // in the air above the deck
+  } else if (cardIndex === c0 && fraction <= 0.06) {
+    zIndex = 24;
+  }
+
+  const isChosen = Math.abs(cardIndex - virtualIndex) < 0.48;
+
+  return {
+    rotation: rot,
+    rotateY: rotY,
+    translateX: tx,
+    translateY: ty,
+    translateZ: tz,
+    scale: sc,
+    zIndex,
+    isChosen,
+  };
+}
+
 export default function HeroFannedCards() {
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [mouseOffset, setMouseOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [dragOffset, setDragOffset] = useState<number>(0);
+  const router = useRouter();
+  const [virtualIndex, setVirtualIndex] = useState<number>(1);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
+  const virtualIndexRef = useRef<number>(1);
+  virtualIndexRef.current = virtualIndex;
+
   const startXRef = useRef<number>(0);
+  const startVirtualRef = useRef<number>(1);
+  const startTimeRef = useRef<number>(0);
   const totalMovedRef = useRef<number>(0);
+  const isPointerDownRef = useRef<boolean>(false);
+  const animFrameRef = useRef<number | null>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+
+  const animateTo = useCallback((targetIndex: number) => {
+    if (animFrameRef.current) {
+      cancelAnimationFrame(animFrameRef.current);
+      animFrameRef.current = null;
+    }
+
+    const startV = virtualIndexRef.current;
+    const targetV = Math.max(0, Math.min(N - 1, targetIndex));
+    const animStartTime = performance.now();
+    const duration = 520;
+
+    function step(now: number) {
+      const elapsed = now - animStartTime;
+      const progress = Math.min(1, elapsed / duration);
+      const ease = 1 - Math.pow(1 - progress, 5); // Quintic ease-out
+      const currentV = startV + (targetV - startV) * ease;
+
+      setVirtualIndex(currentV);
+
+      if (progress < 1) {
+        animFrameRef.current = requestAnimationFrame(step);
+      } else {
+        setVirtualIndex(targetV);
+        animFrameRef.current = null;
+      }
+    }
+
+    animFrameRef.current = requestAnimationFrame(step);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    };
+  }, []);
 
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    setIsDragging(true);
+    if (e.button !== 0) return;
+    if (animFrameRef.current) {
+      cancelAnimationFrame(animFrameRef.current);
+      animFrameRef.current = null;
+    }
+    isPointerDownRef.current = true;
     startXRef.current = e.clientX;
+    startVirtualRef.current = virtualIndexRef.current;
+    startTimeRef.current = Date.now();
     totalMovedRef.current = 0;
+    setIsDragging(true);
+
     try {
-      (e.currentTarget as HTMLDivElement).setPointerCapture(e.pointerId);
+      if (e.currentTarget.setPointerCapture) {
+        e.currentTarget.setPointerCapture(e.pointerId);
+      }
     } catch {
       // ignore
     }
   }, []);
 
   const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const relX = (e.clientX - rect.left) / rect.width - 0.5;
-    const relY = (e.clientY - rect.top) / rect.height - 0.5;
+    if (!isPointerDownRef.current) return;
+    const deltaX = e.clientX - startXRef.current;
+    totalMovedRef.current = Math.max(totalMovedRef.current, Math.abs(deltaX));
 
-    if (isDragging) {
+    const rawTarget = startVirtualRef.current - deltaX / SWIPE_DRAG_PX;
+    let boundedTarget = rawTarget;
+    if (rawTarget < 0) {
+      boundedTarget = rawTarget * 0.26;
+    } else if (rawTarget > N - 1) {
+      boundedTarget = (N - 1) + (rawTarget - (N - 1)) * 0.26;
+    }
+    setVirtualIndex(boundedTarget);
+  }, []);
+
+  const handlePointerUp = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!isPointerDownRef.current) return;
+      isPointerDownRef.current = false;
+      setIsDragging(false);
+
+      try {
+        if (e.currentTarget.hasPointerCapture && e.currentTarget.hasPointerCapture(e.pointerId)) {
+          e.currentTarget.releasePointerCapture(e.pointerId);
+        }
+      } catch {
+        // ignore
+      }
+
       const deltaX = e.clientX - startXRef.current;
-      totalMovedRef.current = Math.abs(deltaX);
-      setDragOffset(deltaX * 0.35);
-    } else {
-      setMouseOffset({ x: relX * 12, y: relY * 12 });
-    }
-  }, [isDragging]);
+      const elapsed = Math.max(1, Date.now() - startTimeRef.current);
+      const velocity = deltaX / elapsed;
 
-  const handlePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    setIsDragging(false);
-    setDragOffset(0);
-    try {
-      (e.currentTarget as HTMLDivElement).releasePointerCapture(e.pointerId);
-    } catch {
-      // ignore
-    }
-  }, []);
+      const currentV = virtualIndexRef.current;
+      let targetIndex = Math.round(currentV);
 
-  const handlePointerLeave = useCallback(() => {
-    if (!isDragging) {
-      setHoveredId(null);
-      setMouseOffset({ x: 0, y: 0 });
-    }
-  }, [isDragging]);
+      if (velocity < -0.22 && currentV < N - 1) {
+        targetIndex = Math.min(N - 1, Math.floor(currentV) + 1);
+      } else if (velocity > 0.22 && currentV > 0) {
+        targetIndex = Math.max(0, Math.ceil(currentV) - 1);
+      }
 
-  const handleCardClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (totalMovedRef.current > 6) {
-      e.preventDefault();
-    }
-  }, []);
+      animateTo(targetIndex);
+    },
+    [animateTo]
+  );
+
+  const handleCardClick = useCallback(
+    (index: number, href: string) => {
+      if (totalMovedRef.current > 6) return;
+      const currentCenter = Math.round(virtualIndexRef.current);
+      if (currentCenter === index) {
+        router.push(href);
+      } else {
+        animateTo(index);
+      }
+    },
+    [router, animateTo]
+  );
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      const currentCenter = Math.round(virtualIndexRef.current);
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        animateTo(Math.max(0, currentCenter - 1));
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        animateTo(Math.min(N - 1, currentCenter + 1));
+      }
+    },
+    [animateTo]
+  );
 
   return (
     <div
-      className={`hero-fanned-stage ${isDragging ? "is-dragging" : ""}`}
+      ref={stageRef}
+      tabIndex={0}
+      className={`hero-unified-stage ${isDragging ? "is-dragging" : ""}`}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
-      onPointerLeave={handlePointerLeave}
+      onKeyDown={handleKeyDown}
       role="region"
-      aria-label="Featured Portfolio Flagships"
+      aria-label="Featured Portfolio Flagships — drag horizontally to cycle with 3D arc-lift"
+      style={{ touchAction: "pan-y" }}
     >
-      {/* Cards Deck Container */}
-      <div
-        className="fanned-deck-wrapper"
-        style={{
-          transform: `translate3d(${mouseOffset.x + dragOffset}px, ${mouseOffset.y}px, 0) rotate(${dragOffset * 0.04}deg)`,
-          transition: isDragging ? "none" : "transform 0.4s cubic-bezier(0, 0, 0.2, 1)",
-        }}
-      >
-        {CARDS.map((card) => {
-          const isHovered = hoveredId === card.id;
-
-          // Smooth elevation & straightening on hover
-          const currentRotation = isHovered ? 0 : card.rotation;
-          const currentTranslateX = card.translateX;
-          const currentTranslateY = isHovered ? card.translateY - 26 : card.translateY;
-          const currentScale = isHovered ? 1.05 : 1;
-          const currentZ = isHovered ? 20 : card.zIndex;
+      <div className="unified-deck-wrapper">
+        {DECK_CARDS.map((card, idx) => {
+          const t = getCardPose(idx, virtualIndex);
 
           return (
-            <Link
+            <div
               key={card.id}
-              href={card.href}
-              className={`fanned-card ${isHovered ? "hovered" : ""}`}
+              role="button"
+              tabIndex={0}
+              className={`fanned-card ${t.isChosen ? "is-chosen" : "is-background"}`}
               style={{
-                transform: `translate(${currentTranslateX}px, ${currentTranslateY}px) rotate(${currentRotation}deg) scale(${currentScale})`,
-                zIndex: currentZ,
+                transform: `translate3d(${t.translateX}px, ${t.translateY}px, ${t.translateZ}px) rotate(${t.rotation}deg) rotateY(${t.rotateY}deg) scale(${t.scale})`,
+                zIndex: t.zIndex,
+                cursor: isDragging ? "grabbing" : t.isChosen ? "pointer" : "grab",
               }}
-              onMouseEnter={() => {
-                if (!isDragging) setHoveredId(card.id);
+              draggable={false}
+              onDragStart={(e) => e.preventDefault()}
+              onClick={() => handleCardClick(idx, card.href)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  handleCardClick(idx, card.href);
+                }
               }}
-              onMouseLeave={() => {
-                if (!isDragging) setHoveredId(null);
-              }}
-              onClick={handleCardClick}
-              aria-label={`View ${card.title} platform build`}
+              aria-label={`Project: ${card.title} — ${card.category}${t.isChosen ? " (selected)" : " (drag to select)"}`}
             >
               <div className="fanned-card-inner">
                 <Image
@@ -178,10 +337,12 @@ export default function HeroFannedCards() {
                   alt={card.title}
                   fill
                   sizes="(max-width: 760px) 70vw, 340px"
-                  priority
+                  priority={idx < 2}
                   unoptimized
+                  draggable={false}
                   className="fanned-card-img"
-                  style={{ objectPosition: card.objectPosition }}
+                  style={{ objectPosition: card.objectPosition, pointerEvents: "none" }}
+                  onDragStart={(e) => e.preventDefault()}
                 />
                 <div className="fanned-card-overlay" />
                 <div className="fanned-card-pill">
@@ -189,7 +350,7 @@ export default function HeroFannedCards() {
                   <span className="pill-category">{card.category}</span>
                 </div>
               </div>
-            </Link>
+            </div>
           );
         })}
       </div>

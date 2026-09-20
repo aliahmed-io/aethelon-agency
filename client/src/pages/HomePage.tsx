@@ -95,28 +95,28 @@ function SectionLabel({ children, index }: { children: React.ReactNode; index?: 
 
 function Hero() {
   return (
-    <section className="hero">
-      <div className="hero-copy">
-        <div className="eyebrow">
-          <span className="signal-dot" /> Freelance Full-Stack Developer
+    <section className="hero-unified-canvas">
+      <HeroFannedCards />
+      <div className="hero-copy-layered">
+        <div className="hero-copy-inner">
+          <div className="eyebrow">
+            <span className="signal-dot" /> Modern Ecommerce Design &amp; Build
+          </div>
+          <h1>
+            I build unique ecommerce stores with everything your brand needs to sell.
+          </h1>
+          <p>
+            Your business deserves more than a generic template. I craft distinctive online stores designed to showcase your products, earn customer trust, and turn visitors into buyers.
+          </p>
+          <div className="hero-actions">
+            <Link className="button button-dark" href="/contact">
+              Start your project <ArrowUpRight size={15} aria-hidden="true" />
+            </Link>
+            <a className="text-link" href="#flagship">
+              Explore recent work <ArrowDownRight size={15} aria-hidden="true" />
+            </a>
+          </div>
         </div>
-        <h1>
-          I build custom ecommerce experiences and full-stack web applications.
-        </h1>
-        <p>
-          From high-speed storefronts and interactive configurators to database schemas, checkout endpoints, and custom admin portals. Direct senior execution.
-        </p>
-        <div className="hero-actions">
-          <Link className="button button-dark" href="/contact">
-            Start a project <ArrowUpRight size={15} aria-hidden="true" />
-          </Link>
-          <a className="text-link" href="#flagship">
-            Explore flagship <ArrowDownRight size={15} aria-hidden="true" />
-          </a>
-        </div>
-      </div>
-      <div className="hero-visual-wrapper">
-        <HeroFannedCards />
       </div>
     </section>
   );
@@ -127,7 +127,7 @@ function TrustStrip() {
     <div className="trust-strip">
       {[
         "Custom Storefronts",
-        "Full-Stack Systems",
+        "Bespoke Builds",
         "Admin & CMS",
         "Checkout & Payments",
         "Interactive 3D / AI",
