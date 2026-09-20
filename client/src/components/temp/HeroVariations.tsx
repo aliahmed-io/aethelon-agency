@@ -54,12 +54,13 @@ const DECK_CARDS: readonly DeckCard[] = [
 ];
 
 type AnimationMode = "phill-flow" | "magnetic-center" | "legacy-single";
-type SpeedPreset = "studio" | "snappy" | "elastic";
+type SpeedPreset = "butter" | "crisp" | "liquid";
 
 interface CardTransformState {
   rotation: number;
   translateX: number;
   translateY: number;
+  translateZ: number;
   scale: number;
   zIndex: number;
   isChosen: boolean;
@@ -90,6 +91,7 @@ function computeCardTransform(
       rotation: isChosen ? 0 : def.rotation,
       translateX: def.translateX,
       translateY: isChosen ? def.translateY - 26 : def.translateY,
+      translateZ: isChosen ? 40 : 0,
       scale: isChosen ? 1.05 : 1,
       zIndex: isChosen ? 25 : def.zIndex,
       isChosen,
@@ -108,6 +110,7 @@ function computeCardTransform(
         rotation: 0,
         translateX: 0,
         translateY: -28,
+        translateZ: 60,
         scale: 1.06,
         zIndex: 30,
         isChosen: true,
@@ -120,11 +123,13 @@ function computeCardTransform(
     const x = sign * (dist === 1 ? 95 : dist === 2 ? 180 : 255);
     const y = dist === 1 ? 12 : dist === 2 ? 28 : 46;
     const z = 20 - dist * 5;
+    const tz = 30 - dist * 20;
 
     return {
       rotation: angle,
       translateX: x,
       translateY: y,
+      translateZ: tz,
       scale: 1 - dist * 0.035,
       zIndex: z,
       isChosen: false,
@@ -134,7 +139,7 @@ function computeCardTransform(
   // -------------------------------------------------------------
   // Mode 1: Ask Phill Dynamic Flow (Exact Whole-Deck Tweak)
   // Left cards fan negative (-), right cards fan positive (+),
-  // chosen card stands upright at 0° in front.
+  // chosen card stands upright at 0° in front with true 3D Z-depth.
   // -------------------------------------------------------------
   const delta = cardIndex - chosenIndex;
   const isChosen = delta === 0;
@@ -147,7 +152,8 @@ function computeCardTransform(
     return {
       rotation: 0,
       translateX: baseX,
-      translateY: -24,
+      translateY: -26,
+      translateZ: 60,
       scale: 1.05,
       zIndex: 25,
       isChosen: true,
@@ -169,13 +175,15 @@ function computeCardTransform(
   const yStep = dist === 1 ? 14 : dist === 2 ? 30 : 48;
   const y = -8 + yStep;
 
-  // Z-index cascades cleanly away from chosen card
+  // Continuous 3D spatial depth for butter smooth layering
+  const tz = 35 - dist * 18;
   const z = 20 - dist * 4;
 
   return {
     rotation: angle,
     translateX: x,
     translateY: y,
+    translateZ: tz,
     scale: 1 - dist * 0.03,
     zIndex: z,
     isChosen: false,
@@ -190,7 +198,7 @@ export function HeroCurrentPhillTweak() {
   const [chosenIndex, setChosenIndex] = useState<number>(1);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [mode, setMode] = useState<AnimationMode>("phill-flow");
-  const [speed, setSpeed] = useState<SpeedPreset>("studio");
+  const [speed, setSpeed] = useState<SpeedPreset>("butter");
 
   // Pointer tracking & drag physics
   const [mouseOffset, setMouseOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -204,13 +212,13 @@ export function HeroCurrentPhillTweak() {
   // Effective active index (hover overrides locked selection while hovering)
   const effectiveIndex = hoveredIndex !== null ? hoveredIndex : chosenIndex;
 
-  // Transition timing curves based on speed preset
+  // Buttery transition timing curves (0.72s cubic-bezier(0.22, 1, 0.36, 1))
   const transitionTiming =
-    speed === "snappy"
-      ? "transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease"
-      : speed === "elastic"
-      ? "transform 0.65s cubic-bezier(0.2, 1.25, 0.4, 1), box-shadow 0.5s ease"
-      : "transform 0.50s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s ease";
+    speed === "crisp"
+      ? "transform 0.48s cubic-bezier(0.25, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.25, 1, 0.3, 1), filter 0.45s ease"
+      : speed === "liquid"
+      ? "transform 0.88s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.8s ease, filter 0.7s ease"
+      : "transform 0.72s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.68s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease";
 
   // Drag interaction handlers
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
@@ -321,29 +329,32 @@ export function HeroCurrentPhillTweak() {
 
         <div className="control-group">
           <span className="control-label">
-            <span>Spring Speed:</span>
+            <span>Motion Velocity:</span>
           </span>
           <div className="control-pill-group">
             <button
               type="button"
-              className={`control-pill ${speed === "studio" ? "active" : ""}`}
-              onClick={() => setSpeed("studio")}
+              className={`control-pill ${speed === "butter" ? "active" : ""}`}
+              onClick={() => setSpeed("butter")}
+              title="Buttery silk 720ms luxury agency ease"
             >
-              Studio (500ms)
+              <Sparkles size={12} className="pill-icon" /> Butter Silk (720ms)
             </button>
             <button
               type="button"
-              className={`control-pill ${speed === "snappy" ? "active" : ""}`}
-              onClick={() => setSpeed("snappy")}
+              className={`control-pill ${speed === "crisp" ? "active" : ""}`}
+              onClick={() => setSpeed("crisp")}
+              title="Crisp dynamic 480ms response"
             >
-              Snappy (350ms)
+              Crisp Studio (480ms)
             </button>
             <button
               type="button"
-              className={`control-pill ${speed === "elastic" ? "active" : ""}`}
-              onClick={() => setSpeed("elastic")}
+              className={`control-pill ${speed === "liquid" ? "active" : ""}`}
+              onClick={() => setSpeed("liquid")}
+              title="Ultra-cushioned liquid 880ms ease"
             >
-              Elastic (650ms)
+              Liquid Cushioned (880ms)
             </button>
           </div>
         </div>
@@ -356,7 +367,7 @@ export function HeroCurrentPhillTweak() {
               setChosenIndex(1);
               setHoveredIndex(null);
               setMode("phill-flow");
-              setSpeed("studio");
+              setSpeed("butter");
             }}
           >
             <RefreshCw size={12} /> Reset to Default
@@ -416,7 +427,7 @@ export function HeroCurrentPhillTweak() {
                     href={card.href}
                     className={`fanned-card ${transform.isChosen ? "is-chosen hovered" : "is-background"}`}
                     style={{
-                      transform: `translate(${transform.translateX}px, ${transform.translateY}px) rotate(${transform.rotation}deg) scale(${transform.scale})`,
+                      transform: `translate3d(${transform.translateX}px, ${transform.translateY}px, ${transform.translateZ}px) rotate(${transform.rotation}deg) scale(${transform.scale})`,
                       zIndex: transform.zIndex,
                       transition: isDragging ? "none" : transitionTiming,
                     }}
@@ -512,6 +523,7 @@ export function HeroCurrentPhillTweak() {
                   <span>rot: <b>{t.rotation > 0 ? `+${t.rotation}°` : `${t.rotation}°`}</b></span>
                   <span>tx: <b>{t.translateX}px</b></span>
                   <span>ty: <b>{t.translateY}px</b></span>
+                  <span>tz: <b>{t.translateZ}px</b></span>
                   <span>z: <b>{t.zIndex}</b></span>
                 </div>
               </div>
