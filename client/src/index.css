@@ -431,9 +431,9 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
 .fanned-card { position: absolute; width: clamp(280px, 30vw, 400px); aspect-ratio: 16 / 10.5; border-radius: 20px; text-decoration: none; color: inherit; transform-origin: 50% 120%; will-change: transform, box-shadow; backface-visibility: hidden; -webkit-backface-visibility: hidden; cursor: pointer; pointer-events: auto; }
 
 .fanned-card:hover,
-.fanned-card.hovered { box-shadow: 0 32px 70px -12px rgba(23, 23, 23, 0.38), 0 8px 22px rgba(23, 23, 23, 0.15), 0 0 0 1.5px var(--ink); }
+.fanned-card.hovered { box-shadow: 0 32px 70px -12px rgba(23, 23, 23, 0.32), 0 8px 22px rgba(23, 23, 23, 0.12); }
 
-.fanned-card-inner { position: relative; width: 100%; height: 100%; border-radius: 20px; overflow: hidden; background: #1a1816; transform: translateZ(0); }
+.fanned-card-inner { position: relative; width: 100%; height: 100%; border-radius: 20px; overflow: hidden; background: transparent; transform: translateZ(0); }
 
 .fanned-card-img { object-fit: cover; border-radius: 20px; transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); user-select: none; -webkit-user-drag: none; }
 .fanned-card:hover .fanned-card-img,
@@ -2963,7 +2963,7 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
 }
 
 .fanned-card.is-chosen {
-  box-shadow: 0 32px 70px -12px rgba(23, 23, 23, 0.42), 0 8px 24px rgba(23, 23, 23, 0.16), 0 0 0 2px var(--ink) !important;
+  box-shadow: 0 32px 70px -12px rgba(23, 23, 23, 0.38), 0 8px 24px rgba(23, 23, 23, 0.14) !important;
   filter: brightness(1.02);
 }
 
@@ -2972,8 +2972,8 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
 }
 
 .fanned-card.is-background {
-  filter: brightness(0.94);
-  box-shadow: 0 14px 32px -8px rgba(23, 23, 23, 0.2), 0 0 0 1px rgba(23, 23, 23, 0.08);
+  filter: brightness(0.95);
+  box-shadow: 0 14px 32px -8px rgba(23, 23, 23, 0.18) !important;
 }
 
 .fanned-card.is-chosen .fanned-card-pill {
@@ -3204,6 +3204,22 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
 
 .hero-unified-canvas .fanned-card {
   width: clamp(240px, 23vw, 320px);
+  border: none !important;
+  outline: none !important;
+}
+
+.hero-unified-canvas .fanned-card .fanned-card-inner {
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+}
+
+.hero-unified-canvas .fanned-card.is-chosen {
+  box-shadow: 0 28px 65px -12px rgba(23, 23, 23, 0.28), 0 10px 24px -6px rgba(23, 23, 23, 0.12) !important;
+}
+
+.hero-unified-canvas .fanned-card.is-background {
+  box-shadow: 0 14px 32px -8px rgba(23, 23, 23, 0.16), 0 4px 12px -2px rgba(23, 23, 23, 0.08) !important;
 }
 
 .hero-copy-layered {
