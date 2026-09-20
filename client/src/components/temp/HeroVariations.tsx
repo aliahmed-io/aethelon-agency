@@ -3,6 +3,7 @@
 import React, { useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowUpRight, ArrowDownRight, Sliders, RefreshCw, Layers, Sparkles } from "lucide-react";
 import TempBadge from "./TempBadge";
 
@@ -53,6 +54,9 @@ const DECK_CARDS: readonly DeckCard[] = [
   },
 ];
 
+const N = DECK_CARDS.length;
+const DRAG_SENSITIVITY = 140; // px of horizontal drag per full card cycle
+
 type AnimationMode = "phill-flow" | "magnetic-center" | "legacy-single";
 type SpeedPreset = "butter" | "crisp" | "liquid";
 
@@ -67,15 +71,20 @@ interface CardTransformState {
 }
 
 /**
- * Calculates transform matrix for every card in the deck based on the active card index and chosen mode.
+ * Calculates continuous 3D transform matrix based on continuous float offset from active center.
+ * offset = cardIndex - activeFloatCenter
  */
-function computeCardTransform(
+function computeContinuousTransform(
   cardIndex: number,
-  chosenIndex: number,
+  offset: number,
   mode: AnimationMode
 ): CardTransformState {
+  const isChosen = Math.abs(offset) < 0.45;
+  const absOffset = Math.abs(offset);
+  const sign = Math.sign(offset) || 1;
+
   // -------------------------------------------------------------
-  // Mode 3: Legacy Single-Card Stand (Old behavior before tweak)
+  // Mode 3: Legacy Single-Card Stand
   // -------------------------------------------------------------
   if (mode === "legacy-single") {
     const legacyDefaults = [
@@ -85,13 +94,12 @@ function computeCardTransform(
       { rotation: 24, translateX: 175, translateY: 46, zIndex: 1 },
     ];
     const def = legacyDefaults[cardIndex] ?? legacyDefaults[0]!;
-    const isChosen = cardIndex === chosenIndex;
 
     return {
       rotation: isChosen ? 0 : def.rotation,
       translateX: def.translateX,
       translateY: isChosen ? def.translateY - 26 : def.translateY,
-      translateZ: isChosen ? 40 : 0,
+      translateZ: isChosen ? 50 : 0,
       scale: isChosen ? 1.05 : 1,
       zIndex: isChosen ? 25 : def.zIndex,
       isChosen,
@@ -99,94 +107,52 @@ function computeCardTransform(
   }
 
   // -------------------------------------------------------------
-  // Mode 2: Magnetic Center (Snaps chosen card to 0px center)
+  // Mode 2: Magnetic Center Pivot
   // -------------------------------------------------------------
   if (mode === "magnetic-center") {
-    const delta = cardIndex - chosenIndex;
-    const isChosen = delta === 0;
-
-    if (isChosen) {
-      return {
-        rotation: 0,
-        translateX: 0,
-        translateY: -28,
-        translateZ: 60,
-        scale: 1.06,
-        zIndex: 30,
-        isChosen: true,
-      };
-    }
-
-    const sign = Math.sign(delta);
-    const dist = Math.abs(delta);
-    const angle = sign * (dist === 1 ? 13 : dist === 2 ? 23 : 32);
-    const x = sign * (dist === 1 ? 95 : dist === 2 ? 180 : 255);
-    const y = dist === 1 ? 12 : dist === 2 ? 28 : 46;
-    const z = 20 - dist * 5;
-    const tz = 30 - dist * 20;
+    const angle = sign * Math.min(34, absOffset * 13);
+    const x = sign * Math.min(260, absOffset * 92);
+    const y = absOffset * 16 - (isChosen ? 22 : 0);
+    const tz = 50 - Math.min(60, absOffset * 22);
+    const scale = Math.max(0.86, 1.05 - absOffset * 0.04);
+    const zIndex = Math.round(25 - Math.min(15, absOffset * 4));
 
     return {
       rotation: angle,
       translateX: x,
       translateY: y,
       translateZ: tz,
-      scale: 1 - dist * 0.035,
-      zIndex: z,
-      isChosen: false,
+      scale,
+      zIndex,
+      isChosen,
     };
   }
 
   // -------------------------------------------------------------
-  // Mode 1: Ask Phill Dynamic Flow (Exact Whole-Deck Tweak)
+  // Mode 1: Ask Phill Dynamic Flow (Continuous Whole-Deck Tweak)
   // Left cards fan negative (-), right cards fan positive (+),
-  // chosen card stands upright at 0° in front with true 3D Z-depth.
+  // active center stands upright at 0° in front with true 3D depth.
   // -------------------------------------------------------------
-  const delta = cardIndex - chosenIndex;
-  const isChosen = delta === 0;
-
-  // Natural horizontal anchors for the chosen card
+  // Natural anchor calculation
+  const centerCard = Math.max(0, Math.min(N - 1, Math.round(cardIndex - offset)));
   const chosenAnchors = [-85, -20, 45, 110];
-  const baseX = chosenAnchors[chosenIndex] ?? 0;
+  const baseX = chosenAnchors[centerCard] ?? -20;
 
-  if (isChosen) {
-    return {
-      rotation: 0,
-      translateX: baseX,
-      translateY: -26,
-      translateZ: 60,
-      scale: 1.05,
-      zIndex: 25,
-      isChosen: true,
-    };
-  }
-
-  const dist = Math.abs(delta);
-  const sign = Math.sign(delta); // -1 for cards to the left, +1 for cards to the right
-
-  // Fanning angles: -12°/-22°/-31° for left, +12°/+22°/+31° for right
-  const angleStep = dist === 1 ? 12 : dist === 2 ? 22 : 31;
-  const angle = sign * angleStep;
-
-  // Staggered horizontal positioning around the chosen anchor
-  const xStep = dist === 1 ? 88 : dist === 2 ? 168 : 240;
-  const x = baseX + sign * xStep;
-
-  // Gentle vertical downward cascade behind the upright card
-  const yStep = dist === 1 ? 14 : dist === 2 ? 30 : 48;
-  const y = -8 + yStep;
-
-  // Continuous 3D spatial depth for butter smooth layering
-  const tz = 35 - dist * 18;
-  const z = 20 - dist * 4;
+  const angle = offset * 11.8;
+  const x = baseX + offset * 86;
+  const y = absOffset * 14 - (isChosen ? (1 - absOffset * 1.5) * 26 : 0);
+  const tz = 55 - absOffset * 20;
+  const scale = Math.max(0.88, 1.05 - absOffset * 0.035);
+  const zIndex = Math.round(25 - Math.min(15, absOffset * 4));
 
   return {
     rotation: angle,
     translateX: x,
     translateY: y,
     translateZ: tz,
-    scale: 1 - dist * 0.03,
-    zIndex: z,
-    isChosen: false,
+    scale,
+    zIndex,
+    isChosen,
   };
 }
 
@@ -194,26 +160,26 @@ function computeCardTransform(
    Main Component: HeroCurrentPhillTweak
    ========================================================================= */
 export function HeroCurrentPhillTweak() {
-  // Active chosen card (defaults to index 1 = Aethelon)
+  const router = useRouter();
+
+  // Active chosen card index (default 1 = Aethelon)
   const [chosenIndex, setChosenIndex] = useState<number>(1);
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [dragDelta, setDragDelta] = useState<number>(0);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
   const [mode, setMode] = useState<AnimationMode>("phill-flow");
   const [speed, setSpeed] = useState<SpeedPreset>("butter");
 
-  // Pointer tracking & drag physics
+  // Subtle ambient mouse parallax
   const [mouseOffset, setMouseOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [dragOffset, setDragOffset] = useState<number>(0);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
 
-  const initialXRef = useRef<number>(0);
   const startXRef = useRef<number>(0);
-  const totalMovedRef = useRef<number>(0);
+  const startTimeRef = useRef<number>(0);
+  const initialXRef = useRef<number>(0);
+  const hasMovedRef = useRef<boolean>(false);
   const stageRef = useRef<HTMLDivElement>(null);
 
-  // Effective active index (hover overrides locked selection while hovering)
-  const effectiveIndex = hoveredIndex !== null ? hoveredIndex : chosenIndex;
-
-  // Buttery transition timing curves (0.72s cubic-bezier(0.22, 1, 0.36, 1))
+  // Transitions: when dragging, we update positions with instant 60fps tracking;
+  // when dragging stops or during hover, we use the buttery luxury agency ease curve.
   const transitionTiming =
     speed === "crisp"
       ? "transform 0.48s cubic-bezier(0.25, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.25, 1, 0.3, 1), filter 0.45s ease"
@@ -221,20 +187,29 @@ export function HeroCurrentPhillTweak() {
       ? "transform 0.88s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.8s ease, filter 0.7s ease"
       : "transform 0.72s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.68s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease";
 
-  // Drag interaction handlers
+  // Active float center position for continuous drag interpolation
+  const activeFloatCenter = isDragging
+    ? chosenIndex - dragDelta / DRAG_SENSITIVITY
+    : chosenIndex;
+
+  // Pointer Down: captures pointer for desktop mouse and mobile touch
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (e.button !== 0) return;
     setIsDragging(true);
-    initialXRef.current = e.clientX;
+    setDragDelta(0);
     startXRef.current = e.clientX;
-    totalMovedRef.current = 0;
+    initialXRef.current = e.clientX;
+    startTimeRef.current = Date.now();
+    hasMovedRef.current = false;
+
     try {
-      (e.currentTarget as HTMLDivElement).setPointerCapture(e.pointerId);
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     } catch {
       // ignore
     }
   }, []);
 
+  // Pointer Move: continuous drag tracking with boundary resistance
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       const rect = e.currentTarget.getBoundingClientRect();
@@ -242,60 +217,89 @@ export function HeroCurrentPhillTweak() {
       const relY = (e.clientY - rect.top) / rect.height - 0.5;
 
       if (isDragging) {
-        const deltaX = e.clientX - startXRef.current;
+        const rawDelta = e.clientX - startXRef.current;
         const totalMoved = Math.abs(e.clientX - initialXRef.current);
-        totalMovedRef.current = totalMoved;
-        setDragOffset(deltaX * 0.35);
-
-        // Threshold cycle on drag (45px sweep triggers next/prev card)
-        const threshold = 45;
-        if (deltaX < -threshold) {
-          setChosenIndex((prev) => Math.min(DECK_CARDS.length - 1, prev + 1));
-          startXRef.current = e.clientX;
-          setDragOffset(0);
-        } else if (deltaX > threshold) {
-          setChosenIndex((prev) => Math.max(0, prev - 1));
-          startXRef.current = e.clientX;
-          setDragOffset(0);
+        if (totalMoved > 5) {
+          hasMovedRef.current = true;
         }
+
+        // Elastic resistance past boundaries
+        let effectiveDelta = rawDelta;
+        if (chosenIndex === 0 && rawDelta > 0) {
+          effectiveDelta = rawDelta * 0.28;
+        } else if (chosenIndex === N - 1 && rawDelta < 0) {
+          effectiveDelta = rawDelta * 0.28;
+        }
+
+        setDragDelta(effectiveDelta);
       } else {
         setMouseOffset({ x: relX * 10, y: relY * 10 });
       }
     },
-    [isDragging]
+    [isDragging, chosenIndex]
   );
 
-  const handlePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    setIsDragging(false);
-    setDragOffset(0);
-    try {
-      (e.currentTarget as HTMLDivElement).releasePointerCapture(e.pointerId);
-    } catch {
-      // ignore
-    }
-  }, []);
+  // Pointer Up: flick velocity detection and snap to nearest card
+  const handlePointerUp = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!isDragging) return;
+
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+
+      setIsDragging(false);
+
+      const deltaX = dragDelta;
+      const elapsed = Math.max(1, Date.now() - startTimeRef.current);
+      const velocity = deltaX / elapsed; // px per ms
+
+      if (hasMovedRef.current && Math.abs(deltaX) > 8) {
+        let shift = 0;
+        // Velocity flick detection or distance threshold
+        if (velocity < -0.28 || deltaX < -45) {
+          shift = deltaX < -160 ? 2 : 1;
+        } else if (velocity > 0.28 || deltaX > 45) {
+          shift = deltaX > 160 ? -2 : -1;
+        } else {
+          shift = Math.round(-deltaX / DRAG_SENSITIVITY);
+        }
+
+        const nextIndex = Math.max(0, Math.min(N - 1, chosenIndex + shift));
+        setChosenIndex(nextIndex);
+      }
+
+      setDragDelta(0);
+    },
+    [isDragging, dragDelta, chosenIndex]
+  );
 
   const handlePointerLeave = useCallback(() => {
     if (!isDragging) {
-      setHoveredIndex(null);
       setMouseOffset({ x: 0, y: 0 });
     }
   }, [isDragging]);
 
-  const handleCardClick = useCallback((e: React.MouseEvent, index: number) => {
-    if (totalMovedRef.current > 8) {
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
-    setChosenIndex(index);
-  }, []);
+  // Card click: selects card if background; navigates if already active
+  const handleCardClick = useCallback(
+    (index: number, href: string) => {
+      if (hasMovedRef.current) return;
+      if (chosenIndex === index) {
+        router.push(href);
+      } else {
+        setChosenIndex(index);
+      }
+    },
+    [chosenIndex, router]
+  );
 
   return (
     <div className="temp-hero-lab-container" id="hero-phill-tweak">
       <TempBadge
         label="HERO / ASK PHILL TWEAK"
-        description="Current Homepage Hero with Dynamic Whole-Deck Fanning Animation"
+        description="Current Homepage Hero with Dynamic Drag-to-Cycle & Whole-Deck Fanning"
       />
 
       {/* Control Strip to Test & Tune Animation Live */}
@@ -371,7 +375,6 @@ export function HeroCurrentPhillTweak() {
             className="control-reset-btn"
             onClick={() => {
               setChosenIndex(1);
-              setHoveredIndex(null);
               setMode("phill-flow");
               setSpeed("butter");
             }}
@@ -403,7 +406,7 @@ export function HeroCurrentPhillTweak() {
           </div>
         </div>
 
-        {/* Dynamic Cards Stage with Ask Phill Whole-Deck Fanning */}
+        {/* Dynamic Cards Stage with Full Drag Gestures & Ask Phill Fanning */}
         <div className="hero-visual-wrapper">
           <div
             ref={stageRef}
@@ -414,42 +417,47 @@ export function HeroCurrentPhillTweak() {
             onPointerCancel={handlePointerUp}
             onPointerLeave={handlePointerLeave}
             role="region"
-            aria-label="Interactive Flagship Deck"
+            aria-label="Interactive flagship cards — hold and drag to cycle, or hover to inspect"
+            style={{ touchAction: "none" }}
           >
             {/* Ambient Deck Wrapper with Pointer Parallax */}
             <div
               className="fanned-deck-wrapper"
               style={{
-                transform: `translate3d(${mouseOffset.x + dragOffset}px, ${mouseOffset.y}px, 0) rotate(${dragOffset * 0.04}deg)`,
+                transform: `translate3d(${mouseOffset.x}px, ${mouseOffset.y}px, 0)`,
                 transition: isDragging ? "none" : "transform 0.4s cubic-bezier(0, 0, 0.2, 1)",
               }}
             >
               {DECK_CARDS.map((card, idx) => {
-                const transform = computeCardTransform(idx, effectiveIndex, mode);
+                const offset = idx - activeFloatCenter;
+                const transform = computeContinuousTransform(idx, offset, mode);
 
                 return (
-                  <Link
+                  <div
                     key={card.id}
-                    href={card.href}
+                    role="button"
+                    tabIndex={0}
                     className={`fanned-card ${transform.isChosen ? "is-chosen hovered" : "is-background"}`}
                     style={{
                       transform: `translate3d(${transform.translateX}px, ${transform.translateY}px, ${transform.translateZ}px) rotate(${transform.rotation}deg) scale(${transform.scale})`,
                       zIndex: transform.zIndex,
-                      transition: transitionTiming,
+                      transition: isDragging ? "none" : transitionTiming,
+                      cursor: isDragging ? "grabbing" : "grab",
                     }}
                     draggable={false}
                     onDragStart={(e) => e.preventDefault()}
                     onMouseEnter={() => {
                       if (!isDragging) {
                         setChosenIndex(idx);
-                        setHoveredIndex(idx);
                       }
                     }}
-                    onMouseLeave={() => {
-                      if (!isDragging) setHoveredIndex(null);
+                    onClick={() => handleCardClick(idx, card.href)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        handleCardClick(idx, card.href);
+                      }
                     }}
-                    onClick={(e) => handleCardClick(e, idx)}
-                    aria-label={`Select and view ${card.title} platform build`}
+                    aria-label={`Select ${card.title} platform build`}
                   >
                     <div className="fanned-card-inner">
                       <Image
@@ -457,11 +465,12 @@ export function HeroCurrentPhillTweak() {
                         alt={card.title}
                         fill
                         sizes="(max-width: 760px) 70vw, 340px"
-                        priority
+                        priority={idx < 2}
                         unoptimized
                         draggable={false}
                         className="fanned-card-img"
-                        style={{ objectPosition: card.objectPosition }}
+                        style={{ objectPosition: card.objectPosition, pointerEvents: "none" }}
+                        onDragStart={(e) => e.preventDefault()}
                       />
                       <div className="fanned-card-overlay" />
                       <div className="fanned-card-pill">
@@ -469,7 +478,7 @@ export function HeroCurrentPhillTweak() {
                         <span className="pill-category">{card.category}</span>
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 );
               })}
             </div>
@@ -484,12 +493,13 @@ export function HeroCurrentPhillTweak() {
           <span>Active Deck Matrix Diagnostics</span>
           <span className="inspector-mode-tag">Mode: {mode}</span>
           <span className="inspector-active-tag">
-            Active: #{effectiveIndex + 1} ({DECK_CARDS[effectiveIndex]?.title})
+            Active: #{chosenIndex + 1} ({DECK_CARDS[chosenIndex]?.title})
           </span>
         </div>
         <div className="inspector-cards-grid">
           {DECK_CARDS.map((card, idx) => {
-            const t = computeCardTransform(idx, effectiveIndex, mode);
+            const offset = idx - activeFloatCenter;
+            const t = computeContinuousTransform(idx, offset, mode);
             return (
               <div
                 key={card.id}
@@ -502,10 +512,10 @@ export function HeroCurrentPhillTweak() {
                   {t.isChosen && <span className="cell-badge">CHOSEN (0°)</span>}
                 </div>
                 <div className="cell-specs">
-                  <span>rot: <b>{t.rotation > 0 ? `+${t.rotation}°` : `${t.rotation}°`}</b></span>
-                  <span>tx: <b>{t.translateX}px</b></span>
-                  <span>ty: <b>{t.translateY}px</b></span>
-                  <span>tz: <b>{t.translateZ}px</b></span>
+                  <span>rot: <b>{Math.round(t.rotation)}°</b></span>
+                  <span>tx: <b>{Math.round(t.translateX)}px</b></span>
+                  <span>ty: <b>{Math.round(t.translateY)}px</b></span>
+                  <span>tz: <b>{Math.round(t.translateZ)}px</b></span>
                   <span>z: <b>{t.zIndex}</b></span>
                 </div>
               </div>
