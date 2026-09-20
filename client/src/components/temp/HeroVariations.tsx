@@ -1006,37 +1006,39 @@ export function HeroAlternativeC() {
 }
 
 /* =========================================================================
-   ALTERNATIVE D: UNIFIED FULL CANVAS · LAYERED EDITORIAL COPY (ALT 1 BUILD)
-   - User Request: "make it more cramped like in alt 3, and change the text to fit the screen"
-   - Canvas Cut-Off Fix: Zero vertical dividing lines. The entire section is one
-     continuous canvas (hero-unified-canvas) where cards fan freely across the
-     full section width without ever being sliced by container boundaries.
-   - Cramped Deck Geometry: Tightly clustered 78px spacing with steeper ±15/26/36°
-     fanning, matching Alt 3's dense, high-fashion lookbook aesthetic.
-   - Z-Layer Fix: Alt 1's 3D Parabolic Arc-Lift physics. The incoming card lifts
-     48px UP and pushes 55px FORWARD into 3D space, completely clearing the
-     deck before docking. Zero mid-transition popping.
-   - Text Fit: Screen-fitted editorial typography with balanced line wrapping
-     and proportional heights, sitting cleanly beside the deck.
+   ALTERNATIVE D: UNIFIED FULL CANVAS · CRAMPED DECK & EMPOWERING ECOMMERCE
+   - User Request: "change the text position and the text itself no one knows
+     what fullstack even is, just write something like i built a modern website,
+     or i builed unique ecommers, or i build ecommerce with everything you might
+     need and so on, something sentimintil and empowering not boring with details,
+     my clients will be small ecommerce that pays 2k - 5k for it in usa so they
+     dont care or know the details they want to the goal"
+   - Spatial Collision Fix: Deck wrapper shifted to right zone (clamp(130px, 15vw, 230px))
+     with tuned deck centers ([35, 10, -10, -30]), compact 72px spacing, and
+     dedicated left text zone (32vw) so cards never cover text or CTA buttons.
+   - Sentimental & Empowering Copy: Replaces tech jargon (full-stack, schemas, endpoints)
+     with goal-driven value for $2k-$5k store owners: distinctive design, customer trust,
+     instant readiness, and sales growth.
+   - Z-Layer Fix: Alt 1's 3D Parabolic Arc-Lift physics (48px up, 55px forward).
    ========================================================================= */
 function getBasePoseD(cardIndex: number, chosen: number) {
   const slot = cardIndex - chosen;
-  // Cramped tighter horizontal spacing like in Alt 3 (78px vs 88px)
-  const deckCenters = [32, 0, -32, -70];
+  // Anchored rightward to prevent cards from ever covering text or CTAs
+  const deckCenters = [35, 10, -10, -30];
   const centerShift = deckCenters[chosen] ?? 0;
-  const translateX = centerShift + slot * 78;
+  const translateX = centerShift + slot * 72;
 
   let rotation = 0;
-  if (slot === -1) rotation = -15;
-  else if (slot === -2) rotation = -26;
-  else if (slot <= -3) rotation = -36;
-  else if (slot === 1) rotation = 15;
-  else if (slot === 2) rotation = 26;
-  else if (slot >= 3) rotation = 36;
+  if (slot === -1) rotation = -13;
+  else if (slot === -2) rotation = -22;
+  else if (slot <= -3) rotation = -30;
+  else if (slot === 1) rotation = 13;
+  else if (slot === 2) rotation = 22;
+  else if (slot >= 3) rotation = 30;
 
   const absSlot = Math.abs(slot);
-  const translateY = slot === 0 ? -22 : absSlot * 15;
-  const translateZ = slot === 0 ? 48 : 18 - absSlot * 14;
+  const translateY = slot === 0 ? -20 : absSlot * 13;
+  const translateZ = slot === 0 ? 46 : 18 - absSlot * 14;
   const scale = slot === 0 ? 1.04 : Math.max(0.85, 1 - absSlot * 0.05);
 
   return { rotation, translateX, translateY, translateZ, scale };
@@ -1325,20 +1327,20 @@ export function HeroAlternativeD() {
         <div className="hero-copy-layered">
           <div className="hero-copy-inner">
             <div className="eyebrow">
-              <span className="signal-dot" /> Freelance Full-Stack Developer
+              <span className="signal-dot" /> Modern Ecommerce Design & Build
             </div>
             <h1>
-              I build custom ecommerce experiences and full-stack web applications.
+              I build unique ecommerce stores with everything your brand needs to sell.
             </h1>
             <p>
-              From high-speed storefronts and interactive configurators to database schemas, checkout endpoints, and custom admin portals. Direct senior execution.
+              Your business deserves more than a generic template. I craft distinctive online stores designed to showcase your products, earn customer trust, and turn visitors into buyers.
             </p>
             <div className="hero-actions">
               <Link className="button button-dark" href="/contact">
-                Start a project <ArrowUpRight size={15} aria-hidden="true" />
+                Start your project <ArrowUpRight size={15} aria-hidden="true" />
               </Link>
               <a className="text-link" href="#flagship">
-                Explore flagship <ArrowDownRight size={15} aria-hidden="true" />
+                Explore recent work <ArrowDownRight size={15} aria-hidden="true" />
               </a>
             </div>
           </div>
