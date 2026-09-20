@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Compass, Sparkles, Layout, ChevronDown } from "lucide-react";
 
-import { HeroCurrentPhillTweak } from "../components/temp/HeroVariations";
+import { HeroAlternativeA, HeroAlternativeB, HeroAlternativeC } from "../components/temp/HeroVariations";
 import { WhoWeAreA, WhoWeAreB, WhoWeAreC, WhoWeAreD } from "../components/temp/WhoWeAreVariations";
 import { SelectedWorkA, SelectedWorkB, SelectedWorkC } from "../components/temp/SelectedWorkVariations";
 import { ServicesA, ServicesB, ServicesC } from "../components/temp/ServicesVariations";
@@ -16,7 +16,7 @@ import { FooterA, FooterB } from "../components/temp/FooterVariations";
 
 export default function TempComparisonPage() {
   const sections = [
-    { id: "sec-hero", label: "1. Hero Section", count: "Ask Phill Deck Tweak" },
+    { id: "sec-hero", label: "1. Hero Section", count: "3 Alternatives" },
     { id: "sec-who", label: "2. Who We Are", count: "4 Concepts" },
     { id: "sec-work", label: "3. Selected Work", count: "3 Concepts" },
     { id: "sec-services", label: "4. Services", count: "3 Concepts" },
@@ -71,22 +71,34 @@ export default function TempComparisonPage() {
             Review all major section alternatives implemented below in production-grade code. Each option adheres strictly to Aethelon’s warm archival paper aesthetic, Space Grotesk / DM Sans typography, generous vertical breathing room, and intentional micro-interactions.
           </p>
           <div className="lab-instructions">
-            <span>Scroll through the live options below, test their interactions, and note your picks (e.g. Hero B, Who We Are C, Work A, Services B, Insights A, Positioning B, FAQ A, Newsletter A, Footer A).</span>
+            <span>Scroll through the live options below, test their interactions, and note your picks (e.g. Hero A/B/C, Who We Are C, Work A, Services B, Insights A, Positioning B, FAQ A, Newsletter A, Footer A).</span>
           </div>
         </div>
       </section>
 
       {/* ===================================================================
-          1. HERO SECTION (ASK PHILL WHOLE-DECK TWEAK)
+          1. HERO SECTION: 3 DISTINCT ALTERNATIVES (Z-LAYER & CANVAS CUT FIXES)
           =================================================================== */}
       <div id="sec-hero" className="temp-section-separator">
         <div className="separator-inner">
-          <span className="separator-num">SECTION 01</span>
-          <h2>Hero Section · Ask Phill Whole-Deck Tweak Animation</h2>
-          <p>Current hero layout retained. Hover or select any card to tweak the entire deck: left cards fan left, right cards fan right, and the chosen card stands upright at 0°.</p>
+          <span className="separator-num">SECTION 01 · 3 ALTERNATIVES</span>
+          <h2>Hero Section · Z-Layer Transition & Uncut Canvas Alternatives</h2>
+          <p>Comparing 3 distinct approaches to eliminate mid-transition Z-index popping and prevent cards from being sliced by the canvas container boundary. All options have hover animations completely removed and operate via butter-smooth dragging.</p>
         </div>
       </div>
-      <HeroCurrentPhillTweak />
+
+      {/* Alternative A: 3D Vertical Arc-Lift + Unclipped Split Stage */}
+      <HeroAlternativeA />
+
+      <div className="temp-sub-divider" />
+
+      {/* Alternative B: True Ask Phill Centered Horizon + Lateral Side-Swing Orbit */}
+      <HeroAlternativeB />
+
+      <div className="temp-sub-divider" />
+
+      {/* Alternative C: Direction-Locked Depth Peel + Asymmetric Editorial Bleed */}
+      <HeroAlternativeC />
 
       {/* ===================================================================
           2. WHO WE ARE / CAPABILITIES

@@ -2992,6 +2992,149 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
   user-select: none !important;
 }
 
+/* --------------------------------------------------------------------------
+   Hero Alternative A: Unclipped Split Layout
+   -------------------------------------------------------------------------- */
+.hero-visual-unclipped {
+  position: relative;
+  height: 100%;
+  min-height: 520px;
+  background: var(--paper);
+  overflow: visible !important;
+  border-left: none;
+}
+
+.hero-stage-unclipped {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 520px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible !important;
+  user-select: none;
+  background: var(--paper);
+  cursor: grab;
+  perspective: 1200px;
+  perspective-origin: center 60%;
+}
+
+/* --------------------------------------------------------------------------
+   Hero Alternative B: Ask Phill Centered Full-Width Canvas
+   -------------------------------------------------------------------------- */
+.hero-centered-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(60px, 7vw, 96px) clamp(20px, 4vw, 48px) clamp(40px, 6vw, 72px);
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  overflow: visible;
+  position: relative;
+}
+
+.hero-centered-layout .hero-copy-centered {
+  max-width: 860px;
+  margin: 0 auto clamp(24px, 4vw, 40px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-centered-layout .hero-copy-centered .eyebrow {
+  margin-bottom: 16px;
+}
+
+.hero-centered-layout .hero-copy-centered h1 {
+  font-size: clamp(34px, 4.4vw, 58px);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: var(--ink);
+}
+
+.hero-centered-layout .hero-copy-centered p {
+  font-size: clamp(15px, 1.35vw, 18px);
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 660px;
+  margin-bottom: 0;
+}
+
+.hero-centered-layout .hero-visual-centered {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 480px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  margin: 16px 0 28px;
+  perspective: 1200px;
+  perspective-origin: center 60%;
+}
+
+.hero-centered-layout .hero-actions-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* --------------------------------------------------------------------------
+   Hero Alternative C: Asymmetric 42/58 Editorial Split with Shadow Bleed
+   -------------------------------------------------------------------------- */
+.hero-asymmetric-split {
+  display: grid;
+  grid-template-columns: 42% 58%;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+  overflow: visible;
+  position: relative;
+}
+
+.hero-asymmetric-split .hero-visual-asymmetric {
+  position: relative;
+  height: 100%;
+  min-height: 540px;
+  background: var(--paper);
+  overflow: visible !important;
+}
+
+.hero-asymmetric-split .hero-stage-asymmetric {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 540px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible !important;
+  user-select: none;
+  background: var(--paper);
+  cursor: grab;
+  perspective: 1200px;
+  perspective-origin: center 60%;
+}
+
+.hero-asymmetric-split .fanned-card {
+  width: clamp(260px, 26vw, 360px);
+}
+
+@media (max-width: 960px) {
+  .hero-asymmetric-split {
+    grid-template-columns: 1fr;
+  }
+  .hero-asymmetric-split .hero-visual-asymmetric {
+    min-height: 460px;
+  }
+}
+
 
 /* ==========================================================================
    2. WHO WE ARE / WHAT WE'RE GOOD AT
