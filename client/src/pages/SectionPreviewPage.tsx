@@ -69,7 +69,7 @@ export default function SectionPreviewPage() {
       {/* Hero Intro */}
       <header className="preview-hero-intro">
         <div className="preview-eyebrow">
-          <span className="signal-dot" /> Visual Craft, Storytelling & Trust
+          Visual Craft, Storytelling & Trust
         </div>
         <h1>
           4 New Editorial Directions for<br />

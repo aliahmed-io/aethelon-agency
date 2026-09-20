@@ -64,7 +64,7 @@ export default function InsightsPage() {
       <div className="newsletter">
         <div>
           <span className="eyebrow">
-            <span className="signal-dot" /> One useful note, occasionally
+            One useful note, occasionally
           </span>
           <h2>
             No noise.<br />

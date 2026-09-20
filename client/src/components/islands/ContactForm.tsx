@@ -15,7 +15,6 @@ export default function ContactForm() {
   if (sent) {
     return (
       <div className="success-state">
-        <span className="signal-dot" />
         <h1>
           Good.<br />
           <em>Let’s make it useful.</em>

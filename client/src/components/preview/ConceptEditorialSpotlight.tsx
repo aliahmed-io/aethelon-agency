@@ -32,7 +32,7 @@ export default function ConceptEditorialSpotlight() {
         {/* Right: Thoughtful Editorial Storytelling */}
         <div className="spotlight-story-col">
           <div className="spotlight-eyebrow">
-            <span className="signal-dot" /> 02 · The Client Transformation
+            02 · The Client Transformation
           </div>
 
           <h2 className="spotlight-headline">

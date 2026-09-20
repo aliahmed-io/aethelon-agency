@@ -272,7 +272,7 @@ export default function PortfolioHeroIsland() {
         {/* Central Typographic Statement */}
         <div className="portfolio-hero-core">
           <div className="eyebrow">
-            <span className="signal-dot" /> Selected Works & Case Studies
+            Selected Works & Case Studies
           </div>
 
           <h1 className="portfolio-hero-title">

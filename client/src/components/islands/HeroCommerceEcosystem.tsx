@@ -76,7 +76,6 @@ export default function HeroCommerceEcosystem() {
               {cartCount} items · ${(cartCount * 1420).toLocaleString()}
             </strong>
           </div>
-          <span className="pill-live-dot" title="Optimistic State Synchronized" />
         </div>
 
         {/* Live UI Token 2: Architecture Spec Pill */}
@@ -90,7 +89,6 @@ export default function HeroCommerceEcosystem() {
 
         {/* Live UI Token 3: Real-Time Stock Status */}
         <div className="ecosystem-pill ecosystem-pill-bottom-left">
-          <span className="stock-signal-dot" />
           <div className="pill-text-group">
             <span className="pill-meta-label">{activeFinish.sku}</span>
             <strong className="pill-meta-value">In Stock · {activeFinish.price}</strong>

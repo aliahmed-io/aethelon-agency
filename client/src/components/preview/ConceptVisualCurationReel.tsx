@@ -61,7 +61,7 @@ export default function ConceptVisualCurationReel() {
         <div className="curation-header">
           <div>
             <div className="curation-eyebrow">
-              <span className="signal-dot" /> 02 · Bespoke Visual Worlds
+              02 · Bespoke Visual Worlds
             </div>
             <h2 className="curation-title">
               Stores with the weight & desire of<br />

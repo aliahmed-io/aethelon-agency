@@ -100,7 +100,7 @@ function Hero() {
       <div className="hero-copy-layered">
         <div className="hero-copy-inner">
           <div className="eyebrow">
-            <span className="signal-dot" /> Modern Ecommerce Design &amp; Build
+            Modern Ecommerce Design &amp; Build
           </div>
           <h1>
             I build unique ecommerce stores with everything your brand needs to sell.
@@ -185,7 +185,7 @@ export default function HomePage() {
               A live commerce slice demonstrating real-time finish switching, dynamic subtotal calculations, and optimistic cart updates without layout shift.
             </p>
             <span className="demo-note">
-              <span className="signal-dot" /> Live interaction slice · Optimistic state handling
+              Live interaction slice · Optimistic state handling
             </span>
           </div>
           <ProductDemo />

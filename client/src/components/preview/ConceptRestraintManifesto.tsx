@@ -12,7 +12,7 @@ export default function ConceptRestraintManifesto() {
         {/* Editorial Lead Header */}
         <div className="restraint-header">
           <div className="restraint-eyebrow">
-            <span className="signal-dot" /> 02 · The Philosophy of Restraint
+            02 · The Philosophy of Restraint
           </div>
           <h2 className="restraint-headline">
             The best stores don’t shout.<br />

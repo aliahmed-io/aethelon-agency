@@ -24,7 +24,7 @@ export function NewsletterA() {
       <section className="newsletter-a-section">
         <div className="newsletter-a-inner">
           <div className="newsletter-a-kicker">
-            <span className="signal-dot" /> Quarterly Editorial Dispatch
+            Quarterly Editorial Dispatch
           </div>
           <h2>The Aethelon Commerce Brief.</h2>
           <p className="newsletter-a-desc">

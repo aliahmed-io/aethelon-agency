@@ -118,7 +118,6 @@ export default function WorkArchiveIsland({
       {/* Empty State */}
       {filteredProjects.length === 0 ? (
         <div className="empty-filter">
-          <span className="signal-dot" />
           <h2>No projects found in this category.</h2>
           <p>Reset the filter to view the complete collection.</p>
           <button

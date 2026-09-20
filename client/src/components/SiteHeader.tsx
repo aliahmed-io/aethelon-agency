@@ -109,9 +109,7 @@ export default function SiteHeader() {
         <div className="dock-backdrop" onClick={closeMenu} aria-hidden="true" />
         <div className="dock-card">
           <div className="dock-header">
-            <span className="dock-eyebrow">
-              <span className="signal-dot" /> Navigation
-            </span>
+            <span className="dock-eyebrow">Navigation</span>
             <span className="dock-esc-hint">Esc to close</span>
           </div>
 
@@ -138,7 +136,6 @@ export default function SiteHeader() {
 
           <div className="dock-footer">
             <div className="dock-status">
-              <span className="pulse-dot" />
               <span>Available for bespoke builds</span>
             </div>
             <Link href="/contact" onClick={closeMenu} className="dock-contact-btn">

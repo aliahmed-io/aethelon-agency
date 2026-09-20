@@ -7,7 +7,7 @@ export default function SiteFooter() {
       <div className="footer-top">
         <div>
           <div className="eyebrow">
-            <span className="signal-dot" /> Independent commerce engineering
+            Independent commerce engineering
           </div>
           <h2>
             Make the next<br />

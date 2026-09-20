@@ -71,7 +71,6 @@ export default function FlagshipShowcaseIsland({
           ))}
         </div>
         <div className="showcase-indicator">
-          <span className="signal-dot" />
           <span>Interactive Architecture Lens</span>
         </div>
       </div>

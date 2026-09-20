@@ -313,7 +313,7 @@ export function HeroAlternativeA() {
       <section className="hero phill-tweak-hero-section">
         <div className="hero-copy">
           <div className="eyebrow">
-            <span className="signal-dot" /> Freelance Full-Stack Developer
+            Freelance Full-Stack Developer
           </div>
           <h1>
             I build custom ecommerce experiences and full-stack web applications.
@@ -620,7 +620,7 @@ export function HeroAlternativeB() {
       <section className="hero-centered-layout">
         <div className="hero-copy-centered">
           <div className="eyebrow">
-            <span className="signal-dot" /> Freelance Full-Stack Developer
+            Freelance Full-Stack Developer
           </div>
           <h1>
             I build custom ecommerce experiences and full-stack web applications.
@@ -925,7 +925,7 @@ export function HeroAlternativeC() {
       <section className="hero-asymmetric-split">
         <div className="hero-copy">
           <div className="eyebrow">
-            <span className="signal-dot" /> Freelance Full-Stack Developer
+            Freelance Full-Stack Developer
           </div>
           <h1>
             I build custom ecommerce experiences and full-stack web applications.
@@ -1327,7 +1327,7 @@ export function HeroAlternativeD() {
         <div className="hero-copy-layered">
           <div className="hero-copy-inner">
             <div className="eyebrow">
-              <span className="signal-dot" /> Modern Ecommerce Design & Build
+              Modern Ecommerce Design & Build
             </div>
             <h1>
               I build unique ecommerce stores with everything your brand needs to sell.

@@ -11,7 +11,7 @@ export default function ConceptStudioPromise() {
         {/* Left Column: Personal Narrative */}
         <div className="promise-narrative-col">
           <div className="promise-eyebrow">
-            <span className="signal-dot" /> 02 · The Studio Partnership
+            02 · The Studio Partnership
           </div>
 
           <h2 className="promise-headline">

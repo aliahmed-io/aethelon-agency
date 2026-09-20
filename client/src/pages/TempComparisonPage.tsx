@@ -64,7 +64,7 @@ export default function TempComparisonPage() {
       <section className="temp-lab-hero">
         <div className="lab-hero-inner">
           <div className="lab-eyebrow">
-            <span className="signal-dot" /> Aethelon Homepage Evolution
+            Aethelon Homepage Evolution
           </div>
           <h1>Compare & Select Your Preferred Homepage Direction.</h1>
           <p>
