@@ -2949,9 +2949,26 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
   border-bottom: 1px solid var(--line);
 }
 
+.phill-tweak-hero-section .fanned-card:hover {
+  box-shadow: 0 14px 32px -8px rgba(23, 23, 23, 0.2), 0 0 0 1px rgba(23, 23, 23, 0.08);
+}
+
+.phill-tweak-hero-section .fanned-card:hover .fanned-card-img {
+  transform: none !important;
+}
+
+.phill-tweak-hero-section .fanned-card:hover .fanned-card-pill {
+  background: rgba(23, 23, 23, 0.88);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
 .fanned-card.is-chosen {
   box-shadow: 0 32px 70px -12px rgba(23, 23, 23, 0.42), 0 8px 24px rgba(23, 23, 23, 0.16), 0 0 0 2px var(--ink) !important;
   filter: brightness(1.02);
+}
+
+.fanned-card.is-chosen .fanned-card-img {
+  transform: scale(1.025);
 }
 
 .fanned-card.is-background {
