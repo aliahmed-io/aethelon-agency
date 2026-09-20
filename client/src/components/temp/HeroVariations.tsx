@@ -1007,37 +1007,37 @@ export function HeroAlternativeC() {
 
 /* =========================================================================
    ALTERNATIVE D: UNIFIED FULL CANVAS · LAYERED EDITORIAL COPY (ALT 1 BUILD)
-   - User Request: "remove the divider completely, make the whole section in
-     canvas and then stack the text on top in a different layer. Implement this
-     using Alt 1 build."
+   - User Request: "make it more cramped like in alt 3, and change the text to fit the screen"
    - Canvas Cut-Off Fix: Zero vertical dividing lines. The entire section is one
      continuous canvas (hero-unified-canvas) where cards fan freely across the
      full section width without ever being sliced by container boundaries.
+   - Cramped Deck Geometry: Tightly clustered 78px spacing with steeper ±15/26/36°
+     fanning, matching Alt 3's dense, high-fashion lookbook aesthetic.
    - Z-Layer Fix: Alt 1's 3D Parabolic Arc-Lift physics. The incoming card lifts
      48px UP and pushes 55px FORWARD into 3D space, completely clearing the
      deck before docking. Zero mid-transition popping.
-   - Layered Editorial Architecture: Copy sits in an upper Z-plane (hero-copy-layered,
-     z-index: 10) with pointer-events: none on text (so dragging scrubs the canvas
-     from anywhere) and pointer-events: auto on CTA buttons.
+   - Text Fit: Screen-fitted editorial typography with balanced line wrapping
+     and proportional heights, sitting cleanly beside the deck.
    ========================================================================= */
 function getBasePoseD(cardIndex: number, chosen: number) {
   const slot = cardIndex - chosen;
-  const deckCenters = [45, 0, -45, -90];
+  // Cramped tighter horizontal spacing like in Alt 3 (78px vs 88px)
+  const deckCenters = [32, 0, -32, -70];
   const centerShift = deckCenters[chosen] ?? 0;
-  const translateX = centerShift + slot * 88;
+  const translateX = centerShift + slot * 78;
 
   let rotation = 0;
-  if (slot === -1) rotation = -13;
-  else if (slot === -2) rotation = -24;
-  else if (slot <= -3) rotation = -34;
-  else if (slot === 1) rotation = 13;
-  else if (slot === 2) rotation = 24;
-  else if (slot >= 3) rotation = 34;
+  if (slot === -1) rotation = -15;
+  else if (slot === -2) rotation = -26;
+  else if (slot <= -3) rotation = -36;
+  else if (slot === 1) rotation = 15;
+  else if (slot === 2) rotation = 26;
+  else if (slot >= 3) rotation = 36;
 
   const absSlot = Math.abs(slot);
-  const translateY = slot === 0 ? -24 : absSlot * 14;
-  const translateZ = slot === 0 ? 40 : 15 - absSlot * 12;
-  const scale = slot === 0 ? 1.04 : Math.max(0.86, 1 - absSlot * 0.05);
+  const translateY = slot === 0 ? -22 : absSlot * 15;
+  const translateZ = slot === 0 ? 48 : 18 - absSlot * 14;
+  const scale = slot === 0 ? 1.04 : Math.max(0.85, 1 - absSlot * 0.05);
 
   return { rotation, translateX, translateY, translateZ, scale };
 }
@@ -1251,8 +1251,8 @@ export function HeroAlternativeD() {
   return (
     <div className="temp-hero-lab-container" id="hero-alt-d">
       <TempBadge
-        label="ALTERNATIVE D · UNIFIED FULL CANVAS · LAYERED COPY"
-        description="Zero vertical dividers. The entire hero is a single unified canvas with Alt 1's 3D Parabolic Arc-Lift physics running beneath a layered editorial copy stack."
+        label="ALTERNATIVE D · UNIFIED FULL CANVAS · CRAMPED DECK & SCREEN-FITTED"
+        description="Zero vertical dividers. Alt 3's cramped intimate deck clustering (78px interval, ±15/26/36° fan) with Alt 1's 3D Parabolic Arc-Lift, tuned directly adjacent to screen-fitted balanced typography."
       />
 
       <section className="hero-unified-canvas">

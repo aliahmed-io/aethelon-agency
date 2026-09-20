@@ -3142,10 +3142,19 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
    - Stacking Architecture: Stage is at z-index: 1, copy sits at z-index: 10
      with pointer-events: none on text and pointer-events: auto on CTAs.
    -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------
+   Hero Alternative D: Unified Full Canvas with Layered Editorial Copy
+   - Canvas Cut-Off Fix: No divider line; stage is 100% full-width canvas.
+   - Cramped Like Alt 3: Tightly clustered 78px deck geometry, ±15/26/36° fanning,
+     compact card width, and deck brought inward directly adjacent to copy.
+   - Text Fitted to Screen: Section height scaled to viewport (clamp(520px, 72vh, 640px)),
+     balanced typography with clamp sizing, text-wrap: balance, zero overflow.
+   -------------------------------------------------------------------------- */
 .hero-unified-canvas {
   position: relative;
   width: 100%;
-  min-height: clamp(600px, 75vh, 760px);
+  height: clamp(520px, 72vh, 640px);
+  min-height: 500px;
   background: var(--paper);
   border-bottom: 1px solid var(--line);
   overflow: hidden;
@@ -3163,7 +3172,7 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
   user-select: none;
   cursor: grab;
   perspective: 1200px;
-  perspective-origin: 65% 54%;
+  perspective-origin: 58% 50%;
   z-index: 1;
 }
 
@@ -3189,11 +3198,11 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
   align-items: center;
   justify-content: center;
   overflow: visible;
-  transform: translate3d(clamp(160px, 18vw, 280px), 0, 0);
+  transform: translate3d(clamp(70px, 9vw, 150px), 0, 0);
 }
 
 .hero-unified-canvas .fanned-card {
-  width: clamp(270px, 28vw, 380px);
+  width: clamp(245px, 24vw, 335px);
 }
 
 .hero-copy-layered {
@@ -3201,17 +3210,16 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
   z-index: 10;
   width: 100%;
   height: 100%;
-  min-height: clamp(600px, 75vh, 760px);
   max-width: 1400px;
   margin: 0 auto;
-  padding: clamp(64px, 8vw, 110px) clamp(24px, 5vw, 64px);
+  padding: clamp(24px, 4vh, 48px) clamp(24px, 5vw, 64px);
   display: flex;
   align-items: center;
   pointer-events: none;
 }
 
 .hero-copy-layered .hero-copy-inner {
-  max-width: clamp(480px, 42vw, 620px);
+  max-width: clamp(350px, 35vw, 450px);
   pointer-events: none;
 }
 
@@ -3229,39 +3237,53 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
   align-items: center;
   gap: 8px;
   font-family: var(--font-mono, monospace);
-  font-size: 13px;
-  letter-spacing: 0.08em;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .hero-copy-layered h1 {
-  font-size: clamp(36px, 4.2vw, 58px);
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.5vw, 38px);
   line-height: 1.08;
-  letter-spacing: -0.03em;
-  font-weight: 700;
+  letter-spacing: -0.04em;
+  font-weight: 600;
   color: var(--ink);
-  margin-bottom: 20px;
+  margin: 0 0 12px;
+  text-wrap: balance;
 }
 
 .hero-copy-layered p {
-  font-size: clamp(15px, 1.35vw, 18px);
-  line-height: 1.6;
+  font-size: clamp(13.5px, 1vw, 15px);
+  line-height: 1.5;
   color: var(--muted);
-  margin-bottom: 30px;
-  max-width: 520px;
+  margin: 0 0 20px;
+  max-width: 390px;
+  text-wrap: pretty;
 }
 
 .hero-copy-layered .hero-actions {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
   flex-wrap: wrap;
+}
+
+.hero-copy-layered .hero-actions .button {
+  padding: 11px 20px;
+  font-size: 12.5px;
+}
+
+.hero-copy-layered .hero-actions .text-link {
+  font-size: 12.5px;
 }
 
 @media (max-width: 960px) {
   .hero-unified-canvas {
+    height: auto;
     min-height: auto;
     display: flex;
     flex-direction: column;
@@ -3269,28 +3291,33 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
 
   .hero-copy-layered {
     position: relative;
-    min-height: auto;
-    padding: 48px 24px 24px;
     height: auto;
+    min-height: auto;
+    padding: 36px 20px 16px;
   }
 
   .hero-copy-layered .hero-copy-inner {
     max-width: 100%;
   }
 
+  .hero-copy-layered h1 {
+    font-size: clamp(26px, 7vw, 34px);
+  }
+
   .hero-unified-stage {
     position: relative;
     inset: auto;
     width: 100%;
-    height: 480px;
-    min-height: 480px;
-    perspective-origin: center 55%;
+    height: 420px;
+    min-height: 420px;
+    perspective-origin: center 50%;
   }
 
   .unified-deck-wrapper {
     transform: translate3d(0, 0, 0);
   }
 }
+
 
 
 
