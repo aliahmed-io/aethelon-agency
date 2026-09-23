@@ -23,14 +23,20 @@ export function Marquee({
     <div
       {...props}
       className={cn(
-        "group flex overflow-hidden p-2 [--duration:35s] [--gap:1.5rem]",
+        "group flex overflow-hidden p-2 [--duration:35s] [--gap:1.5rem] w-full",
         {
-          "flex-row": !vertical,
+          "flex-row flex-nowrap items-center": !vertical,
           "flex-col": vertical,
         },
         className
       )}
       style={{
+        display: "flex",
+        flexDirection: vertical ? "column" : "row",
+        flexWrap: "nowrap",
+        alignItems: "center",
+        overflow: "hidden",
+        whiteSpace: "nowrap",
         gap: "var(--gap)",
         ...props.style,
       }}
@@ -41,11 +47,16 @@ export function Marquee({
           <div
             key={i}
             className={cn("flex shrink-0 justify-around", {
-              "animate-marquee flex-row": !vertical,
+              "animate-marquee flex-row flex-nowrap items-center": !vertical,
               "animate-marquee-vertical flex-col": vertical,
               "group-hover:[animation-play-state:paused]": pauseOnHover,
             })}
             style={{
+              display: "inline-flex",
+              flexDirection: vertical ? "column" : "row",
+              flexWrap: "nowrap",
+              alignItems: "center",
+              flexShrink: 0,
               gap: "var(--gap)",
               animationDirection: reverse ? "reverse" : "normal",
             }}
@@ -58,3 +69,4 @@ export function Marquee({
 }
 
 export default Marquee;
+

@@ -361,46 +361,43 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="services-modules-grid">
             {engineeringModules.map((mod, index) => (
               <div key={mod.title} className="service-module-card">
                 {/* Border Beam subtle traveling highlight on first card */}
                 {index === 0 && <BorderBeam size={70} duration={7} borderWidth={1.5} />}
 
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs font-mono uppercase tracking-wider text-orange-600 dark:text-orange-400 font-semibold">
+                  <div className="service-card-header">
+                    <span className="service-card-eyebrow">
                       {mod.eyebrow}
                     </span>
-                    <span className="text-xs font-mono text-neutral-500">
+                    <span className="service-card-num">
                       0{index + 1}
                     </span>
                   </div>
 
-                  <h3 className="text-2xl font-bold font-display text-neutral-900 dark:text-neutral-100 tracking-tight mb-3">
+                  <h3 className="service-card-title">
                     {mod.title}
                   </h3>
 
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed mb-6">
+                  <p className="service-card-desc">
                     {mod.description}
                   </p>
 
-                  <ul className="space-y-2 mb-6">
+                  <ul className="service-card-features">
                     {mod.features.map((feat) => (
-                      <li key={feat} className="flex items-start gap-2.5 text-xs text-neutral-700 dark:text-neutral-300">
-                        <CheckCircle2 className="w-4 h-4 text-orange-600 dark:text-orange-400 shrink-0 mt-0.5" />
+                      <li key={feat} className="service-card-feature-item">
+                        <CheckCircle2 className="service-check-icon" />
                         <span>{feat}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-neutral-300/40 dark:border-neutral-800">
+                <div className="service-card-tags">
                   {mod.tech.map((t) => (
-                    <span
-                      key={t}
-                      className="text-[10.5px] font-mono text-neutral-600 dark:text-neutral-400 bg-neutral-200/50 dark:bg-neutral-800/60 px-2.5 py-1 rounded"
-                    >
+                    <span key={t} className="service-card-tag">
                       {t}
                     </span>
                   ))}
@@ -422,36 +419,36 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="playbooks-grid">
             {technicalPlaybooks.map((book) => (
               <Link
                 key={book.title}
                 href={book.href}
-                className="group relative flex flex-col justify-between p-6 rounded-2xl border border-neutral-300 dark:border-neutral-800 bg-[rgba(243,240,232,0.6)] dark:bg-[rgba(18,19,26,0.6)] backdrop-blur-md transition-all duration-300 hover:border-orange-500/50 hover:shadow-xl"
+                className="playbook-card"
               >
                 <div>
-                  <div className="flex items-center justify-between text-xs font-mono text-neutral-500 mb-4">
-                    <span className="text-orange-600 dark:text-orange-400 uppercase tracking-wider font-semibold">
+                  <div className="playbook-meta-row">
+                    <span className="playbook-tag">
                       {book.tag}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5" />
+                    <span className="playbook-read-time">
+                      <Clock size={13} />
                       {book.readTime}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-bold font-display text-neutral-900 dark:text-neutral-100 tracking-tight group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
+                  <h3 className="playbook-title">
                     {book.title}
                   </h3>
 
-                  <p className="mt-2 text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                  <p className="playbook-desc">
                     {book.description}
                   </p>
                 </div>
 
-                <div className="mt-6 flex items-center justify-between pt-4 border-t border-neutral-300/40 dark:border-neutral-800 text-xs font-medium text-neutral-900 dark:text-neutral-100">
+                <div className="playbook-cta-row">
                   <span>Read technical breakdown</span>
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  <ArrowUpRight size={14} className="playbook-arrow" />
                 </div>
               </Link>
             ))}
@@ -474,39 +471,39 @@ export default function HomePage() {
             <CodeComparisonCard />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8 border-t border-neutral-300 dark:border-neutral-800">
-            <div>
-              <span className="text-xs font-mono uppercase tracking-wider text-orange-600 dark:text-orange-400 font-semibold block mb-2">
+          <div className="manifesto-pillars-grid">
+            <div className="manifesto-pillar">
+              <span className="manifesto-pillar-eyebrow">
                 Pillar 01 · Restraint Over Noise
               </span>
-              <h4 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+              <h4 className="manifesto-pillar-title">
                 The Discipline of Restraint
               </h4>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              <p className="manifesto-pillar-desc">
                 Zero aggressive popups. Zero artificial countdown urgency. Discerning customers respond to quiet confidence, generous breathing room, and interfaces that respect their intelligence.
               </p>
             </div>
 
-            <div>
-              <span className="text-xs font-mono uppercase tracking-wider text-orange-600 dark:text-orange-400 font-semibold block mb-2">
+            <div className="manifesto-pillar">
+              <span className="manifesto-pillar-eyebrow">
                 Pillar 02 · Full-Stack Ownership
               </span>
-              <h4 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+              <h4 className="manifesto-pillar-title">
                 True Full-Stack Ownership
               </h4>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              <p className="manifesto-pillar-desc">
                 From sub-second Next.js edge rendering and custom Prisma/PostgreSQL schemas to optimistic cart drawers and resilient Stripe checkout flows. Complete technical autonomy with zero platform lock-in.
               </p>
             </div>
 
-            <div>
-              <span className="text-xs font-mono uppercase tracking-wider text-orange-600 dark:text-orange-400 font-semibold block mb-2">
+            <div className="manifesto-pillar">
+              <span className="manifesto-pillar-eyebrow">
                 Pillar 03 · Direct Collaboration
               </span>
-              <h4 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+              <h4 className="manifesto-pillar-title">
                 Direct Senior Collaboration
               </h4>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              <p className="manifesto-pillar-desc">
                 You work directly with the specialist designing the interface, writing the production code, and optimizing the system. No account managers, no junior contractors, and zero diluted context.
               </p>
             </div>
@@ -525,19 +522,19 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="max-w-4xl">
-            <Accordion type="single" collapsible className="w-full space-y-4">
+          <div className="faq-container-wrap">
+            <Accordion type="single" collapsible className="faq-accordion-root">
               {transparentFaqItems.map((faq, index) => (
                 <AccordionItem
                   key={faq.question}
                   value={`item-${index}`}
-                  className="border border-neutral-300 dark:border-neutral-800 rounded-xl px-6 py-2 bg-[rgba(243,240,232,0.5)] dark:bg-[rgba(18,19,26,0.5)] backdrop-blur-md"
+                  className="faq-accordion-item"
                 >
-                  <AccordionTrigger className="text-left font-display font-bold text-base md:text-lg text-neutral-900 dark:text-neutral-100 hover:text-orange-600 dark:hover:text-orange-400 transition-colors py-4">
-                    {faq.question}
+                  <AccordionTrigger className="faq-accordion-trigger">
+                    <span>{faq.question}</span>
                   </AccordionTrigger>
-                  <AccordionContent className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed pb-4">
-                    {faq.answer}
+                  <AccordionContent className="faq-accordion-content">
+                    <p>{faq.answer}</p>
                   </AccordionContent>
                 </AccordionItem>
               ))}
@@ -552,48 +549,52 @@ export default function HomePage() {
           <div className="studio-conversion-bar">
             <div className="conversion-glow" aria-hidden="true" />
 
-            <div className="relative z-10 max-w-2xl">
-              <span className="inline-block text-xs font-mono uppercase tracking-widest text-orange-400 font-bold mb-3">
-                Booking Q2 / Q3 Commissions
-              </span>
-              <h2 className="text-3xl md:text-5xl font-extrabold font-display tracking-tight text-white leading-tight mb-4">
-                Ready to build a digital flagship that commands authority?
-              </h2>
-              <p className="text-neutral-300 text-sm md:text-base leading-relaxed mb-8">
-                Schedule a 30-minute technical discovery session or request a storefront performance audit. Direct senior engineering. Fixed milestones between $2k–$5k.
-              </p>
+            <div className="conversion-content-grid">
+              <div className="conversion-left">
+                <span className="conversion-eyebrow">
+                  Booking Q2 / Q3 Commissions
+                </span>
+                <h2 className="conversion-title">
+                  Ready to build a digital flagship that commands authority?
+                </h2>
+                <p className="conversion-subtext">
+                  Schedule a 30-minute technical discovery session or request a storefront performance audit. Direct senior engineering. Fixed milestones between $2k–$5k.
+                </p>
 
-              <div className="flex flex-wrap items-center gap-4 mb-8">
-                <Link
-                  href="/contact"
-                  className="button button-dark bg-orange-600 hover:bg-orange-500 text-white font-medium px-6 py-3 rounded-lg flex items-center gap-2 transition-colors"
-                >
-                  Start your project <ArrowUpRight size={16} />
-                </Link>
-                <Link
-                  href="/contact?type=audit"
-                  className="px-6 py-3 rounded-lg border border-white/20 text-white font-medium hover:bg-white/10 transition-colors text-sm"
-                >
-                  Request Architecture Audit
-                </Link>
+                <div className="conversion-actions">
+                  <Link
+                    href="/contact"
+                    className="button-orange"
+                  >
+                    Start your project <ArrowUpRight size={15} />
+                  </Link>
+                  <Link
+                    href="/contact?type=audit"
+                    className="button-outline-light"
+                  >
+                    Request Architecture Audit
+                  </Link>
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-white/10 text-[11px] font-mono text-neutral-400">
-                <div>
-                  <span className="block text-white font-semibold">Q2/Q3 2026</span>
-                  <span>Commissions Open</span>
-                </div>
-                <div>
-                  <span className="block text-white font-semibold">Senior Direct</span>
-                  <span>Zero Middlemen</span>
-                </div>
-                <div>
-                  <span className="block text-white font-semibold">$2k–$5k Scope</span>
-                  <span>Fixed Milestones</span>
-                </div>
-                <div>
-                  <span className="block text-white font-semibold">&lt; 24h Response</span>
-                  <span>Direct Communication</span>
+              <div className="conversion-right">
+                <div className="conversion-specs-grid">
+                  <div className="conversion-spec-card">
+                    <span className="spec-val">Q2/Q3 2026</span>
+                    <span className="spec-lbl">Commissions Open</span>
+                  </div>
+                  <div className="conversion-spec-card">
+                    <span className="spec-val">Senior Direct</span>
+                    <span className="spec-lbl">Zero Middlemen</span>
+                  </div>
+                  <div className="conversion-spec-card">
+                    <span className="spec-val">$2k–$5k Scope</span>
+                    <span className="spec-lbl">Fixed Milestones</span>
+                  </div>
+                  <div className="conversion-spec-card">
+                    <span className="spec-val">&lt; 24h Response</span>
+                    <span className="spec-lbl">Direct Communication</span>
+                  </div>
                 </div>
               </div>
             </div>
