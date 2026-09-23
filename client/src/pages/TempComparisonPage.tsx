@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowUpRight, Compass, Sparkles, Layout, ChevronDown } from "lucide-react";
 
 import { HeroAlternativeA, HeroAlternativeB, HeroAlternativeC, HeroAlternativeD } from "../components/temp/HeroVariations";
+import NavigationVariations from "../components/temp/NavigationVariations";
 import { WhoWeAreA, WhoWeAreB, WhoWeAreC, WhoWeAreD } from "../components/temp/WhoWeAreVariations";
 import { SelectedWorkA, SelectedWorkB, SelectedWorkC } from "../components/temp/SelectedWorkVariations";
 import { ServicesA, ServicesB, ServicesC } from "../components/temp/ServicesVariations";
@@ -16,6 +17,7 @@ import { FooterA, FooterB } from "../components/temp/FooterVariations";
 
 export default function TempComparisonPage() {
   const sections = [
+    { id: "sec-nav", label: "0. Navigation Bar", count: "4 Alternatives" },
     { id: "sec-hero", label: "1. Hero Section", count: "4 Alternatives" },
     { id: "sec-who", label: "2. Who We Are", count: "4 Concepts" },
     { id: "sec-work", label: "3. Selected Work", count: "3 Concepts" },
@@ -75,6 +77,13 @@ export default function TempComparisonPage() {
           </div>
         </div>
       </section>
+
+      {/* ===================================================================
+          0. NAVIGATION & MENU: 4 DISTINCT ALTERNATIVES (MINIMAL TO EXTREME)
+          =================================================================== */}
+      <NavigationVariations />
+
+      <div className="temp-sub-divider" />
 
       {/* ===================================================================
           1. HERO SECTION: 4 DISTINCT ALTERNATIVES (Z-LAYER & CANVAS CUT FIXES)

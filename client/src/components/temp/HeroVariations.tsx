@@ -1024,7 +1024,7 @@ export function HeroAlternativeC() {
 function getBasePoseD(cardIndex: number, chosen: number) {
   const slot = cardIndex - chosen;
   // Anchored rightward to prevent cards from ever covering text or CTAs
-  const deckCenters = [35, 10, -10, -30];
+  const deckCenters = [20, 8, 2, 0];
   const centerShift = deckCenters[chosen] ?? 0;
   const translateX = centerShift + slot * 72;
 

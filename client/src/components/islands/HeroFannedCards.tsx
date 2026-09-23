@@ -65,7 +65,7 @@ interface CardPose {
 function getBasePose(cardIndex: number, chosen: number) {
   const slot = cardIndex - chosen;
   // Anchored harmoniously to frame the bold typography with balanced breathing room
-  const deckCenters = [20, 6, -6, -20];
+  const deckCenters = [14, 6, 2, 0];
   const centerShift = deckCenters[chosen] ?? 0;
   const translateX = centerShift + slot * 74;
 
