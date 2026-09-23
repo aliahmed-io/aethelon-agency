@@ -5,17 +5,13 @@ import Link from "next/link";
 import {
   ArrowDownRight,
   ArrowUpRight,
-  Zap,
-  Rotate3d,
-  Sparkles,
-  ShieldCheck,
-  ShoppingBag,
 } from "lucide-react";
 import HeroFannedCards from "../components/islands/HeroFannedCards";
+import BusinessImpactSection from "../components/islands/BusinessImpactSection";
 import SpatialProductStage from "../components/islands/SpatialProductStage";
 import AiVisionShowcase from "../components/islands/AiVisionShowcase";
+import ServicesCapabilitiesGrid from "../components/islands/ServicesCapabilitiesGrid";
 import { Marquee } from "../components/ui/marquee";
-import { BentoGrid, BentoCard } from "../components/ui/bento-grid";
 import { FocusCards, type FocusCardItem } from "../components/ui/focus-cards";
 import {
   Accordion,
@@ -32,12 +28,12 @@ const protocols = [
   { spec: "Bespoke Brand Identity", tag: "Zero Templates" },
   { spec: "Next.js 16 Storefronts", tag: "High-Ticket Conversion" },
   { spec: "Complete Code Ownership", tag: "Zero Platform Lock-In" },
-  { spec: "Sub-Second Checkout", tag: "Frictionless Cart" },
+  { spec: "Automated Cart Recovery", tag: "15% Revenue Restored" },
   { spec: "Lighthouse 100/100", tag: "Zero Layout Shift" },
 ];
 
-/* --- CLIENT-FOCUSED FLAGSHIP WORK (ZERO DEVELOPER JARGON) --- */
-const builtToSpecCards: FocusCardItem[] = [
+/* --- CLIENT COMMISSIONS SHOWCASE (ZERO DEVELOPER JARGON) --- */
+const studioCommissions: FocusCardItem[] = [
   {
     title: "Aethelon Living Furniture",
     category: "Luxury Furniture",
@@ -121,8 +117,8 @@ export default function HomePage() {
                 <Link className="button button-dark" href="/contact">
                   Start your project <ArrowUpRight size={15} aria-hidden="true" />
                 </Link>
-                <a className="text-link" href="#spatial-stage">
-                  Explore 3D &amp; AR capabilities <ArrowDownRight size={15} aria-hidden="true" />
+                <a className="text-link" href="#impact">
+                  Explore business impact <ArrowDownRight size={15} aria-hidden="true" />
                 </a>
               </div>
             </div>
@@ -144,122 +140,50 @@ export default function HomePage() {
 
       <main>
         {/* ====================================================================
-            02: SPATIAL 3D & UNIVERSAL AUGMENTED REALITY (REPLACES TACTILE STANDARD)
-            1 CLEAR IDEA: Experience Before Purchase
-            1 BIG ANIMATION: 360° Drag Inspection + Finish Switcher + AR Simulation
+            02: BUSINESS IMPACT & RETENTION
+            1 BIG STAT (+38%) + WORDS ONLY (Cart Recovery, Returns, Speed, Scarcity)
+            ==================================================================== */}
+        <BusinessImpactSection />
+
+        {/* ====================================================================
+            03: CORE SUPERPOWER FEATURES (3D, AR, AI)
+            FEATURE A: SPATIAL 3D & UNIVERSAL AR
+            FEATURE B: MULTIMODAL AI ROOM VISION & SEMANTIC SEARCH
             ==================================================================== */}
         <section id="spatial-stage">
           <SpatialProductStage />
         </section>
 
-        {/* ====================================================================
-            03: FLAGSHIP PROOF OF WORK (REFINED FOCUS CARDS)
-            1 CLEAR IDEA: Designed to Captivate. Engineered to Convert.
-            1 BIG ANIMATION: Cinematic Focus Cards with Depth Blur
-            ==================================================================== */}
-        <section className="section-pad-lg" id="work">
-          <div className="section-head-wrap">
-            <span className="eyebrow">Flagship Proof of Work</span>
-            <h2>
-              Working architectural flagships &amp; bespoke storefronts.
-            </h2>
-            <p>
-              Explore high-ticket commerce environments built to demonstrate real-time 3D configuration, instant discovery, and frictionless luxury checkouts.
-            </p>
-          </div>
-
-          <FocusCards cards={builtToSpecCards} />
-        </section>
-
-        {/* ====================================================================
-            04: THE AUTONOMOUS STORE ENGINE (MULTIMODAL AI VISION)
-            1 CLEAR IDEA: An intelligent store that predicts what buyers desire.
-            1 BIG ANIMATION: Kinetic Neural Room Photo Analyzer & Recommendations
-            ==================================================================== */}
         <section id="ai-engine">
           <AiVisionShowcase />
         </section>
 
         {/* ====================================================================
-            05: THE HIGH-SPEED ENTERPRISE ENGINE (SPEED & ECONOMICS BENTO)
-            1 CLEAR IDEA: Instant speed. Unbreakable checkouts. Zero recurring app fees.
-            1 BIG ANIMATION: Kinetic Bento Spotlight Grid with Concrete Client Wins
+            04: "JOIN US" FLAGSHIP COMMISSIONS SHOWCASE ("WHO ARE THEIR CLIENTS?")
+            SHOWCASING RECENT COMMISSIONS WITHOUT FALSE CLAIMS
             ==================================================================== */}
-        <section className="section-pad-lg" id="guarantees">
+        <section className="section-pad-lg" id="commissions">
           <div className="section-head-wrap">
-            <span className="eyebrow">Enterprise Commerce Architecture</span>
+            <span className="eyebrow">Recent Studio Commissions</span>
             <h2>
-              Instant speed. Unbreakable checkouts. Zero recurring app fees.
+              Join ambitious brands elevating their digital flagships.
             </h2>
             <p>
-              We replace bloated plugin marketplaces and fragile scripts with deterministic performance engineered directly into your storefront.
+              We collaborate with emerging founders who refuse generic commerce. Explore recent digital storefronts and bespoke interactive experiences built to convert.
             </p>
           </div>
 
-          <BentoGrid>
-            <BentoCard
-              name="Sub-100ms Speed"
-              description="Edge-rendered page transitions cached across global CDN nodes. Shoppers experience instant catalog discovery without waiting."
-              Icon={Zap}
-              metric={
-                <>
-                  <span>98</span>
-                  <span className="text-xl font-normal text-muted-foreground ml-1">ms</span>
-                </>
-              }
-              tag="Global Speed"
-              href="/contact"
-              cta="Request speed benchmark"
-            />
-            <BentoCard
-              name="40% Lower Return Rates"
-              description="True-to-scale 3D models and native AR living room placement eliminate buyer sizing hesitation before checkout."
-              Icon={Rotate3d}
-              metric={
-                <>
-                  <span>-40</span>
-                  <span className="text-xl font-normal text-muted-foreground ml-1">%</span>
-                </>
-              }
-              tag="Buyer Confidence"
-              href="#spatial-stage"
-              cta="Test interactive 3D preview"
-            />
-            <BentoCard
-              name="Zero Monthly App Subscriptions"
-              description="Persistent cart drawers, variant swatches, and recovery automations are built natively. Eliminate $1,000+/mo in Shopify app bills."
-              Icon={ShoppingBag}
-              metric={
-                <>
-                  <span>$0</span>
-                  <span className="text-lg font-normal text-muted-foreground ml-1.5">/month</span>
-                </>
-              }
-              tag="Cost Efficiency"
-              href="/contact"
-              cta="Review native architecture"
-            />
-            <BentoCard
-              name="100% Owned Intellectual Property"
-              description="You own the private code repository, custom design tokens, and customer data. Absolute brand independence with zero vendor lock-in."
-              Icon={ShieldCheck}
-              metric={
-                <>
-                  <span>100</span>
-                  <span className="text-xl font-normal text-muted-foreground ml-1">%</span>
-                </>
-              }
-              tag="Brand Autonomy"
-              href="/contact"
-              cta="Inquire about custom build"
-            />
-          </BentoGrid>
+          <FocusCards cards={studioCommissions} />
         </section>
 
         {/* ====================================================================
+            05: COMPREHENSIVE SERVICE CAPABILITIES ("WHAT SERVICES DO THEY OFFER?")
+            HEADLESS, CUSTOM DESIGN/DEV, 3D, AR, AI, CART RECOVERY, ADMIN DASHBOARDS
+            ==================================================================== */}
+        <ServicesCapabilitiesGrid />
+
+        {/* ====================================================================
             06: COMMERCIAL CLARITY & TRANSPARENT FAQ
-            1 CLEAR IDEA: Guaranteed milestones. 3 to 5 week delivery. Zero surprises.
-            1 BIG ANIMATION: Generous Radix Accordion with Right-Aligned Chevrons
             ==================================================================== */}
         <section className="section-pad-lg" id="faq">
           <div className="section-head-wrap">
@@ -291,9 +215,7 @@ export default function HomePage() {
         </section>
 
         {/* ====================================================================
-            07: STUDIO CONVERSION BAR (FINAL CTA)
-            1 CLEAR IDEA: Ready to build a digital flagship that commands authority?
-            1 BIG ANIMATION: Kinetic Ambient Glow Card + 4-Spec Guarantee Grid
+            07: STUDIO CONVERSION BAR & FOOTER (CALL TO ACTION)
             ==================================================================== */}
         <section className="section-pad-lg pt-4 pb-20">
           <div className="studio-conversion-bar">
