@@ -7677,3 +7677,157 @@ html[data-route-loading="false"] .route-progress { opacity: 0; transform: scaleX
     gap: 32px;
   }
 }
+
+/* ==========================================================================
+   ASK PHILL-INSPIRED KINETIC AGENCY ARCHITECTURE & MCP STYLES
+   ========================================================================== */
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap, 1.5rem)));
+  }
+}
+
+@keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap, 1.5rem)));
+  }
+}
+
+.animate-marquee {
+  animation: marquee var(--duration, 35s) linear infinite;
+}
+
+.animate-marquee-vertical {
+  animation: marquee-vertical var(--duration, 35s) linear infinite;
+}
+
+/* PROTOCOL & TECH STACK TICKER */
+.tech-protocol-strip {
+  width: 100%;
+  border-top: 1px solid rgba(23, 23, 23, 0.08);
+  border-bottom: 1px solid rgba(23, 23, 23, 0.08);
+  background: rgba(243, 240, 232, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 10px 0;
+  overflow: hidden;
+}
+
+.protocol-badge-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono, monospace);
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  padding: 4px 14px;
+  border-radius: 9999px;
+  background: rgba(23, 23, 23, 0.04);
+  border: 1px solid rgba(23, 23, 23, 0.07);
+}
+
+.protocol-badge-item .proto-spec {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.protocol-badge-item .proto-tag {
+  color: var(--orange-contrast);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(189, 59, 5, 0.08);
+}
+
+/* SECTION UTILITIES */
+.section-pad-lg {
+  padding: clamp(70px, 9vw, 130px) clamp(20px, 4.5vw, 48px);
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.section-head-wrap {
+  margin-bottom: clamp(36px, 5vw, 64px);
+}
+
+.section-head-wrap .eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--orange-contrast);
+  margin-bottom: 12px;
+}
+
+.section-head-wrap h2 {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3.5vw, 46px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0 0 16px 0;
+  max-width: 820px;
+}
+
+.section-head-wrap p {
+  font-size: clamp(15px, 1.3vw, 18px);
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 680px;
+  margin: 0;
+}
+
+/* SERVICE CARD WITH BORDER BEAM CONTAINER */
+.service-module-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 16px;
+  border: 1px solid rgba(23, 23, 23, 0.09);
+  background: rgba(243, 240, 232, 0.6);
+  padding: clamp(24px, 3vw, 36px);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.service-module-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(189, 59, 5, 0.35);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* FINAL CTA STRIP */
+.studio-conversion-bar {
+  border-radius: 24px;
+  background: #111217;
+  color: #f3f4f6;
+  padding: clamp(48px, 6vw, 84px) clamp(24px, 5vw, 64px);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.studio-conversion-bar .conversion-glow {
+  position: absolute;
+  top: -40%;
+  right: -20%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255, 90, 31, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
