@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { getProject, projects, getFlagshipProject, getFullstackProjects, getDesignProjects } from "../../shared/projects";
 
 describe("curated portfolio projects", () => {
-  it("includes all 7 structured portfolio projects across the 3 tiers", () => {
-    expect(projects).toHaveLength(8);
+  it("includes all structured portfolio projects across the 3 tiers", () => {
+    expect(projects).toHaveLength(10);
 
     const flagship = getFlagshipProject();
     expect(flagship.slug).toBe("aethelon-furniture-commerce");
@@ -18,12 +18,14 @@ describe("curated portfolio projects", () => {
     ]);
 
     const design = getDesignProjects();
-    expect(design).toHaveLength(4);
+    expect(design).toHaveLength(6);
     expect(design.map((p) => p.slug)).toEqual([
       "lundev-furniture-experience",
       "in-your-space",
       "afterlight",
-      "monolith-audio",
+      "vantiq",
+      "atelier",
+      "the-monolith",
     ]);
   });
 

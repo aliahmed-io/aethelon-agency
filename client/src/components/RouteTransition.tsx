@@ -12,12 +12,10 @@ type TransitionProfile = {
   number: string;
 };
 
-// The page begins loading immediately, while the visual cover and reveal keep
-// a deliberate 700 ms editorial cadence.
-const TRANSITION_DURATION = 700;
-const COVER_DURATION = TRANSITION_DURATION;
-const REVEAL_DURATION = TRANSITION_DURATION;
-const FALLBACK_DURATION = 3200;
+// Snappy, Ask Phill-grade editorial transition: instant feedback with zero perceived lag.
+const COVER_DURATION = 120;
+const REVEAL_DURATION = 160;
+const FALLBACK_DURATION = 1500;
 
 function getTransitionProfile(pathname: string): TransitionProfile {
   if (pathname === "/") return { label: "Aethelon / home", variant: "arrival", number: "00" };

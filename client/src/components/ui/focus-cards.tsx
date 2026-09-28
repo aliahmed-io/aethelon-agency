@@ -8,11 +8,8 @@ import { cn } from "@/lib/utils";
 
 export interface FocusCardItem {
   title: string;
-  category: string;
   src: string;
   href: string;
-  techStack: string[];
-  metrics: string;
   description: string;
 }
 
@@ -52,13 +49,6 @@ export const FocusCards = ({ cards }: { cards: FocusCardItem[] }) => {
 
             <div className="focus-card-gradient-overlay" />
 
-            {/* Top metadata tags */}
-            <div className="focus-card-top-tags">
-              <span className="focus-tag-category">{card.category}</span>
-              <span className="focus-tag-metric">{card.metrics}</span>
-            </div>
-
-            {/* Bottom content info */}
             <div className="focus-card-bottom-info">
               <div className="focus-card-title-row">
                 <h3 className="focus-card-title">{card.title}</h3>
@@ -68,14 +58,6 @@ export const FocusCards = ({ cards }: { cards: FocusCardItem[] }) => {
               </div>
 
               <p className="focus-card-desc">{card.description}</p>
-
-              <div className="focus-card-tech-row">
-                {card.techStack.map((tech) => (
-                  <span key={tech} className="focus-tech-pill">
-                    {tech}
-                  </span>
-                ))}
-              </div>
             </div>
           </Link>
         );

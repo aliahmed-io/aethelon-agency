@@ -9,10 +9,9 @@ import {
 import HeroFannedCards from "../components/islands/HeroFannedCards";
 import BusinessImpactSection from "../components/islands/BusinessImpactSection";
 import SpatialProductStage from "../components/islands/SpatialProductStage";
-import AiVisionShowcase from "../components/islands/AiVisionShowcase";
 import ServicesCapabilitiesGrid from "../components/islands/ServicesCapabilitiesGrid";
+import FlagshipConversionSection from "../components/islands/FlagshipConversionSection";
 import { Marquee } from "../components/ui/marquee";
-import { FocusCards, type FocusCardItem } from "../components/ui/focus-cards";
 import {
   Accordion,
   AccordionContent,
@@ -20,53 +19,21 @@ import {
   AccordionTrigger,
 } from "../components/ui/accordion";
 
-/* --- PRESTIGIOUS CLIENT-FACING OUTCOME TICKER --- */
+/* --- CLIENT HIGHLIGHTS TICKER --- */
 const protocols = [
-  { spec: "Sub-100ms Speed", tag: "Instant Global TTFB" },
-  { spec: "Spatial 3D & Instant AR", tag: "40% Lower Return Rates" },
-  { spec: "Zero Monthly App Fees", tag: "Native Architecture" },
-  { spec: "Bespoke Brand Identity", tag: "Zero Templates" },
-  { spec: "Next.js 16 Storefronts", tag: "High-Ticket Conversion" },
-  { spec: "Complete Code Ownership", tag: "Zero Platform Lock-In" },
-  { spec: "Automated Cart Recovery", tag: "15% Revenue Restored" },
-  { spec: "Lighthouse 100/100", tag: "Zero Layout Shift" },
+  { spec: "Custom Design & Headless Dev", tag: "Shopify + Next.js" },
+  { spec: "Fast 2–4 Week Delivery", tag: "Guaranteed Timeline" },
+  { spec: "Affordable Fixed Rates", tag: "From $2,000" },
+  { spec: "Sub-100ms Page Speed", tag: "Higher Conversion" },
+  { spec: "Interactive 3D & AR", tag: "40% Fewer Returns" },
+  { spec: "2 Months Free Maintenance", tag: "Full Support Included" },
+  { spec: "Automated Cart Recovery", tag: "15% More Sales" },
+  { spec: "Senior Engineers", tag: "No Agency Overhead" },
 ];
 
-/* --- CLIENT COMMISSIONS SHOWCASE (ZERO DEVELOPER JARGON) --- */
-const studioCommissions: FocusCardItem[] = [
-  {
-    title: "Aethelon Living Furniture",
-    category: "Luxury Furniture",
-    src: "/images/projects/aethelon.png",
-    href: "/work/aethelon-furniture-commerce",
-    metrics: "360° Room Staging",
-    techStack: ["Spatial 3D", "Instant AR", "Shopify Backend"],
-    description:
-      "Bespoke furniture commerce with real-time finish inspection, dynamic room staging, and persistent one-click checkout.",
-  },
-  {
-    title: "Velorum Haute Horlogerie",
-    category: "Luxury Timepieces",
-    src: "/images/projects/velorum.png",
-    href: "/work/velorum-watch-commerce",
-    metrics: "360° Sapphire Inspection",
-    techStack: ["Micro-Mechanical 3D", "Tactile Audio", "Global Stripe"],
-    description:
-      "High-jewelry horology showcase featuring micro-mechanical crown inspection, sapphire reflection previews, and instant checkout.",
-  },
-  {
-    title: "Novexa Precision Audio",
-    category: "Acoustic Engineering",
-    src: "/images/projects/novexa.png",
-    href: "/work/novexa-product-commerce",
-    metrics: "Sound Isolation Preview",
-    techStack: ["Acoustic WebGL", "Sub-100ms Speed", "Direct Checkout"],
-    description:
-      "Interactive acoustic isolation comparison and instant one-click purchase flow engineered for high-intent audiophile conversion.",
-  },
-];
 
-/* --- COMMERCIAL TRANSPARENCY FAQ --- */
+
+/* --- FAQ --- */
 const transparentFaqItems = [
   {
     question: "What are your realistic project scopes, turnaround times, and pricing?",
@@ -99,20 +66,16 @@ export default function HomePage() {
   return (
     <>
       {/* ====================================================================
-          01: HERO & OUTCOME TICKER (EXACT 100DVH INITIAL WINDOW VIEWPORT)
+          HERO
           ==================================================================== */}
       <div className="hero-landing-fold">
         <section className="hero-unified-canvas">
           <HeroFannedCards />
           <div className="hero-copy-layered">
             <div className="hero-copy-inner">
-              <div className="eyebrow">Bespoke Commerce Engineering</div>
-              <h1>
-                Bespoke online stores engineered for brands that refuse to look like everyone else.
-              </h1>
-              <p>
-                We design and engineer custom Next.js storefronts, tactile 3D configurators, and resilient commerce systems. Direct senior craft. Zero templates. Built to convert.
-              </p>
+              <div className="eyebrow">Commerce Engineering Studio</div>
+              <h1>Custom online stores for brands that refuse to blend in.</h1>
+              <p>We design and build Next.js storefronts, interactive 3D product experiences, and fast commerce systems. Senior engineers. No templates.</p>
               <div className="hero-actions">
                 <Link className="button button-dark" href="/contact">
                   Start your project <ArrowUpRight size={15} aria-hidden="true" />
@@ -125,7 +88,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* OUTCOME-DRIVEN CLIENT TICKER */}
+        {/* TICKER */}
         <div className="tech-protocol-strip" aria-label="Aethelon studio performance standards">
           <Marquee pauseOnHover repeat={4} className="[--duration:38s]">
             {protocols.map((proto) => (
@@ -139,59 +102,23 @@ export default function HomePage() {
       </div>
 
       <main>
-        {/* ====================================================================
-            02: BUSINESS IMPACT & RETENTION
-            1 BIG STAT (+38%) + WORDS ONLY (Cart Recovery, Returns, Speed, Scarcity)
-            ==================================================================== */}
+        {/* BUSINESS IMPACT */}
         <BusinessImpactSection />
 
-        {/* ====================================================================
-            03: CORE SUPERPOWER FEATURES (3D, AR, AI)
-            FEATURE A: SPATIAL 3D & UNIVERSAL AR
-            FEATURE B: MULTIMODAL AI ROOM VISION & SEMANTIC SEARCH
-            ==================================================================== */}
+        {/* 3D & AR STAGE */}
         <section id="spatial-stage">
           <SpatialProductStage />
         </section>
 
-        <section id="ai-engine">
-          <AiVisionShowcase />
-        </section>
 
-        {/* ====================================================================
-            04: "JOIN US" FLAGSHIP COMMISSIONS SHOWCASE ("WHO ARE THEIR CLIENTS?")
-            SHOWCASING RECENT COMMISSIONS WITHOUT FALSE CLAIMS
-            ==================================================================== */}
-        <section className="section-pad-lg" id="commissions">
-          <div className="section-head-wrap">
-            <span className="eyebrow">Recent Studio Commissions</span>
-            <h2>
-              Join ambitious brands elevating their digital flagships.
-            </h2>
-            <p>
-              We collaborate with emerging founders who refuse generic commerce. Explore recent digital storefronts and bespoke interactive experiences built to convert.
-            </p>
-          </div>
-
-          <FocusCards cards={studioCommissions} />
-        </section>
-
-        {/* ====================================================================
-            05: COMPREHENSIVE SERVICE CAPABILITIES ("WHAT SERVICES DO THEY OFFER?")
-            HEADLESS, CUSTOM DESIGN/DEV, 3D, AR, AI, CART RECOVERY, ADMIN DASHBOARDS
-            ==================================================================== */}
+        {/* SERVICES */}
         <ServicesCapabilitiesGrid />
 
-        {/* ====================================================================
-            06: COMMERCIAL CLARITY & TRANSPARENT FAQ
-            ==================================================================== */}
+        {/* FAQ */}
         <section className="section-pad-lg" id="faq">
           <div className="section-head-wrap">
-            <span className="eyebrow">Commercial Transparency</span>
-            <h2>Direct answers before we write a single line of code.</h2>
-            <p>
-              Clear scopes, realistic timelines, and guaranteed pricing so you can make an informed decision without agency sales pressure.
-            </p>
+            <h2>Answers before we start.</h2>
+            <p>Clear scope, honest timelines, and straightforward pricing.</p>
           </div>
 
           <div className="faq-container-wrap">
@@ -214,64 +141,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ====================================================================
-            07: STUDIO CONVERSION BAR & FOOTER (CALL TO ACTION)
-            ==================================================================== */}
-        <section className="section-pad-lg pt-4 pb-20">
-          <div className="studio-conversion-bar">
-            <div className="conversion-glow" aria-hidden="true" />
-
-            <div className="conversion-content-grid">
-              <div className="conversion-left">
-                <span className="conversion-eyebrow">
-                  Booking Q2 / Q3 Commissions
-                </span>
-                <h2 className="conversion-title">
-                  Ready to build a digital flagship that commands authority?
-                </h2>
-                <p className="conversion-subtext">
-                  Schedule a 30-minute technical discovery session or request a storefront performance audit. Direct senior engineering. Fixed milestones between $2k–$5k.
-                </p>
-
-                <div className="conversion-actions">
-                  <Link
-                    href="/contact"
-                    className="button-orange"
-                  >
-                    Start your project <ArrowUpRight size={15} />
-                  </Link>
-                  <Link
-                    href="/contact?type=audit"
-                    className="button-outline-light"
-                  >
-                    Request Architecture Audit
-                  </Link>
-                </div>
-              </div>
-
-              <div className="conversion-right">
-                <div className="conversion-specs-grid">
-                  <div className="conversion-spec-card">
-                    <span className="spec-val">Q2/Q3 2026</span>
-                    <span className="spec-lbl">Commissions Open</span>
-                  </div>
-                  <div className="conversion-spec-card">
-                    <span className="spec-val">Senior Direct</span>
-                    <span className="spec-lbl">Zero Middlemen</span>
-                  </div>
-                  <div className="conversion-spec-card">
-                    <span className="spec-val">$2k–$5k Scope</span>
-                    <span className="spec-lbl">Fixed Milestones</span>
-                  </div>
-                  <div className="conversion-spec-card">
-                    <span className="spec-val">&lt; 24h Response</span>
-                    <span className="spec-lbl">Direct Communication</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* CTA */}
+        <FlagshipConversionSection />
       </main>
     </>
   );

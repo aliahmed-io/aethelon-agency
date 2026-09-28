@@ -2,306 +2,143 @@
 
 import React, { useState, useRef } from "react";
 import Image from "next/image";
-import { 
-  Rotate3d, 
-  Smartphone, 
-  Sparkles, 
-  Maximize2, 
-  Check, 
-  ArrowRight,
-  Layers
-} from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface FinishOption {
+interface ShowcaseItem {
   id: string;
-  name: string;
-  material: string;
-  colorHex: string;
-  price: string;
-  leadTime: string;
+  title: string;
+  category: string;
+  description: string;
   image: string;
-  specNote: string;
 }
 
-const FINISHES: FinishOption[] = [
+const SHOWCASES: ShowcaseItem[] = [
   {
-    id: "travertine",
-    name: "Navona Travertine",
-    material: "Honed Roman Stone & Smoked Walnut",
-    colorHex: "#e3dac9",
-    price: "$3,450",
-    leadTime: "Crafted in 14 days",
+    id: "vonex",
+    title: "Vonex Essentials",
+    category: "Luxury Apparel",
+    description:
+      "Editorial fashion storefront with tailored lookbooks, tactile fabric previews, and rapid checkout.",
+    image: "/images/projects/vonex.png",
+  },
+  {
+    id: "aethelon",
+    title: "Aethelon Living",
+    category: "Spatial Furniture",
+    description:
+      "Architectural home commerce with real-time stone & wood finish inspection and spatial room staging.",
     image: "/images/projects/aethelon.png",
-    specNote: "Hand-honed open pore travertine with architectural walnut framework",
   },
   {
-    id: "walnut",
-    name: "Smoked American Walnut",
-    material: "FSC Heritage Hardwood & Brushed Bronze",
-    colorHex: "#5c4033",
-    price: "$3,100",
-    leadTime: "Crafted in 10 days",
-    image: "/images/projects/velorum.png",
-    specNote: "Quarter-sawn American black walnut finished in organic low-sheen beeswax",
-  },
-  {
-    id: "brass",
-    name: "Brushed Patina Brass",
-    material: "Solid Alloy Brass & Nero Marquina",
-    colorHex: "#c5a059",
-    price: "$3,850",
-    leadTime: "Crafted in 18 days",
-    image: "/images/projects/novexa.png",
-    specNote: "Solid hot-forged brass casing hand-relieved with micro-mechanical bevels",
+    id: "atelier",
+    title: "Atelier Studio",
+    category: "Collectible Furniture",
+    description:
+      "Museum-grade collectible furniture flagship featuring 3D sculptural plinths, tactile material libraries, and bespoke concierge flows.",
+    image: "/images/projects/atelier-hero-v2.png",
   },
 ];
 
 export default function SpatialProductStage() {
-  const [activeFinish, setActiveFinish] = useState<FinishOption>(FINISHES[0]!);
-  const [rotationAngle, setRotationAngle] = useState(15);
-  const [isDragging, setIsDragging] = useState(false);
-  const [showArModal, setShowArModal] = useState(false);
-  const [isAdded, setIsAdded] = useState(false);
-  const startXRef = useRef<number>(0);
-  const currentAngleRef = useRef<number>(15);
+  const [activeItem, setActiveItem] = useState<ShowcaseItem>(SHOWCASES[0]!);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  const handlePointerDown = (e: React.PointerEvent) => {
-    setIsDragging(true);
-    startXRef.current = e.clientX;
-    currentAngleRef.current = rotationAngle;
-    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotX = -((y - centerY) / centerY) * 7;
+    const rotY = ((x - centerX) / centerX) * 7;
+    setTilt({ x: rotX, y: rotY });
   };
 
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isDragging) return;
-    const deltaX = e.clientX - startXRef.current;
-    const newAngle = currentAngleRef.current + deltaX * 0.45;
-    setRotationAngle(newAngle);
-  };
-
-  const handlePointerUp = (e: React.PointerEvent) => {
-    setIsDragging(false);
-    (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
-  };
-
-  const handleAddToCart = () => {
-    setIsAdded(true);
-    setTimeout(() => setIsAdded(false), 2400);
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setTilt({ x: 0, y: 0 });
   };
 
   return (
     <div className="spatial-stage-wrapper">
-      {/* Top Value Statement */}
-      <div className="spatial-stage-header">
-        <span className="spatial-eyebrow">
-          <Sparkles size={12} className="text-orange-600 inline mr-1" />
-          Spatial Computing &amp; Augmented Reality
-        </span>
-        <h2 className="spatial-headline">
-          Experience before purchase. Zero hesitation.
-        </h2>
-        <p className="spatial-subtext">
-          Let customers inspect finishes in 360° and instantly place true-to-scale items in their living rooms through native WebXR and iOS Quick Look. No app downloads required.
+      <div className="section-head-wrap">
+        <h2>Selected store designs.</h2>
+        <p>
+          Explore custom storefronts and interactive commerce systems we've designed and engineered for modern brands.
         </p>
       </div>
 
-      {/* Main 3D / AR Interactive Canvas Container */}
-      <div className="spatial-stage-canvas-card">
-        {/* Interactive 3D Viewport Stage */}
+      <div className="spatial-stage-card">
+        {/* Interactive Visual Viewport */}
         <div 
-          className={cn("spatial-canvas-viewport", isDragging && "is-grabbing")}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          role="region"
-          aria-label="Interactive 360-degree spatial product inspection"
+          ref={cardRef}
+          onMouseMove={handleMouseMove}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className="spatial-viewport"
         >
-          {/* Ambient Lighting & Backdrop Halo */}
-          <div className="spatial-halo-glow" aria-hidden="true" />
-          
-          {/* Spatial Floor Shadow Plane */}
+          <div className="spatial-ambient-glow" aria-hidden="true" />
           <div className="spatial-floor-shadow" aria-hidden="true" />
 
-          {/* Interactive Rotatable 3D Product Simulation */}
           <div 
             className="spatial-product-rotor"
             style={{
-              transform: `perspective(1000px) rotateY(${rotationAngle}deg) rotateX(3deg)`,
-              transition: isDragging ? 'none' : 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)',
+              transform: isHovered
+                ? `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(1.02)`
+                : "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)",
+              transition: isHovered ? "transform 0.15s ease-out" : "transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)",
             }}
           >
             <div className="spatial-image-box">
               <Image
-                src={activeFinish.image}
-                alt={activeFinish.name}
+                src={activeItem.image}
+                alt={activeItem.title}
                 fill
                 priority
                 className="spatial-render-image"
-                sizes="(max-width: 768px) 100vw, 700px"
+                sizes="(max-width: 768px) 100vw, 600px"
               />
             </div>
           </div>
-
-          {/* 360 Drag Prompt Floating Badge */}
-          <div className="spatial-drag-hint">
-            <Rotate3d size={14} className="text-orange-600" />
-            <span>Drag to rotate 360°</span>
-          </div>
-
-          {/* Dimension Metric Marker */}
-          <div className="spatial-spec-pill">
-            <Maximize2 size={12} className="text-neutral-500" />
-            <span>180cm × 45cm × 52cm · True-to-scale</span>
-          </div>
-
-          {/* AR Trigger Button */}
-          <button
-            type="button"
-            onClick={() => setShowArModal(true)}
-            className="spatial-ar-button"
-            aria-label="Preview in Augmented Reality"
-          >
-            <Smartphone size={15} />
-            <span>View in Your Room (AR)</span>
-          </button>
         </div>
 
-        {/* Right Configuration & Value Panel */}
-        <div className="spatial-config-panel">
-          <div className="config-header">
-            <span className="config-collection">Living Architecture · 01</span>
-            <h3 className="config-title">{activeFinish.name}</h3>
-            <div className="config-price-row">
-              <span className="config-price">{activeFinish.price}</span>
-              <span className="config-lead">{activeFinish.leadTime}</span>
-            </div>
-            <p className="config-description">{activeFinish.specNote}</p>
+        {/* Showcase Selector & Studio CTA */}
+        <div className="spatial-info-panel">
+          <div className="spatial-showcase-list">
+            {SHOWCASES.map((item) => {
+              const isSelected = item.id === activeItem.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setActiveItem(item)}
+                  className={cn("spatial-item-btn", isSelected && "is-active")}
+                  aria-label={`View ${item.title}`}
+                >
+                  <div className="spatial-item-header">
+                    <span className="spatial-item-title">{item.title}</span>
+                    <span className="spatial-item-cat">{item.category}</span>
+                  </div>
+                  <p className="spatial-item-desc">{item.description}</p>
+                </button>
+              );
+            })}
           </div>
 
-          {/* Material Swatch Selector */}
-          <div className="config-finish-group">
-            <label className="config-group-label">
-              <Layers size={13} className="text-neutral-500" />
-              <span>Select Material Finish</span>
-            </label>
-            <div className="config-swatches">
-              {FINISHES.map((finish) => {
-                const isSelected = finish.id === activeFinish.id;
-                return (
-                  <button
-                    key={finish.id}
-                    type="button"
-                    onClick={() => setActiveFinish(finish)}
-                    className={cn("config-swatch-btn", isSelected && "is-selected")}
-                    aria-label={`Select ${finish.name}`}
-                  >
-                    <span 
-                      className="swatch-color-disc"
-                      style={{ backgroundColor: finish.colorHex }}
-                    />
-                    <div className="swatch-info">
-                      <span className="swatch-title">{finish.name}</span>
-                      <span className="swatch-mat">{finish.material}</span>
-                    </div>
-                    {isSelected && <Check size={14} className="swatch-check" />}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Commerce Action Strip */}
-          <div className="config-actions">
-            <button
-              type="button"
-              onClick={handleAddToCart}
-              className={cn("spatial-add-btn", isAdded && "is-success")}
-            >
-              {isAdded ? (
-                <>
-                  <Check size={16} />
-                  <span>Added to Bespoke Order</span>
-                </>
-              ) : (
-                <>
-                  <span>Order Custom Prototype</span>
-                  <ArrowRight size={15} />
-                </>
-              )}
-            </button>
-            <div className="config-guarantee">
-              <span>✓ Proven 40% reduction in customer return rates</span>
-            </div>
+          <div className="spatial-footer-cta">
+            <Link href="/contact" className="spatial-cta-btn">
+              <span>Build your custom store</span>
+              <ArrowUpRight size={16} aria-hidden="true" />
+            </Link>
           </div>
         </div>
       </div>
-
-      {/* Instant AR Simulation Modal */}
-      {showArModal && (
-        <div 
-          className="ar-modal-backdrop" 
-          onClick={() => setShowArModal(false)}
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="ar-modal-card" onClick={(e) => e.stopPropagation()}>
-            <div className="ar-modal-header">
-              <div className="ar-modal-title-row">
-                <Smartphone size={18} className="text-orange-600" />
-                <h4 className="ar-modal-title">Universal Augmented Reality</h4>
-              </div>
-              <button 
-                type="button" 
-                onClick={() => setShowArModal(false)}
-                className="ar-close-btn"
-                aria-label="Close AR modal"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="ar-modal-body">
-              <div className="ar-device-preview">
-                <div className="ar-scan-grid" />
-                <div className="ar-product-ghost">
-                  <div className="ar-snap-indicator">
-                    <span className="ar-snap-pulse" />
-                    <span>Auto-snapped to Floor Plane (0.00cm drift)</span>
-                  </div>
-                  <div className="ar-product-silhouette">
-                    <Image
-                      src={activeFinish.image}
-                      alt={activeFinish.name}
-                      width={320}
-                      height={240}
-                      className="ar-ghost-image"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="ar-modal-details">
-                <h5>Device-Aware Spatial Routing</h5>
-                <ul className="ar-protocol-list">
-                  <li>
-                    <strong>iOS Safari:</strong> Instant Apple Quick Look (.usdz)
-                  </li>
-                  <li>
-                    <strong>Android Chrome:</strong> Google Scene Viewer &amp; WebXR
-                  </li>
-                  <li>
-                    <strong>Desktop WebGL:</strong> Photo-mode room upload &amp; compositing
-                  </li>
-                </ul>
-                <p className="ar-note">
-                  Zero client friction. Customers point their camera and see exactly how the item complements their space before tapping Checkout.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
