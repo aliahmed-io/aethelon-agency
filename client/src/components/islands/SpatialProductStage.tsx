@@ -100,7 +100,6 @@ export default function SpatialProductStage() {
                 src={activeItem.image}
                 alt={activeItem.title}
                 fill
-                priority
                 className="spatial-render-image"
                 sizes="(max-width: 768px) 100vw, 600px"
               />

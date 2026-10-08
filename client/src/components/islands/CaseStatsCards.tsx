@@ -1,19 +1,14 @@
-"use client";
-
-import { useState } from "react";
+import type { CSSProperties } from "react";
 import type { ProjectMetric } from "../../../../shared/projects";
 
 const tiltAngles = ["-3.5deg", "0deg", "3.5deg", "-1.5deg"];
 
 export default function CaseStatsCards({
   metrics,
-  title,
 }: {
   metrics: readonly ProjectMetric[];
   title: string;
 }) {
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-
   return (
     <section className="stats-card-deck-section" aria-label="Main wins and quantitative performance">
       <div className="stats-deck-header">
@@ -24,20 +19,17 @@ export default function CaseStatsCards({
       <div className="stats-card-deck-container">
         {metrics.slice(0, 4).map((metric, idx) => {
           const defaultTilt = tiltAngles[idx % tiltAngles.length] || "0deg";
-          const isHovered = hoveredIdx === idx;
 
           return (
             <div
               key={metric.label + idx}
-              className={`tilted-stat-card ${isHovered ? "hovered" : ""}`}
-              style={{
-                transform: isHovered
-                  ? "translateY(-12px) scale(1.03) rotate(0deg)"
-                  : `translateY(0px) scale(1) rotate(${defaultTilt})`,
-                zIndex: isHovered ? 10 : idx === 1 ? 5 : 2,
-              }}
-              onMouseEnter={() => setHoveredIdx(idx)}
-              onMouseLeave={() => setHoveredIdx(null)}
+              className="tilted-stat-card"
+              style={
+                {
+                  transform: `translateY(0px) scale(1) rotate(${defaultTilt})`,
+                  zIndex: idx === 1 ? 5 : 2,
+                } as CSSProperties
+              }
             >
               {/* Giant Top Display Number */}
               <div className="stat-card-top">

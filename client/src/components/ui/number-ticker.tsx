@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, type ComponentPropsWithoutRef } from "react";
-import { useInView, useMotionValue, useSpring } from "motion/react";
 import { cn } from "@/lib/utils";
 
 export interface NumberTickerProps extends ComponentPropsWithoutRef<"span"> {
@@ -22,39 +21,71 @@ export function NumberTicker({
   ...props
 }: NumberTickerProps) {
   const ref = useRef<HTMLSpanElement>(null);
-  const motionValue = useMotionValue(direction === "down" ? value : startValue);
-  const springValue = useSpring(motionValue, {
-    damping: 50,
-    stiffness: 90,
-  });
-  const isInView = useInView(ref, { once: true, margin: "0px" });
 
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | null = null;
-    if (isInView) {
-      timer = setTimeout(() => {
-        motionValue.set(direction === "down" ? startValue : value);
-      }, delay * 1000);
-    }
-    return () => {
-      if (timer !== null) {
-        clearTimeout(timer);
-      }
-    };
-  }, [motionValue, isInView, delay, value, direction, startValue]);
+    const el = ref.current;
+    if (!el) return;
 
-  useEffect(
-    () =>
-      springValue.on("change", (latest) => {
-        if (ref.current) {
-          ref.current.textContent = Intl.NumberFormat("en-US", {
-            minimumFractionDigits: decimalPlaces,
-            maximumFractionDigits: decimalPlaces,
-          }).format(Number(latest.toFixed(decimalPlaces)));
+    const formatter = new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: decimalPlaces,
+      maximumFractionDigits: decimalPlaces,
+    });
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      el.textContent = formatter.format(
+        Number((direction === "down" ? startValue : value).toFixed(decimalPlaces))
+      );
+      return;
+    }
+
+    let rafId: number | null = null;
+    let delayTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const from = direction === "down" ? value : startValue;
+    const to = direction === "down" ? startValue : value;
+    const duration = 900;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry || !entry.isIntersecting) return;
+        observer.disconnect();
+
+        const startAnim = () => {
+          const startTime = performance.now();
+          const tick = (now: number) => {
+            const progress = Math.min(1, (now - startTime) / duration);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = from + (to - from) * eased;
+            if (ref.current) {
+              ref.current.textContent = formatter.format(
+                Number(current.toFixed(decimalPlaces))
+              );
+            }
+            if (progress < 1) {
+              rafId = requestAnimationFrame(tick);
+            }
+          };
+          rafId = requestAnimationFrame(tick);
+        };
+
+        if (delay > 0) {
+          delayTimer = setTimeout(startAnim, delay * 1000);
+        } else {
+          startAnim();
         }
-      }),
-    [springValue, decimalPlaces]
-  );
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      if (delayTimer !== null) clearTimeout(delayTimer);
+    };
+  }, [value, startValue, direction, delay, decimalPlaces]);
 
   return (
     <span

@@ -1,16 +1,17 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ArrowUpRight, Moon, Sun, ArrowRight } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 import { useTheme } from "../contexts/ThemeContext";
+import TransitionLink from "./TransitionLink";
+import BrandLogo from "./ui/BrandLogo";
 
 const NAV_LINKS = [
-  { label: "Portfolio", href: "/work" },
-  { label: "Services", href: "/services" },
-  { label: "About", href: "/about" },
-  { label: "Insights", href: "/insights" },
+  { label: "Portfolio", href: "/work", index: "01" },
+  { label: "Services", href: "/services", index: "02" },
+  { label: "About", href: "/about", index: "03" },
+  { label: "Insights", href: "/insights", index: "04" },
 ] as const;
 
 function ThemeToggle() {
@@ -45,64 +46,67 @@ export default function SiteHeader() {
   }, [pathname, closeMobile]);
 
   useEffect(() => {
+    if (!mobileOpen) return;
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") closeMobile();
     };
     document.addEventListener("keydown", closeOnEscape);
     return () => document.removeEventListener("keydown", closeOnEscape);
-  }, [closeMobile]);
+  }, [mobileOpen, closeMobile]);
 
   return (
     <header className="site-header">
       <div className="site-header-inner">
         {/* 1. Left: Brand Lockup */}
         <div className="header-brand-wrap">
-          <Link href="/" className="brand header-brand" onClick={closeMobile}>
-            <span className="mark-lockup" aria-hidden="true">
-              <b>AE/</b>
-            </span>
-            <span className="brand-name">Aethelon</span>
-          </Link>
-          <span className="header-tagline">Bespoke Commerce</span>
+          <TransitionLink
+            href="/"
+            transitionLabel="Home"
+            transitionIndex="00"
+            className="brand header-brand"
+            onClick={closeMobile}
+          >
+            <BrandLogo />
+          </TransitionLink>
         </div>
 
-        {/* 2. Center: Direct Studio Ribbon (Desktop) */}
+        {/* 2. Center: Direct Studio Ribbon */}
         <nav className="site-nav-ribbon" aria-label="Primary navigation">
           {NAV_LINKS.map((item) => {
             const isActive = pathname.startsWith(item.href);
             return (
-              <Link
+              <TransitionLink
                 key={item.href}
                 href={item.href}
+                transitionLabel={item.label}
+                transitionIndex={item.index}
                 prefetch
                 onPointerEnter={() => warmRoute(item.href)}
                 onFocus={() => warmRoute(item.href)}
                 className={`ribbon-item ${isActive ? "is-active" : ""}`}
               >
+                {isActive && <span className="ribbon-active-pill" aria-hidden="true" />}
                 <span>{item.label}</span>
-                {isActive && <span className="ribbon-active-pill" />}
-              </Link>
+              </TransitionLink>
             );
           })}
         </nav>
 
-        {/* 3. Right: Studio Availability & Actions */}
+        {/* 3. Right: Studio Actions */}
         <div className="header-actions">
-          <div className="header-availability-badge" title="Accepting bespoke commissions for Q2/Q3 2026">
-            <span className="avail-text">Q2/Q3 Commissions</span>
-          </div>
-
           <ThemeToggle />
 
-          <Link
+          <TransitionLink
             href="/contact"
+            transitionLabel="Contact"
+            transitionIndex="05"
             prefetch
             onPointerEnter={() => warmRoute("/contact")}
             onFocus={() => warmRoute("/contact")}
             className="nav-cta"
           >
             Start a project <ArrowUpRight size={14} aria-hidden="true" />
-          </Link>
+          </TransitionLink>
 
           {/* Minimal Mobile Trigger */}
           <button
@@ -121,25 +125,39 @@ export default function SiteHeader() {
       {mobileOpen && (
         <div className="site-mobile-drawer" role="dialog" aria-modal="true">
           <nav className="mobile-drawer-nav" aria-label="Mobile navigation">
-            <Link href="/" onClick={closeMobile} className="mobile-nav-link">
+            <TransitionLink
+              href="/"
+              transitionLabel="Home"
+              transitionIndex="00"
+              onClick={closeMobile}
+              className="mobile-nav-link"
+            >
               <span>Home</span>
               <ArrowRight size={15} aria-hidden="true" />
-            </Link>
+            </TransitionLink>
             {NAV_LINKS.map((item) => (
-              <Link
+              <TransitionLink
                 key={item.href}
                 href={item.href}
+                transitionLabel={item.label}
+                transitionIndex={item.index}
                 onClick={closeMobile}
                 className="mobile-nav-link"
               >
                 <span>{item.label}</span>
                 <ArrowRight size={15} aria-hidden="true" />
-              </Link>
+              </TransitionLink>
             ))}
-            <Link href="/contact" onClick={closeMobile} className="mobile-nav-link mobile-nav-cta">
+            <TransitionLink
+              href="/contact"
+              transitionLabel="Contact"
+              transitionIndex="05"
+              onClick={closeMobile}
+              className="mobile-nav-link mobile-nav-cta"
+            >
               <span>Start a project</span>
               <ArrowUpRight size={15} aria-hidden="true" />
-            </Link>
+            </TransitionLink>
           </nav>
           <div className="mobile-drawer-footer">
             <span className="mobile-avail-note">Accepting Q2/Q3 bespoke builds</span>

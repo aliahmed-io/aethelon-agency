@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "../../client/src/contexts/ThemeContext";
+import { TransitionProvider } from "../../client/src/contexts/TransitionContext";
 import SiteHeader from "../../client/src/components/SiteHeader";
-import RouteTransition from "../../client/src/components/RouteTransition";
+import InkVeilOverlay from "../../client/src/components/InkVeilOverlay";
 import TempComparisonPage from "../../client/src/pages/TempComparisonPage";
 
 export const metadata: Metadata = {
@@ -16,13 +17,15 @@ export const metadata: Metadata = {
 export default function TempPage() {
   return (
     <ThemeProvider defaultTheme="light" switchable>
-      <div className="app-shell temp-shell">
-        <RouteTransition />
-        <SiteHeader />
-        <main className="route-page">
-          <TempComparisonPage />
-        </main>
-      </div>
+      <TransitionProvider>
+        <div className="app-shell temp-shell">
+          <InkVeilOverlay />
+          <SiteHeader />
+          <main className="route-page">
+            <TempComparisonPage />
+          </main>
+        </div>
+      </TransitionProvider>
     </ThemeProvider>
   );
 }

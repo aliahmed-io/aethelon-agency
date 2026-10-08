@@ -3,20 +3,13 @@ import "../client/src/index.css";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { siteUrl } from "../shared/site-config";
 
-const displayFont = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
-  weight: ["500", "600", "700", "800"],
-  preload: true,
-});
-
-const bodyFont = Plus_Jakarta_Sans({
+const jakartaFont = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-body",
   display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
   preload: true,
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {
@@ -40,5 +33,9 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body className={`${bodyFont.variable} ${displayFont.variable}`}>{children}</body></html>;
+  return (
+    <html lang="en" data-theme="light" style={{ colorScheme: "light" }}>
+      <body className={jakartaFont.variable}>{children}</body>
+    </html>
+  );
 }

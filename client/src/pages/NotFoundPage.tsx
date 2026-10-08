@@ -1,5 +1,3 @@
-'use client';
-
 // Paper Signal style: editorial fallback, warm paper, charcoal ink, signal orange, clear escape route.
 import type { ReactNode } from "react";
 import Link from "next/link";

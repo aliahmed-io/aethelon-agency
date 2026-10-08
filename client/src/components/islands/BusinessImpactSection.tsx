@@ -1,19 +1,12 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { 
-  ArrowUpRight, 
-  ArrowRight,
-} from "lucide-react";
 import { NumberTicker } from "@/components/ui/number-ticker";
 import { cn } from "@/lib/utils";
 
-/**
- * Tactile 3D Tilt Card with cursor-following spotlight
- * Inspired by ReactBits SpotlightCard & TiltedCard
- */
+/* ─────────────────────────────────────────────────────────────────────────────
+   KINETIC TILT BASE (cursor-following spotlight + 3D tilt)
+   ───────────────────────────────────────────────────────────────────────────── */
 function KineticTiltCard({
   children,
   className,
@@ -34,19 +27,9 @@ function KineticTiltCard({
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     setCoords({ x, y });
-
-    // Smooth subtle tilt (-6deg to +6deg)
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotX = -((y - centerY) / centerY) * 6;
-    const rotY = ((x - centerX) / centerX) * 6;
-    setTilt({ x: rotX, y: rotY });
-  };
-
-  const handleMouseEnter = () => setIsHovered(true);
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    setTilt({ x: 0, y: 0 });
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    setTilt({ x: -((y - cy) / cy) * 6, y: ((x - cx) / cx) * 6 });
   };
 
   return (
@@ -54,8 +37,8 @@ function KineticTiltCard({
       <div
         ref={cardRef}
         onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => { setIsHovered(false); setTilt({ x: 0, y: 0 }); }}
         className={cn("kinetic-floating-card", className)}
         style={{
           transform: isHovered
@@ -63,7 +46,6 @@ function KineticTiltCard({
             : "perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0px) scale(1)",
         }}
       >
-        {/* ReactBits Cursor-Following Spotlight Glow */}
         <div
           className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300 ease-out z-0"
           style={{
@@ -71,158 +53,190 @@ function KineticTiltCard({
             background: `radial-gradient(circle 180px at ${coords.x}px ${coords.y}px, rgba(189, 59, 5, 0.08), transparent 75%)`,
           }}
         />
-        <div className="relative z-10 w-full">
-          {children}
-        </div>
+        <div className="relative z-10 w-full">{children}</div>
       </div>
     </div>
   );
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   CARD 1 — +94%  3D Commerce Conversion
+   Visual: 3 layered depth planes in perspective — spatial depth signal
+   Source: Shopify Platform Research
+   ───────────────────────────────────────────────────────────────────────────── */
+function Card3DConversion() {
+  return (
+    <KineticTiltCard className="card-orbit-top-left" floatClass="orbit-float-1">
+      <div className="card-header-row">
+        <span className="card-eyebrow-label">3D Commerce</span>
+      </div>
+
+      <div className="card-metric-wrap">
+        <span className="kinetic-stat-number">
+          +<NumberTicker value={94} className="kinetic-stat-number" />%
+        </span>
+      </div>
+
+      {/* Spatial depth visual — 3 layered perspective planes */}
+      <div className="stat3d-depth-visual" aria-hidden="true">
+        <div className="stat3d-plane stat3d-plane-back" />
+        <div className="stat3d-plane stat3d-plane-mid" />
+        <div className="stat3d-plane stat3d-plane-front" />
+      </div>
+
+      <p className="card-footnote-text">
+        Avg. conversion lift for products with 3D and AR vs. static imagery.
+      </p>
+      <div className="card-source-line">Shopify Platform Research</div>
+    </KineticTiltCard>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   CARD 2 — +35.26%  Checkout UX Conversion Lift
+   Visual: Checkout funnel — 4 bars narrowing like a purchase funnel
+   Source: Baymard Institute
+   ───────────────────────────────────────────────────────────────────────────── */
+function CardCheckoutUX() {
+  const funnelSteps = [
+    { label: "Visit", widthPct: 100 },
+    { label: "Cart", widthPct: 68 },
+    { label: "Checkout", widthPct: 44 },
+    { label: "Purchase", widthPct: 28 },
+  ] as const;
+
+  return (
+    <KineticTiltCard className="card-orbit-top-right" floatClass="orbit-float-2">
+      <div className="card-header-row">
+        <span className="card-eyebrow-label">Checkout UX</span>
+      </div>
+
+      <div className="card-metric-wrap">
+        <span className="kinetic-stat-number" style={{ fontSize: "clamp(32px, 3.5vw, 44px)" }}>
+          +<NumberTicker value={35} className="kinetic-stat-number" />
+          <span style={{ fontSize: "0.55em", letterSpacing: "-0.02em" }}>.26%</span>
+        </span>
+      </div>
+
+      {/* Funnel visualization */}
+      <div className="checkout-funnel-visual" aria-label="Purchase funnel visualization" role="img">
+        {funnelSteps.map((step) => (
+          <div key={step.label} className="funnel-row">
+            <div
+              className="funnel-bar"
+              style={{ width: `${step.widthPct}%` }}
+              title={step.label}
+            />
+          </div>
+        ))}
+      </div>
+
+      <p className="card-footnote-text">
+        Potential conversion increase from optimizing checkout friction points.
+      </p>
+      <div className="card-source-line">Baymard Institute — 78K+ data points</div>
+    </KineticTiltCard>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   CARD 3 — $3.65  Cart Recovery Revenue per Recipient
+   Visual: Dark warm card with ascending revenue signal bars
+   Source: Klaviyo — 143K+ flows analyzed
+   ───────────────────────────────────────────────────────────────────────────── */
+function CardCartRecovery() {
+  const signalBars = [0.22, 0.38, 0.52, 0.65, 0.78, 0.88, 1] as const;
+
+  return (
+    <KineticTiltCard className="card-orbit-bottom-left card-dark-recovery" floatClass="orbit-float-3">
+      <div className="card-header-row">
+        <span className="card-eyebrow-label card-eyebrow-light">Cart Recovery</span>
+      </div>
+
+      <div className="card-metric-wrap">
+        <span className="kinetic-stat-number kinetic-stat-light">$3.65</span>
+      </div>
+
+      {/* Ascending revenue signal bars */}
+      <div className="recovery-signal-bars" aria-label="Revenue recovery signal visualization" role="img">
+        {signalBars.map((h, i) => (
+          <div
+            key={i}
+            className="recovery-bar"
+            style={{ height: `${h * 100}%` }}
+          />
+        ))}
+      </div>
+
+      <p className="card-footnote-text card-footnote-light">
+        Avg. revenue per recipient generated by abandoned-cart flows.
+      </p>
+      <div className="card-source-line card-source-light">Klaviyo — 143K+ flows analyzed</div>
+    </KineticTiltCard>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   CARD 4 — 5×  AI-Assisted Conversion
+   Visual: Side-by-side comparison columns — baseline vs AI-assisted
+   Source: McKinsey — Karaca case study
+   ───────────────────────────────────────────────────────────────────────────── */
+function CardAIConversion() {
+  return (
+    <KineticTiltCard className="card-orbit-bottom-right card-ai-comparison" floatClass="orbit-float-4">
+      <div className="card-header-row">
+        <span className="card-eyebrow-label">AI-Assisted Shopping</span>
+      </div>
+
+      <div className="card-metric-wrap">
+        <span className="kinetic-stat-number">
+          5<span style={{ fontSize: "0.65em", letterSpacing: "-0.02em" }}>×</span>
+        </span>
+      </div>
+
+      {/* Comparison columns */}
+      <div className="ai-compare-columns" aria-label="Conversion rate: standard vs AI-assisted" role="img">
+        <div className="ai-compare-col">
+          <div className="ai-compare-bar ai-compare-bar-base" />
+          <span className="ai-compare-label">Standard</span>
+        </div>
+        <div className="ai-compare-col">
+          <div className="ai-compare-bar ai-compare-bar-ai" />
+          <span className="ai-compare-label ai-compare-label-ai">AI-Assisted</span>
+        </div>
+      </div>
+
+      <p className="card-footnote-text">
+        Higher conversion rate from AI-assisted sessions vs. unaided browsing.
+      </p>
+      <div className="card-source-line">McKinsey — Karaca case study</div>
+    </KineticTiltCard>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SECTION
+   ───────────────────────────────────────────────────────────────────────────── */
 export default function BusinessImpactSection() {
   return (
-    <section className="dramatic-stage-section" id="impact" aria-label="Commercial Performance Standard">
+    <section
+      className="dramatic-stage-section"
+      id="impact"
+      aria-label="Commercial Performance Standard"
+    >
       <div className="dramatic-stage-container">
-        
-        {/* HEADLINE */}
         <div className="dramatic-center-copy">
-          <h2 className="dramatic-giant-headline">
-            Stores Built to Outperform.
-          </h2>
+          <h2 className="dramatic-giant-headline">Stores Built to Outperform.</h2>
           <p className="dramatic-center-subtext">
-            Faster load times, fewer returns, higher revenue. Here's what our stores deliver.
+            Faster load times, fewer returns, higher revenue. Here&apos;s what the research says.
           </p>
         </div>
 
-        {/* CARDS */}
         <div className="dramatic-cards-orbit">
-
-          {/* ------------------------------------------------------------------
-              CARD 1: TOP-LEFT — REVENUE ACCELERATION (+38% NUMBERTICKER)
-              ------------------------------------------------------------------ */}
-          <KineticTiltCard
-            className="card-orbit-top-left"
-            floatClass="orbit-float-1"
-          >
-            <div className="card-header-row">
-              <span className="card-eyebrow-label">
-                Revenue
-              </span>
-              <Link
-                href="/contact"
-                className="card-arrow-circle"
-                aria-label="Start project for revenue lift"
-              >
-                <ArrowUpRight size={15} />
-              </Link>
-            </div>
-
-            <div className="card-metric-wrap">
-              <span className="kinetic-stat-number">
-                +<NumberTicker value={38} className="kinetic-stat-number" />%
-              </span>
-            </div>
-
-            <p className="card-footnote-text">
-              Average first-year revenue increase.
-            </p>
-          </KineticTiltCard>
-
-          {/* ------------------------------------------------------------------
-              CARD 2: TOP-RIGHT — SUB-100MS + 4-BAR METRIC SPARKLINE
-              ------------------------------------------------------------------ */}
-          <KineticTiltCard
-            className="card-orbit-top-right"
-            floatClass="orbit-float-2"
-          >
-            <div className="card-header-row">
-              <span className="card-eyebrow-label">
-                Speed
-              </span>
-            </div>
-
-            <div className="card-metric-title">
-              Sub-100ms
-            </div>
-
-            {/* 4-Bar Kinetic Latency Equalizer (Ask Phill bar chart reference) */}
-            <div className="kinetic-bar-chart" aria-label="Global latency bars">
-              <div className="kinetic-bar kinetic-bar-1" title="US East: 42ms" />
-              <div className="kinetic-bar kinetic-bar-2" title="Europe: 38ms" />
-              <div className="kinetic-bar kinetic-bar-3" title="Asia Pacific: 85ms" />
-              <div className="kinetic-bar kinetic-bar-4" title="Global Average: <100ms" />
-            </div>
-
-            <p className="card-footnote-text">
-              Global edge delivery, zero cold starts.
-            </p>
-          </KineticTiltCard>
-
-          {/* ------------------------------------------------------------------
-              CARD 3: BOTTOM-LEFT — EDITORIAL SPATIAL VISUAL
-              ------------------------------------------------------------------ */}
-          <KineticTiltCard
-            className="card-orbit-bottom-left"
-            floatClass="orbit-float-3"
-          >
-            <a href="#spatial-stage" className="spatial-preview-img-box group">
-              <Image
-                src="/images/projects/velorum-campaign.png"
-                alt="Tactile spatial 3D preview"
-                fill
-                sizes="(max-width: 768px) 100vw, 340px"
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="spatial-img-overlay" />
-              
-              <div className="spatial-pill-tag">
-                3D & AR
-              </div>
-
-              <div className="spatial-img-copy">
-                <div className="spatial-img-title">
-                  40% Return Reduction
-                </div>
-                <div className="spatial-img-link">
-                  <span>Explore spatial stage</span>
-                  <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
-                </div>
-              </div>
-            </a>
-          </KineticTiltCard>
-
-          {/* ------------------------------------------------------------------
-              CARD 4: BOTTOM-RIGHT — BESPOKE ARCHITECTURE FLAGSHIP CARD
-              ------------------------------------------------------------------ */}
-          <KineticTiltCard
-            className="card-orbit-bottom-right"
-            floatClass="orbit-float-4"
-          >
-            {/* Top Architecture Badge */}
-            <div className="partner-badge-header">
-              <div className="partner-icon-sq" aria-hidden="true">
-                ae/
-              </div>
-              <div className="partner-badge-text">
-                <span className="partner-badge-sup">Next.js 16 + Shopify API</span>
-                <span className="partner-badge-sub">Native Architecture</span>
-              </div>
-            </div>
-
-            {/* Bottom Typographic Command */}
-            <div className="partner-bottom-copy">
-              <div className="partner-prompt-text">
-                Fast by default
-              </div>
-              <div className="partner-hero-title">
-                Your Stack
-              </div>
-              <div className="partner-specs-footnote">
-                No app bloat. Sub-100ms everywhere.
-              </div>
-            </div>
-          </KineticTiltCard>
-
+          <Card3DConversion />
+          <CardCheckoutUX />
+          <CardCartRecovery />
+          <CardAIConversion />
         </div>
       </div>
     </section>

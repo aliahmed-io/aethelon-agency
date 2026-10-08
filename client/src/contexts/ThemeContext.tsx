@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 type Theme = "light" | "dark";
 
@@ -35,28 +35,34 @@ export function ThemeProvider({
   // Keep the server and first client render identical. Reading localStorage in
   // the useState initializer causes hydration mismatches on returning visitors.
   const [theme, setTheme] = useState<Theme>(defaultTheme);
-  const [isMounted, setIsMounted] = useState(false);
+  const isMountedRef = useRef(false);
 
   useEffect(() => {
+    isMountedRef.current = true;
     if (switchable) {
-      setTheme(getStoredTheme(defaultTheme));
+      const stored = getStoredTheme(defaultTheme);
+      if (stored !== defaultTheme) {
+        setTheme(stored);
+      }
     }
-    setIsMounted(true);
   }, [defaultTheme, switchable]);
 
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.toggle("dark", theme === "dark");
-    root.style.colorScheme = theme;
+    if (root.getAttribute("data-theme") !== theme) {
+      root.classList.toggle("dark", theme === "dark");
+      root.setAttribute("data-theme", theme);
+      root.style.colorScheme = theme;
+    }
 
-    if (switchable && isMounted) {
+    if (switchable && isMountedRef.current) {
       try {
         window.localStorage.setItem("theme", theme);
       } catch {
         // A blocked storage area should never prevent the site from rendering.
       }
     }
-  }, [isMounted, switchable, theme]);
+  }, [switchable, theme]);
 
   const value = useMemo<ThemeContextType>(() => ({
     theme,

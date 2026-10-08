@@ -81,7 +81,6 @@ export default function FlagshipShowcaseIsland({
           src={currentConfig.image}
           alt={`${project.title} — ${currentConfig.label}`}
           fill
-          unoptimized
           sizes="(max-width: 900px) 100vw, 92vw"
           className="cover-image showcase-canvas-image"
         />

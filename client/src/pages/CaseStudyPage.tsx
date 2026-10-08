@@ -1,10 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight, Layers, Clock, ShieldCheck, Zap } from "lucide-react";
 import { getProject, projects, type Project } from "../../../shared/projects";
-import CaseStudySpecsModal from "../components/islands/CaseStudySpecsModal";
 import CaseStatsCards from "../components/islands/CaseStatsCards";
-import CaseNarrativeVisualizer from "../components/islands/CaseNarrativeVisualizer";
+import FlagshipConversionSection from "../components/islands/FlagshipConversionSection";
 
 export default function CaseStudyPage({ slug }: { slug: string }) {
   const project = getProject(slug);
@@ -14,32 +13,39 @@ export default function CaseStudyPage({ slug }: { slug: string }) {
   // Find next project in circular sequence
   const currentIndex = projects.findIndex((p) => p.slug === slug);
   const nextProject = projects[(currentIndex + 1) % projects.length] ?? projects[0]!;
-  
+
   const relatedProjects = projects
-    .filter((p) => p.slug !== slug && (p.tier === project.tier || p.industry === project.industry || p.service === project.service))
+    .filter(
+      (p) =>
+        p.slug !== slug &&
+        (p.tier === project.tier || p.industry === project.industry || p.service === project.service)
+    )
     .slice(0, 2);
 
-  const fallbackRelated = relatedProjects.length >= 2 
-    ? relatedProjects 
-    : projects.filter((p) => p.slug !== slug).slice(0, 2);
+  const fallbackRelated =
+    relatedProjects.length >= 2
+      ? relatedProjects
+      : projects.filter((p) => p.slug !== slug).slice(0, 2);
 
-  const devNote = project.developerNote || {
-    note: "Our primary mission on this build was engineering a seamless commerce layer that eliminated the friction between bespoke high-ticket craft and automated checkout, delivering measurable revenue velocity with zero drop-off.",
-    author: "Lead Systems Architect & Product Engineer",
-    role: "Commerce Studio",
-  };
+  const galleryImages =
+    project.gallery && project.gallery.length > 0 ? project.gallery : [project.image];
+
+  const primaryShowcase = galleryImages[0] ?? project.image;
+  const secondaryGallery = galleryImages.slice(1, 5);
 
   return (
     <main className="case-study-root">
       {/* =========================================================================
-          SECTION 1: CLEAN EDITORIAL HERO WITH DIGITAL FLAGSHIP SHOWCASE IMAGE
+          1. EDITORIAL HERO
          ========================================================================= */}
       <section className="case-hero-clean-section section-pad" id="hero">
         <div className="case-hero-nav-row">
           <Link href="/work" className="case-back-link">
             ← Back to portfolio
           </Link>
-          <span className="case-client-brand">{project.client} · {project.year}</span>
+          <span className="case-client-brand">
+            {project.number ? `${project.number} · ` : ""}{project.client} · {project.year}
+          </span>
         </div>
 
         <div className="case-hero-heading-block">
@@ -47,28 +53,29 @@ export default function CaseStudyPage({ slug }: { slug: string }) {
           <p className="case-hero-subtitle">{project.subtitle}</p>
         </div>
 
-        {/* Large Cinematic Digital Flagship Hero Image */}
+        {/* Cinematic Main Interface Mockup */}
         <div className="case-hero-cinematic-frame">
           <Image
-            src={project.image}
+            src={primaryShowcase}
             alt={`${project.title} digital flagship interface`}
             fill
             sizes="(max-width: 1200px) 100vw, 92vw"
             priority
-            unoptimized
             className="cover-image"
           />
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION 2: EDITORIAL DESCRIPTION & "READ MORE" SPECIFICATIONS MODAL
+          2. CLEAN PROJECT BRIEF (NO JARGON / NO UNNECESSARY MODALS)
          ========================================================================= */}
       <section className="case-summary-clean-section section-pad" id="overview">
         <div className="summary-clean-grid">
+          {/* Metadata Column */}
           <div className="summary-meta-col">
             <span className="summary-eyebrow">Project Overview</span>
             <h2 className="summary-lead-heading">{project.thesis}</h2>
+
             <div className="summary-quick-facts">
               <div>
                 <span className="fact-label">Industry</span>
@@ -82,60 +89,93 @@ export default function CaseStudyPage({ slug }: { slug: string }) {
                 <span className="fact-label">Timeline</span>
                 <strong className="fact-val">{project.timeline}</strong>
               </div>
+              <div>
+                <span className="fact-label">Tech Stack</span>
+                <strong className="fact-val fact-stack">{project.stack}</strong>
+              </div>
             </div>
           </div>
 
+          {/* Narrative Column: Clean Context & Solution */}
           <div className="summary-body-col">
-            <p className="summary-context-paragraph">{project.context}</p>
-            <p className="summary-desc-paragraph">{project.description}</p>
-            
-            {/* Read More Detailed Specifications Trigger */}
-            <div className="summary-readmore-wrapper">
-              <CaseStudySpecsModal project={project} />
+            <div className="summary-narrative-block">
+              <span className="narrative-kicker">The Challenge</span>
+              <p className="summary-context-paragraph">{project.context}</p>
+            </div>
+
+            <div className="summary-narrative-block">
+              <span className="narrative-kicker">The Execution</span>
+              <p className="summary-desc-paragraph">{project.description}</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION 3: MAIN WINS & STATS IN ANIMATED TILTED CARD DECK (IMAGE 1)
+          3. KEY QUANTITATIVE OUTCOMES & PERFORMANCE
          ========================================================================= */}
-      <section className="case-stats-section section-pad" id="wins">
-        <CaseStatsCards metrics={project.metrics} title={project.title} />
-      </section>
+      {project.metrics && project.metrics.length > 0 && (
+        <section className="case-stats-section section-pad" id="wins">
+          <CaseStatsCards metrics={project.metrics} title={project.title} />
+        </section>
+      )}
 
       {/* =========================================================================
-          SECTION 4: DEVELOPER & STUDIO ARCHITECTURAL COMMENTARY
+          4. VISUAL CRAFT & ARCHITECTURAL SHOWCASE GALLERY
          ========================================================================= */}
-      <section className="case-architect-note-section section-pad" id="commentary">
-        <div className="architect-note-container">
-          <span className="note-eyebrow">Studio Commentary &amp; Architectural Reflection</span>
-          
-          <blockquote className="architect-quote-text">
-            “{devNote.note}”
-          </blockquote>
+      {secondaryGallery.length > 0 && (
+        <section className="case-gallery-section section-pad" id="gallery">
+          <div className="gallery-section-header">
+            <span className="gallery-eyebrow">Visual Craft &amp; Interaction</span>
+            <h2>Interface &amp; systems gallery</h2>
+            <p>Every detail engineered for performance, precision typography, and intuitive customer feel.</p>
+          </div>
 
-          <div className="architect-signature-row">
-            <div className="architect-profile">
-              <strong>{devNote.author}</strong>
-              <span>{devNote.role} · Execution Lead</span>
-            </div>
-            <div className="architect-stamp">
-              <span>Verified Production Architecture</span>
+          <div className="case-gallery-grid">
+            {secondaryGallery.map((imgSrc, idx) => (
+              <div
+                key={imgSrc + idx}
+                className={`case-gallery-item ${
+                  idx === 0 && secondaryGallery.length % 2 !== 0 ? "item-full-width" : ""
+                }`}
+              >
+                <div className="gallery-image-wrapper">
+                  <Image
+                    src={imgSrc}
+                    alt={`${project.title} design showcase ${idx + 1}`}
+                    fill
+                    sizes="(max-width: 900px) 100vw, 48vw"
+                    className="cover-image"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* =========================================================================
+          5. AUTHENTIC CLIENT OUTCOME / TESTIMONIAL QUOTE
+         ========================================================================= */}
+      {project.quote && project.quote.quote && (
+        <section className="case-quote-section section-pad" id="quote">
+          <div className="case-quote-container">
+            <span className="quote-eyebrow">Client Reflection</span>
+            <blockquote className="case-quote-text">
+              “{project.quote.quote}”
+            </blockquote>
+            <div className="case-quote-author">
+              <strong>{project.quote.author}</strong>
+              <span>
+                {project.quote.role} · {project.quote.company}
+              </span>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* =========================================================================
-          SECTION 5: ARCHITECTURE, ENGINEERING & ROLLOUT (IMAGE 2 ANNOTATIONS)
-         ========================================================================= */}
-      <section className="case-visualizer-section section-pad" id="architecture">
-        <CaseNarrativeVisualizer project={project} />
-      </section>
-
-      {/* =========================================================================
-          SECTION 6: NEXT CASE STUDY & RELATED PLATFORMS
+          6. NEXT CASE STUDY TRANSITION
          ========================================================================= */}
       <section className="case-next-project-section section-pad" id="next">
         <div className="next-project-intro">
@@ -149,7 +189,6 @@ export default function CaseStudyPage({ slug }: { slug: string }) {
               src={nextProject.image}
               alt={`${nextProject.title} — ${nextProject.subtitle}`}
               fill
-              unoptimized
               sizes="(max-width: 900px) 100vw, 45vw"
               className="cover-image"
             />
@@ -185,7 +224,6 @@ export default function CaseStudyPage({ slug }: { slug: string }) {
                     src={rel.image}
                     alt={rel.title}
                     fill
-                    unoptimized
                     sizes="(max-width: 760px) 100vw, 45vw"
                     className="cover-image"
                   />
@@ -204,26 +242,10 @@ export default function CaseStudyPage({ slug }: { slug: string }) {
         </div>
       </section>
 
-      {/* Direct Discovery Call Banner */}
-      <section className="case-conversion-banner section-pad">
-        <div className="case-conversion-box">
-          <div className="conversion-copy">
-            <span className="conversion-kicker">Direct Senior Execution</span>
-            <h2>Ready to engineer your next digital flagship?</h2>
-            <p>
-              Let&apos;s discuss your commercial architecture, custom 3D configurator, or full-stack migration. Fixed-scope sprint delivery with zero agency bloat.
-            </p>
-          </div>
-          <div className="conversion-actions">
-            <Link href="/contact" className="button button-dark conversion-btn">
-              Start a Discovery Call <ArrowUpRight size={16} aria-hidden="true" />
-            </Link>
-            <Link href="/services" className="text-link conversion-link">
-              Explore capabilities &amp; pricing <ArrowDownRight size={15} aria-hidden="true" />
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* =========================================================================
+          7. DIRECT ENGAGEMENT & EMAIL INTAKE CARD
+         ========================================================================= */}
+      <FlagshipConversionSection />
     </main>
   );
 }

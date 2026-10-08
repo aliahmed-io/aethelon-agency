@@ -1,50 +1,60 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Sparkles } from "lucide-react";
 import { insightIndex, insightTopics } from "../lib/insight-index";
 import InsightsArchiveIsland from "../components/islands/InsightsArchiveIsland";
-import NewsletterForm from "../components/islands/NewsletterForm";
-
-function SectionLabel({ children, index }: { children: React.ReactNode; index?: string }) {
-  return (
-    <div className="section-label">
-      <span>{index || ""}</span>
-      <span>{children}</span>
-      <span className="label-line" />
-    </div>
-  );
-}
+import FlagshipConversionSection from "../components/islands/FlagshipConversionSection";
 
 export default function InsightsPage() {
   return (
     <main className="inner-page insights-page">
-      <div className="inner-hero knowledge-hero">
-        <SectionLabel index="05">Knowledge / field notes</SectionLabel>
-        <h1>
-          Useful notes<br />
-          for <em>better commerce.</em>
+      {/* 1. MODERN EDITORIAL HERO */}
+      <div className="inner-hero modern-insights-hero">
+        <div className="modern-hero-pill">
+          <Sparkles size={12} aria-hidden="true" />
+          <span>Research Publications & Field Notes</span>
+        </div>
+
+        <h1 className="modern-insights-title">
+          Useful notes for<br />
+          <em>better commerce.</em>
         </h1>
-        <p>
-          Evidence-backed thinking on the systems that make an ecommerce business easier to choose, easier to run, and
-          easier to grow.
+
+        <p className="modern-insights-subtitle">
+          Evidence-backed thinking on the technical systems and design choices that make modern commerce storefronts faster to load, easier to buy from, and simpler to scale.
         </p>
-        <div className="knowledge-hero-meta">
-          <span>
-            <b>{insightIndex.length}</b> notes in the archive
-          </span>
-          <span>
-            <b>2026</b> editorial series
-          </span>
-          <span>
-            <b>01</b> honest source rule
-          </span>
+
+        <div className="modern-insights-stats-deck">
+          <div className="modern-stat-card">
+            <strong>{insightIndex.length}</strong>
+            <span>Field Notes in Archive</span>
+          </div>
+          <div className="modern-stat-card">
+            <strong>2026</strong>
+            <span>Editorial Series</span>
+          </div>
+          <div className="modern-stat-card">
+            <strong>Sub-100ms</strong>
+            <span>Performance Standard</span>
+          </div>
+          <div className="modern-stat-card">
+            <strong>100%</strong>
+            <span>Peer-Verified Data</span>
+          </div>
         </div>
       </div>
 
+      {/* 2. ARCHIVE WITH CATEGORY TOPIC FILTERS & EDITORIAL GRID */}
       <InsightsArchiveIsland insightIndex={insightIndex} insightTopics={insightTopics} />
 
+      {/* 3. THE GROWTH / SEO SYSTEM PREVIEW */}
       <section className="seo-plan-preview">
         <div>
-          <SectionLabel index="05—B">The growth layer</SectionLabel>
+          <div className="section-label">
+            <span>02</span>
+            <span>The Growth Layer</span>
+            <span className="label-line" />
+          </div>
           <h2>
             SEO is the system<br />
             <em>behind the signal.</em>
@@ -52,30 +62,16 @@ export default function InsightsPage() {
         </div>
         <div>
           <p>
-            A practical plan for turning the knowledge hub, commerce routes, and product data into a clearer search
-            surface—without promising rankings we have not measured.
+            A practical architectural guide for turning technical performance, structured metadata, and editorial routes into a compounding organic search surface—without vanity keyword stuffing or gimmicks.
           </p>
           <Link href="/insights/seo-for-commerce-that-compounds" className="text-link">
-            Read the SEO note <ArrowUpRight size={16} aria-hidden="true" />
+            Read the SEO architectural note <ArrowUpRight size={16} aria-hidden="true" />
           </Link>
         </div>
       </section>
 
-      <div className="newsletter">
-        <div>
-          <span className="eyebrow">
-            One useful note, occasionally
-          </span>
-          <h2>
-            No noise.<br />
-            <em>Just signal.</em>
-          </h2>
-        </div>
-        <div>
-          <p>Join the small list for practical commerce thinking, not a weekly content treadmill.</p>
-          <NewsletterForm />
-        </div>
-      </div>
+      {/* 4. PRE-FOOTER CONVERSION & EMAIL CAPTURE */}
+      <FlagshipConversionSection />
     </main>
   );
 }

@@ -337,8 +337,8 @@ export default function HeroFannedCards() {
                   alt={card.title}
                   fill
                   sizes="(max-width: 760px) 70vw, 340px"
-                  priority={idx < 2}
-                  unoptimized
+                  priority={idx === 1}
+
                   draggable={false}
                   className="fanned-card-img"
                   style={{ objectPosition: card.objectPosition, pointerEvents: "none" }}

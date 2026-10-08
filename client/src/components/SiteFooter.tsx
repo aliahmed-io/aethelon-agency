@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import BrandLogo from "./ui/BrandLogo";
 
 export default function SiteFooter() {
   return (
@@ -20,10 +21,7 @@ export default function SiteFooter() {
       </div>
       <div className="footer-bottom">
         <div className="brand footer-brand">
-          <span className="mark-lockup" aria-hidden="true">
-            <b>AE/</b>
-          </span>
-          <span>Aethelon</span>
+          <BrandLogo />
         </div>
         <div className="footer-links">
           <Link href="/work">Portfolio</Link>
@@ -33,8 +31,12 @@ export default function SiteFooter() {
           <Link href="/contact">Contact</Link>
         </div>
         <div className="footer-meta">
-          <Link href="/contact">Start a project</Link>
-          <span>© 2026 Aethelon</span>
+          <div className="footer-legal-links">
+            <Link href="/privacy-policy">Privacy Policy</Link>
+            <Link href="/cookie-policy">Cookie Policy</Link>
+            <Link href="/terms-and-conditions">Terms &amp; Conditions</Link>
+          </div>
+          <span>© 2026 Aethelon. All rights reserved.</span>
         </div>
       </div>
     </footer>

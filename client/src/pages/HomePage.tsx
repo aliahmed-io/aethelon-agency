@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import {
@@ -19,66 +17,68 @@ import {
   AccordionTrigger,
 } from "../components/ui/accordion";
 
-/* --- CLIENT HIGHLIGHTS TICKER --- */
+/* --- STUDIO PRACTICES & OFFERS TICKER --- */
 const protocols = [
-  { spec: "Custom Design & Headless Dev", tag: "Shopify + Next.js" },
-  { spec: "Fast 2–4 Week Delivery", tag: "Guaranteed Timeline" },
-  { spec: "Affordable Fixed Rates", tag: "From $2,000" },
-  { spec: "Sub-100ms Page Speed", tag: "Higher Conversion" },
-  { spec: "Interactive 3D & AR", tag: "40% Fewer Returns" },
-  { spec: "2 Months Free Maintenance", tag: "Full Support Included" },
-  { spec: "Automated Cart Recovery", tag: "15% More Sales" },
-  { spec: "Senior Engineers", tag: "No Agency Overhead" },
+  { spec: "Packages from $2,000—$4,000", tag: "Fixed Price" },
+  { spec: "$400 Deposit to Start", tag: "20% Kick-off" },
+  { spec: "Live in 10—14 Days", tag: "Fast Turnaround" },
+  { spec: "Headless or Full Custom", tag: "Shopify / Woo / Custom DB" },
+  { spec: "5—10 Custom 3D Models", tag: "Mobile & Desktop AR" },
+  { spec: "2 Months Free Support", tag: "Optional $200/mo Care Plan" },
+  { spec: "Direct Senior Engineer", tag: "No Agency Overhead" },
+  { spec: "100% Code Ownership", tag: "Zero Lock-In" },
 ];
-
-
 
 /* --- FAQ --- */
 const transparentFaqItems = [
   {
-    question: "What are your realistic project scopes, turnaround times, and pricing?",
+    question: "What are your packages, turnaround times, and payment milestones?",
     answer:
-      "We operate exclusively on fixed-scope, milestone-based agreements—typically ranging from $2k to $5k for bespoke storefronts, interactive 3D configurators, or performance overhauls. Projects are delivered within 3 to 5 weeks with weekly staging demos. You receive a guaranteed price and timeline upfront with zero surprise billing.",
+      "We offer transparent, fixed-price packages from $2,000 to $4,000 with fast 10 to 14 day delivery. You start with just a 20% deposit ($400 on the $2k package) and pay across 4 zero-risk checkpoints: 20% at kickoff, 30% after you approve the interactive design, 30% when you test the live working staging store, and 20% at launch. You only pay the next step after you see and approve the work on a live link.",
   },
   {
-    question: "Can you build on top of our existing Shopify backend?",
+    question: "Can I keep my existing Shopify or WooCommerce backend—or get a 100% custom website?",
     answer:
-      "Yes. We connect custom Next.js storefronts directly to your existing Shopify backend via the Storefront GraphQL API. Your product database, order management, inventory counts, discount codes, and payment gateways remain completely intact while the customer-facing experience is dramatically accelerated.",
+      "Both! If you use Shopify or WooCommerce, there is zero migration headache: you keep your existing product catalog, inventory, orders, and checkout while we supercharge the storefront your customers see. If you prefer complete independence with zero platform fees, we also build 100% custom full-stack websites with a custom database and admin dashboard.",
   },
   {
-    question: "How do you ensure 3D configurators run smoothly on budget mobile phones?",
+    question: "How do the 3D viewers, Desktop/Mobile AR, and AI assistant increase sales?",
     answer:
-      "Every 3D asset adheres to strict performance budgets: lightweight compressed geometries, modern texture compression, and device-aware progressive fallbacks. On lower-powered devices, customers get fluid 60fps interaction without battery drain or stutter.",
+      "Shoppers can rotate 3D models, place products in their room on mobile AR, or upload a photo of their room right on their desktop—lifting conversion rates by up to 94% and cutting returns by 40%. Meanwhile, our 24/7 AI product assistant answers sizing and shipping questions in under 3 seconds, and automated 2-stage cart recovery emails (1h & 24h) recover 10–15% of lost sales automatically.",
   },
   {
-    question: "Do we own the intellectual property and code upon project completion?",
+    question: "What happens after launch? Do I own the code?",
     answer:
-      "Yes, 100%. Upon launch, full ownership of the private Git repository, design assets, and deployment configuration is transferred to you. There are zero recurring agency licensing fees and zero vendor lock-in.",
+      "You own 100% of the code, repository, and 3D assets from day one with zero lock-in. Every build includes 2 full months of free support and updates after launch. Need ongoing help after that? We offer an optional $200/mo care plan that you can pause or cancel anytime.",
   },
   {
-    question: "When should an e-commerce brand NOT go bespoke?",
+    question: "Why are your builds $2,000–$4,000 when traditional agencies charge $15,000+?",
     answer:
-      "If your store sells fewer than 5 simple items and an off-the-shelf theme already satisfies your revenue goals, a bespoke store is unnecessary. You should invest in a bespoke build when your brand requires distinctive luxury positioning, true-to-scale 3D product previews, or sub-100ms global speeds that standard themes cannot deliver.",
+      "When you hire a traditional agency, you pay for account managers, sales directors, office overhead, and junior developer handoffs. At Aethelon, you collaborate 1-on-1 directly with the senior engineer building your store—giving you a $15k flagship storefront in 10 days at a fraction of the cost.",
   },
 ];
 
 export default function HomePage() {
   return (
-    <>
+    <div>
       {/* ====================================================================
           HERO
           ==================================================================== */}
       <div className="hero-landing-fold">
         <section className="hero-unified-canvas">
-          <HeroFannedCards />
+          <div data-reveal="cards" style={{ width: "100%", height: "100%" }}>
+            <HeroFannedCards />
+          </div>
           <div className="hero-copy-layered">
             <div className="hero-copy-inner">
-              <div className="eyebrow">Commerce Engineering Studio</div>
-              <h1>Custom online stores for brands that refuse to blend in.</h1>
-              <p>We design and build Next.js storefronts, interactive 3D product experiences, and fast commerce systems. Senior engineers. No templates.</p>
+              <div className="eyebrow">Direct Senior Commerce Engineering · Live in 10 Days</div>
+              <h1 data-reveal="headline">Custom online stores for brands that refuse to blend in.</h1>
+              <p>
+                Keep your existing Shopify/WooCommerce backend or launch a 100% custom full-stack platform—complete with 3D/AR room previews, 24/7 AI search, and automated cart recovery. Fixed packages from $2,000 ($400 to start).
+              </p>
               <div className="hero-actions">
-                <Link className="button button-dark" href="/contact">
-                  Start your project <ArrowUpRight size={15} aria-hidden="true" />
+                <Link className="button button-dark" href="/services">
+                  View $2k–$4k packages <ArrowUpRight size={15} aria-hidden="true" />
                 </Link>
                 <a className="text-link" href="#impact">
                   Explore business impact <ArrowDownRight size={15} aria-hidden="true" />
@@ -90,7 +90,7 @@ export default function HomePage() {
 
         {/* TICKER */}
         <div className="tech-protocol-strip" aria-label="Aethelon studio performance standards">
-          <Marquee pauseOnHover repeat={4} className="[--duration:38s]">
+          <Marquee pauseOnHover repeat={2} className="[--duration:38s]">
             {protocols.map((proto) => (
               <div key={proto.spec} className="protocol-badge-item">
                 <span className="proto-spec">{proto.spec}</span>
@@ -118,7 +118,7 @@ export default function HomePage() {
         <section className="section-pad-lg" id="faq">
           <div className="section-head-wrap">
             <h2>Answers before we start.</h2>
-            <p>Clear scope, honest timelines, and straightforward pricing.</p>
+            <p>Clear $2k–$4k packages, 10-day delivery, and $400 deposit to start.</p>
           </div>
 
           <div className="faq-container-wrap">
@@ -144,6 +144,6 @@ export default function HomePage() {
         {/* CTA */}
         <FlagshipConversionSection />
       </main>
-    </>
+    </div>
   );
 }

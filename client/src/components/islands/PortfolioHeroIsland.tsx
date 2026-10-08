@@ -3,7 +3,7 @@
 import React, { useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDownRight, ArrowUpRight, Sparkles, Layers, ShieldCheck, Zap } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
 interface FloatingProject {
   readonly id: string;
@@ -34,12 +34,12 @@ const floatingProjects: readonly FloatingProject[] = [
     defaultZ: 6,
   },
   {
-    id: "novexa",
-    title: "Novexa Footwear",
-    category: "AI & 3D Platform",
-    image: "/images/projects/novexa.png",
-    slug: "novexa-product-commerce",
-    stack: "Three.js · Gemini AI",
+    id: "oakwell",
+    title: "Oakwell Atelier",
+    category: "Handcrafted Luxury",
+    image: "/images/projects/oakwell.png",
+    slug: "oakwell-furniture-commerce",
+    stack: "Next.js 16 · Freight Engine",
     slotClass: "orbit-card-bottom-left",
     depth: "midground",
     baseScale: 1.0,
@@ -47,12 +47,12 @@ const floatingProjects: readonly FloatingProject[] = [
     defaultZ: 5,
   },
   {
-    id: "velorum",
-    title: "Velorum Horology",
-    category: "Luxury Horology",
-    image: "/images/projects/velorum.png",
-    slug: "velorum-watch-commerce",
-    stack: "WebGL · 99 Lighthouse",
+    id: "monolith",
+    title: "The Monolith",
+    category: "Bauhaus Architecture",
+    image: "/images/projects/monolith-hero-v2.png",
+    slug: "the-monolith",
+    stack: "Three.js · WebGL · React",
     slotClass: "orbit-card-bottom-right",
     depth: "background",
     baseScale: 0.96,
@@ -66,8 +66,8 @@ export default function PortfolioHeroIsland() {
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
   const [dragOffsets, setDragOffsets] = useState<Record<string, { x: number; y: number }>>({
     aethelon: { x: 0, y: 0 },
-    novexa: { x: 0, y: 0 },
-    velorum: { x: 0, y: 0 },
+    oakwell: { x: 0, y: 0 },
+    monolith: { x: 0, y: 0 },
   });
   const [stageMouse, setStageMouse] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
@@ -249,7 +249,7 @@ export default function PortfolioHeroIsland() {
                       src={project.image}
                       alt={project.title}
                       fill
-                      unoptimized
+                      priority={project.id === "aethelon"}
                       sizes="240px"
                       className="cover-image orbit-card-img"
                       draggable={false}
@@ -292,26 +292,6 @@ export default function PortfolioHeroIsland() {
               Jump to Project Archive <ArrowDownRight size={15} aria-hidden="true" />
             </a>
           </div>
-        </div>
-      </div>
-
-      {/* Hero Stats & Verification Strip */}
-      <div className="portfolio-hero-stats-strip">
-        <div className="stat-pill">
-          <Layers size={13} className="stat-pill-icon" aria-hidden="true" />
-          <span><strong>4</strong> Full-Stack Platforms</span>
-        </div>
-        <div className="stat-pill">
-          <Sparkles size={13} className="stat-pill-icon" aria-hidden="true" />
-          <span><strong>5</strong> Visual Design Studies</span>
-        </div>
-        <div className="stat-pill">
-          <Zap size={13} className="stat-pill-icon" aria-hidden="true" />
-          <span><strong>100/100</strong> Performance Baseline</span>
-        </div>
-        <div className="stat-pill">
-          <ShieldCheck size={13} className="stat-pill-icon" aria-hidden="true" />
-          <span><strong>Production-Ready</strong> Codebases</span>
         </div>
       </div>
     </div>

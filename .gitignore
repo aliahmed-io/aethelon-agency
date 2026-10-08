@@ -118,3 +118,8 @@ research/*.json
 client/public/__manus__/version.json
 .project-config.json
 
+# Local runtime lead storage (PII privacy)
+data/*
+!data/.gitkeep
+
+

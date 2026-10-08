@@ -146,7 +146,6 @@ export default function WorkArchiveIsland({
                     src={project.image}
                     alt={`${project.title} — ${project.subtitle}`}
                     fill
-                    unoptimized
                     sizes="(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="cover-image"
                   />

@@ -1,33 +1,37 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
 const SERVICES = [
   {
-    title: "Headless Storefronts",
-    description: "Fast Next.js frontends connected to your existing Shopify or WooCommerce backend.",
+    title: "Headless or 100% Custom Store",
+    description:
+      "No migration headache: keep your existing Shopify or WooCommerce backend, inventory, and checkout—or launch a 100% custom full-stack website.",
   },
   {
-    title: "Custom Design",
-    description: "Distinctive UI designed for your brand. No templates, no themes.",
+    title: "Desktop + Mobile AR Room Preview",
+    description:
+      "Customers place 3D products in their room on their phone OR upload a room photo on desktop to preview fit and materials before buying.",
   },
   {
-    title: "3D & AR Experiences",
-    description: "Interactive product previews that let customers inspect and place items in their space.",
+    title: "24/7 AI Assistant & Smart Search",
+    description:
+      "Catalog-trained AI shopping assistant that answers sizing, shipping, and product questions in under 3 seconds, paired with intent-aware search.",
   },
   {
-    title: "AI-Powered Search",
-    description: "Smart product discovery that understands what your customers actually mean.",
+    title: "2-Stage Abandoned Cart Recovery",
+    description:
+      "Automated follow-up emails at 1 hour and 24 hours plus wishlist price-drop alerts that recover 10–15% of lost sales with zero ad spend.",
   },
   {
-    title: "Cart Recovery",
-    description: "Automated follow-ups that recover 10–15% of abandoned sales.",
+    title: "Automated Revenue & SEO Blog",
+    description:
+      "Newsletter welcome sequences ($36 return per $1 spent), campaign blast generator, custom admin dashboard, and fast SEO blog infrastructure.",
   },
   {
-    title: "Operations Dashboards",
-    description: "Real-time analytics, inventory tracking, and daily performance summaries.",
+    title: "2 Months Free Support + Care Plan",
+    description:
+      "Includes 2 months of free support & updates after launch. Need ongoing help after that? Optional $200/mo care plan—cancel anytime, zero lock-in.",
   },
 ];
 
@@ -35,8 +39,10 @@ export default function ServicesCapabilitiesGrid() {
   return (
     <section className="section-pad-lg" id="services">
       <div className="section-head-wrap">
-        <h2>What we build.</h2>
-        <p>From fast storefronts to interactive 3D, AI search, and automated revenue recovery.</p>
+        <h2>Everything a high-converting store needs.</h2>
+        <p>
+          Delivered in 10–14 days for $2,000–$4,000 fixed price. Start with just a $400 deposit and pay as you approve each live step.
+        </p>
       </div>
 
       <div className="services-simple-grid">
@@ -49,8 +55,8 @@ export default function ServicesCapabilitiesGrid() {
       </div>
 
       <div className="services-cta-row">
-        <Link href="/contact" className="services-cta-link">
-          <span>Start a project</span>
+        <Link href="/services" className="services-cta-link">
+          <span>View $2k–$4k packages &amp; 10-day roadmap</span>
           <ArrowUpRight size={15} aria-hidden="true" />
         </Link>
       </div>
