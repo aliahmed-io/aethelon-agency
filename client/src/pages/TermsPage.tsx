@@ -31,31 +31,38 @@ const TERMS_SECTIONS: readonly LegalSection[] = [
   },
   {
     id: "commercial-model",
-    title: "Engagement Model & 3-Stage Milestone Plan",
+    title: "Engagement Model & 4-Stage Risk-Free Milestone Plan",
     kicker: "Delivery",
     content: (
       <>
         <p>
-          Aethelon operates exclusively on <strong>fixed-scope, milestone-based agreements</strong> with guaranteed turnarounds
-          (typically 2 to 4 weeks for bespoke storefronts and interactive 3D configurators).
+          Aethelon operates on <strong>fixed-price, milestone-based agreements</strong> with fast, predictable turnarounds
+          (typically <strong>10 to 14 days</strong> for custom Next.js storefronts and flagship 3D &amp; AI commerce builds,
+          available either as a headless frontend connected to your existing Shopify/WooCommerce backend or as a 100% custom
+          full-stack platform).
         </p>
-        <p>Unless customized in an approved Statement of Work, standard builds follow our codified 3-stage milestone schedule:</p>
+        <p>Unless customized in an approved Statement of Work, standard builds follow our codified 4-stage milestone schedule:</p>
         <ul className="legal-list">
           <li>
-            <strong>Milestone 1 — Architecture &amp; Kick-off Deposit (40%):</strong> Covers technical blueprinting,
-            design tokens, component architecture, and project reservation. Payable prior to sprint commencement.
+            <strong>Milestone 1 — Kick-off &amp; Scope Deposit (20% — $400 on a $2,000 build):</strong> Reserves your 10-day
+            engineering sprint and covers architecture setup, design system tokens, and catalog integration planning.
           </li>
           <li>
-            <strong>Milestone 2 — Interactive Staging Approval (30%):</strong> Delivered as a functional, interactive
-            Next.js staging deployment connected to your product catalog with 3D/AR previews and cart flows.
+            <strong>Milestone 2 — Interactive Design Approval (30%):</strong> Payable only after you review and approve the
+            interactive design preview on a live staging link (typically Day 4).
           </li>
           <li>
-            <strong>Milestone 3 — Production QA &amp; Launch (30%):</strong> Full cross-device QA, edge performance optimization,
-            DNS propagation, live deployment, and complete transfer of private Git repositories and administrative ownership.
+            <strong>Milestone 3 — Working Staging Storefront (30%):</strong> Payable only after you test the full working
+            staging site with your products, checkout flow, cart recovery, and 3D/AI features on a live URL (typically Day 8).
+          </li>
+          <li>
+            <strong>Milestone 4 — Production Launch &amp; Git Handoff (20%):</strong> Payable at launch upon cross-device QA,
+            Core Web Vitals verification, DNS cutover, and full transfer of private Git repositories and administrative ownership
+            (typically Day 10–14).
           </li>
         </ul>
         <p>
-          Invoices are payable upon receipt. Work on subsequent milestones proceeds upon formal sign-off and settlement of the
+          Invoices are payable upon milestone approval. Work on subsequent milestones proceeds upon sign-off and settlement of the
           preceding milestone.
         </p>
       </>
@@ -68,11 +75,11 @@ const TERMS_SECTIONS: readonly LegalSection[] = [
     content: (
       <>
         <p>
-          <strong>You own your storefront.</strong> Upon full settlement of all milestones in the project agreement,
+          <strong>You own your storefront 100%.</strong> Upon full settlement of all milestones in the project agreement,
           Aethelon assigns and transfers to the Client complete, unencumbered intellectual property ownership of:
         </p>
         <ul className="legal-list">
-          <li>The entire private Git repository containing custom Next.js frontend code, React components, and styling systems;</li>
+          <li>The entire private Git repository containing custom Next.js frontend/backend code, React components, and styling systems;</li>
           <li>All bespoke UI/UX designs, Figma artifacts, and vector brand assets created specifically for the project;</li>
           <li>Custom 3D geometries, glTF/GLB models, shaders, and AR asset configurations commissioned under the agreement.</li>
         </ul>
@@ -95,19 +102,19 @@ const TERMS_SECTIONS: readonly LegalSection[] = [
     kicker: "Collaboration",
     content: (
       <>
-        <p>Timely delivery relies on active client partnership. The Client agrees to:</p>
+        <p>Fast 10–14 day delivery relies on responsive collaboration. The Client agrees to:</p>
         <ul className="legal-list">
           <li>
-            <strong>Asset &amp; Access Provision:</strong> Provide required branding assets, photography, catalog data,
-            and necessary API access (such as Shopify Storefront API tokens or headless CMS credentials) prior to sprint kickoff.
+            <strong>Asset &amp; Access Provision:</strong> Provide required branding assets, product photography, catalog data,
+            and necessary API access (such as Shopify Storefront API tokens, WooCommerce keys, or Stripe credentials) at kickoff.
           </li>
           <li>
-            <strong>Feedback Turnaround:</strong> Review staging milestones and provide consolidated technical or design
-            feedback within five (5) business days of presentation.
+            <strong>Feedback Turnaround:</strong> Review live staging milestones and provide consolidated design or functional
+            feedback within three (3) business days of presentation to keep the 10–14 day launch timeline on track.
           </li>
           <li>
-            <strong>Third-Party Accounts:</strong> Maintain active subscriptions for third-party hosting, platform fees (Shopify Plus),
-            domain registrars, and external API services.
+            <strong>Third-Party Accounts:</strong> Maintain active subscriptions for chosen third-party platforms (such as Shopify,
+            WooCommerce, domain registrars, or cloud hosting).
           </li>
         </ul>
         <p>
@@ -120,39 +127,39 @@ const TERMS_SECTIONS: readonly LegalSection[] = [
   },
   {
     id: "revisions",
-    title: "Revisions & Scope Boundaries",
+    title: "Revisions & Modular Add-Ons",
     kicker: "Modifications",
     content: (
       <>
         <p>
-          Every standard build includes <strong>five (5) complimentary revision rounds</strong> during the design and staging phases
-          to ensure pixel-perfect delivery to brand standards.
+          Every standard build includes <strong>complimentary revision rounds at both the Design Preview and Staging milestones</strong>
+          to ensure pixel-perfect alignment with your brand before you approve the milestone.
         </p>
         <p>
-          Requests for architectural alterations, new page templates, third-party integration shifts, or features outside the
-          written Statement of Work are treated as Change Orders. Aethelon will submit a fixed-cost and timeline impact assessment
-          for written client approval before executing any out-of-scope work.
+          Optional modular add-ons (such as Extra 3D Product Models at $400, Standalone AI Shopping Assistant at $500, Smart AI
+          Search at $400, or Extra Custom Landing Pages at $200) or out-of-scope custom features can be added at any time via a
+          fixed-price written approval.
         </p>
       </>
     ),
   },
   {
     id: "warranty",
-    title: "Warranty & Post-Launch Maintenance",
+    title: "2 Months Free Support & Optional Care Plan",
     kicker: "Assurance",
     content: (
       <>
         <p>
-          Every custom storefront includes <strong>two (2) months of complimentary maintenance and bug-fix warranty</strong> commencing
-          on the official production launch date.
+          Every custom storefront includes <strong>two (2) months of complimentary post-launch support, updates, and bug-fix warranty</strong>
+          commencing on the official production launch date.
         </p>
         <p>
-          During the warranty window, Aethelon will rectify any software defects, functional regressions, or layout anomalies
-          reported by the Client that deviate from the agreed specifications at zero additional charge.
+          During this 60-day window, Aethelon will rectify any software defects, functional regressions, or layout issues
+          and assist with minor content adjustments at zero additional charge.
         </p>
         <p>
-          Following the warranty period, ongoing support, continuous conversion optimization, and new feature velocity are
-          available via our dedicated monthly Retainer Packages (10h/mo or 20h/mo).
+          Following the initial 2-month free support period, clients may optionally enroll in our <strong>$200/month Care Plan</strong>
+          covering ongoing updates, speed monitoring, security patches, and priority engineering support—cancel anytime with zero lock-in.
         </p>
       </>
     ),
@@ -205,7 +212,7 @@ const TERMS_SECTIONS: readonly LegalSection[] = [
           accordance with international commercial principles and applicable statutory laws.
         </p>
         <p>
-          In the event of a disagreement, both parties commit to an initial 30-day period of amicable executive consultation.
+          In the event of a disagreement, both parties commit to an initial 30-day period of amicable consultation.
           If unresolved, disputes shall be submitted to binding commercial arbitration conducted in English, with proceedings
           conducted virtually to facilitate efficient remote resolution.
         </p>
@@ -217,11 +224,11 @@ const TERMS_SECTIONS: readonly LegalSection[] = [
 export default function TermsPage() {
   return (
     <LegalDocumentLayout
-      kicker="Commercial Standards &amp; Client Agreement"
-      title="Terms &amp; Conditions"
-      deck="Our standard commercial framework: fixed-scope milestone delivery, 100% client code ownership, guaranteed timelines, and transparent studio practices."
+      kicker="Commercial Standards & Client Agreement"
+      title="Terms & Conditions"
+      deck="Our commercial framework: 20% ($400) deposit to start, 4-stage milestone delivery in 10–14 days, 100% client code ownership, and 2 months of free post-launch support."
       effectiveDate="12 October 2026"
-      version="2.1"
+      version="2.2"
       sections={TERMS_SECTIONS}
     />
   );

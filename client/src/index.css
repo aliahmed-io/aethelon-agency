@@ -928,122 +928,183 @@ img, svg, video, canvas { max-width:100%; }
 }
 
 
-/* Ink Veil + Gold Dust Page Transition */
+/* Inkfish Grid Dissolve + Editorial HUD Page Transition (Aethelon Theme) */
+:root {
+  --tile-color: #141413;
+  --tile-outline: #1c1c1a;
+  --dissolve-hud-fg: #f7f4ef;
+  --dissolve-hud-muted: rgba(247, 244, 239, 0.72);
+  --dissolve-badge-bg: rgba(247, 244, 239, 0.08);
+  --dissolve-badge-border: rgba(247, 244, 239, 0.18);
+}
+
+[data-theme="dark"],
+.dark {
+  --tile-color: #1c1e1b;
+  --tile-outline: #262925;
+  --dissolve-hud-fg: #f7f4ef;
+  --dissolve-hud-muted: rgba(247, 244, 239, 0.72);
+  --dissolve-badge-bg: rgba(255, 255, 255, 0.08);
+  --dissolve-badge-border: rgba(255, 255, 255, 0.18);
+}
+
+#transition-grid-container,
 .ink-veil-container {
   position: fixed;
   inset: 0;
-  z-index: 9999;
-  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
+  z-index: 99999;
   visibility: hidden;
-  contain: layout paint style;
+  opacity: 0;
+  isolation: isolate;
 }
 
-.ink-veil-panel {
+#transition-grid-container.active,
+.ink-veil-container.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.grid-dissolve-stage {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  background: var(--ink);
-  color: var(--paper);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  will-change: transform;
-  transform: translate3d(0, 100%, 0);
-}
-
-/* Dark mode theme inversion: warm cream veil with near-black ink text */
-[data-theme="dark"] .ink-veil-panel,
-.dark .ink-veil-panel {
-  background: var(--paper);
-  color: var(--ink);
-}
-
-/* Curved leading (top) and trailing (bottom) SVG caps */
-.ink-veil-cap {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: clamp(32px, 6vw, 68px);
-  color: inherit;
+  display: grid;
+  z-index: 1;
   pointer-events: none;
 }
 
-.ink-veil-cap--top {
-  bottom: 100%;
-  margin-bottom: -1px;
+.grid-tile {
+  background-color: var(--tile-color);
+  outline: 1px solid var(--tile-outline);
+  outline-offset: -0.5px;
+  opacity: 0;
+  transform: scale(0.98);
+  transition: opacity 0.05s linear, transform 0.05s ease-out;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
-.ink-veil-cap--bottom {
-  top: 100%;
-  margin-top: -1px;
+.grid-tile.revealed {
+  opacity: 1 !important;
+  transform: scale(1.015) !important;
 }
 
-/* Central Editorial Typography */
-.ink-veil-content {
-  position: relative;
-  z-index: 2;
+.grid-dissolve-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+#transition-grid-container.active .grid-dissolve-grain {
+  opacity: 0.04;
+}
+
+/* Centered Editorial Route HUD on Top Layer (z-index: 20) */
+.grid-dissolve-hud {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 0 2rem;
+  padding: 0 1.5rem;
   user-select: none;
-}
-
-.ink-veil-mono {
-  font-family: var(--font-mono, monospace);
-  font-size: clamp(11px, 1.2vw, 13px);
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--orange);
-  margin-bottom: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.ink-veil-badge-sep {
-  opacity: 0.5;
-}
-
-.ink-veil-headline-mask {
-  overflow: hidden;
-  padding: 0.2rem 0;
-}
-
-.ink-veil-headline {
-  font-family: var(--font-display);
-  font-size: clamp(3.2rem, 9vw, 8rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 0.92;
-  margin: 0;
-  color: inherit;
-  display: inline-flex;
-  align-items: baseline;
-}
-
-.ink-veil-dot {
-  display: inline-block;
-  color: var(--orange);
-  margin-left: 0.05em;
-  transform-origin: center bottom;
-}
-
-/* 2D Gold Dust Particle Canvas */
-.ink-veil-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
   pointer-events: none;
   opacity: 0;
+  transform: translate3d(0, 14px, 0) scale(0.96);
+  transition:
+    opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.grid-dissolve-hud.is-visible {
+  opacity: 1 !important;
+  transform: translate3d(0, 0, 0) scale(1) !important;
+}
+
+.grid-dissolve-hud.is-exiting {
+  opacity: 0 !important;
+  transform: translate3d(0, -10px, 0) scale(0.98) !important;
+  transition:
+    opacity 0.14s ease-in,
+    transform 0.14s ease-in;
+}
+
+.grid-dissolve-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.42rem 0.95rem;
+  border-radius: 9999px;
+  background: var(--dissolve-badge-bg);
+  border: 1px solid var(--dissolve-badge-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-family: var(--font-mono, monospace);
+  font-size: clamp(10.5px, 1.05vw, 12px);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dissolve-hud-fg);
+  margin-bottom: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.grid-dissolve-dot-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: var(--orange, #ff5a1f);
+  box-shadow: 0 0 10px rgba(255, 90, 31, 0.8);
+}
+
+.grid-dissolve-idx {
+  color: var(--orange, #ff5a1f);
+  font-weight: 700;
+}
+
+.grid-dissolve-sep {
+  opacity: 0.45;
+}
+
+.grid-dissolve-sub {
+  color: var(--dissolve-hud-muted);
+}
+
+.grid-dissolve-title-mask {
+  overflow: hidden;
+  padding: 0.15rem 0.25rem;
+}
+
+.grid-dissolve-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.94;
+  margin: 0;
+  color: var(--dissolve-hud-fg);
+  display: inline-flex;
+  align-items: baseline;
+  text-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+}
+
+.grid-dissolve-period {
+  display: inline-block;
+  color: var(--orange, #ff5a1f);
+  margin-left: 0.04em;
 }
 
 /* Nav Ribbon Active Pill */
@@ -1053,20 +1114,11 @@ img, svg, video, canvas { max-width:100%; }
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
-/* Accessibility: Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  .ink-veil-container {
-    transition: opacity 0.2s ease !important;
-  }
-  .ink-veil-panel {
+  .grid-tile,
+  .grid-dissolve-hud {
+    transition: none !important;
     transform: none !important;
-  }
-  .ink-veil-cap,
-  .ink-veil-canvas {
-    display: none !important;
-  }
-  .route-transition {
-    display: none !important;
   }
 }
 
@@ -5560,7 +5612,7 @@ html, body {
   border-color: rgba(243, 240, 232, 0.14) !important;
 }
 
-/* --- RESPONSIVE BREAKPOINTS FOR PACKAGES, ADD-ONS & CONTACT --- */
+/* --- RESPONSIVE BREAKPOINTS FOR PACKAGES, ADD-ONS, COMPARISON, LEGAL & CONTACT --- */
 @media (max-width: 1080px) {
   .packages-modern-grid {
     grid-template-columns: 1fr !important;
@@ -5595,6 +5647,50 @@ html, body {
   .contact-direct-email-bar {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .package-modern-card {
+    padding: 28px 22px !important;
+  }
+
+  .package-price-value {
+    font-size: 2.35rem !important;
+  }
+
+  .addons-box-container {
+    padding: 26px 20px !important;
+  }
+
+  .milestone-pullquote-box {
+    padding: 22px 20px !important;
+  }
+
+  .milestone-pullquote-box p {
+    font-size: 1.05rem !important;
+  }
+
+  .comparison-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .agency-comparison-table th,
+  .agency-comparison-table td {
+    padding: 14px 14px !important;
+    font-size: 13px !important;
+  }
+
+  .grid-dissolve-badge {
+    font-size: 9.5px !important;
+    padding: 0.35rem 0.75rem !important;
+    letter-spacing: 0.11em !important;
+    max-width: 92vw;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .grid-dissolve-title {
+    font-size: clamp(2.25rem, 11vw, 3.6rem) !important;
   }
 }
 

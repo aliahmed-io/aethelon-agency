@@ -91,7 +91,7 @@ const COOKIE_SECTIONS: readonly LegalSection[] = [
             </thead>
             <tbody>
               <tr>
-                <td><code>aethelon_theme</code></td>
+                <td><code>aethelon-theme</code></td>
                 <td>LocalStorage</td>
                 <td>Stores active visual mode preference (light / dark) to eliminate unstyled flash.</td>
                 <td>Persistent (1 Year)</td>
@@ -173,7 +173,7 @@ const COOKIE_SECTIONS: readonly LegalSection[] = [
 export default function CookiePolicyPage() {
   return (
     <LegalDocumentLayout
-      kicker="Telemetry &amp; Digital Hygiene"
+      kicker="Telemetry & Digital Hygiene"
       title="Cookie Policy"
       deck="How Aethelon utilizes essential storage, rejects invasive third-party ad pixels, and ensures transparent digital hygiene across our storefront architecture."
       effectiveDate="12 October 2026"

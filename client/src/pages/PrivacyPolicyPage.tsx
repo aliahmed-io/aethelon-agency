@@ -25,7 +25,7 @@ const PRIVACY_SECTIONS: readonly LegalSection[] = [
           <br />
           Email: <a href="mailto:legal@aethelon.com" className="legal-inline-link">legal@aethelon.com</a>
           <br />
-          General Inquiries: <a href="mailto:contact@aethelon.com" className="legal-inline-link">contact@aethelon.com</a>
+          General Inquiries: <a href="mailto:hello@aethelon.com" className="legal-inline-link">hello@aethelon.com</a>
         </div>
       </>
     ),
@@ -250,7 +250,7 @@ const PRIVACY_SECTIONS: readonly LegalSection[] = [
 export default function PrivacyPolicyPage() {
   return (
     <LegalDocumentLayout
-      kicker="Studio Compliance &amp; Data Hygiene"
+      kicker="Studio Compliance & Data Hygiene"
       title="Privacy Policy"
       deck="How Aethelon protects your personal information, upholds strict data minimization, and delivers transparent, privacy-first commerce engineering."
       effectiveDate="12 October 2026"
